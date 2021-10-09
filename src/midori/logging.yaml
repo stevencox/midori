@@ -1,0 +1,30 @@
+version: 1
+formatters:
+  simple:
+    format: '%(funcName)s: %(asctime)-15s %(message)s'
+  medium:
+    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  long:
+    format: '%(asctime)-15s %(filename)s %(funcName)s %(levelname)s: %(message)s'
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: medium
+    stream: ext://sys.stdout
+loggers:
+  midori.compiler:
+    level: DEBUG
+    handlers: [console]
+    propagate: no
+  midori.parser:
+    level: DEBUG
+    handlers: [console]
+    propagate: no
+  midori.syntaxtree:
+    level: DEBUG
+    handlers: [console]
+    propagate: no
+root:
+  level: DEBUG
+  handlers: [console]

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+################################################################
+##
+## Midori compiles a domain specific language to target 
+## the Faucet software defined networking stack.
+##
+##   This is the Bash command line interface (CLI) for Midori.
+##   
+##   author: steven cox
+##   version: 0.1
+##   usage:
+##      
+##     compile: 
+##      
+##       midori compile <program.midori>
+##       ex: midori compile faucet.midori
+##       
+################################################################
+set -e
+
+##
+## Get our location and configure the path.
+##
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+MIDORI_ROOT=$( dirname $DIR )
+export PYTHONPATH=$MIDORI_ROOT/src
+
+##
+## Run Midori
+##
+compile () {
+    python $MIDORI_ROOT/src/midori/compiler.py --source $*
+}
+
+$*
