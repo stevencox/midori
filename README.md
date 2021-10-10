@@ -138,6 +138,6 @@ d1 d2
     * Sorting out the version issues with Lark for an easier setup/unboxing experience is first.
     * Error handling is light. An exception hierarchy is in order.
     * Much more granular testing is needed.
-  * A world of expressive power to control complex simulations is unexplored.
+  * Lots of possible directions.
     * Does this live behind an API, permute scenarios, and execute them concurrently in Kubernetes?
     * Is it the template for a Docker like language to build and share network definitions?
