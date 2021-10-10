@@ -20,3 +20,54 @@ ping d1 d2
 down
 ```
 
+## Design
+Midori provided a chance to try Lark, a Python parser library I've been looking at for a while. I've been using Pyparsing for years contentedly. But so far, I prefer Lark. More on that in a minute. First, an overview:
+
+![image](https://user-images.githubusercontent.com/306971/136678115-dae6a844-a391-400d-bfdd-339ad0e4f567.png)
+
+It could be confused with almost any compiler except for a couple of specifics:
+
+### Lark
+
+#### Grammar
+Lark's grammar syntax is very elegant and compact. This is a big contrast to Pyparsing where the grammar syntax is a hybrid domain specific language within Python.  This is the whole Midori parser: 
+```
+parser = Lark("""
+    start: program
+
+    program: statement+
+
+    ?statement: controller | node | switch | link | up
+              | ping | down
+
+    controller: "controller" value
+    node: "node" NAME "ip" ip_addr "image" value
+    switch: "switch" name+
+    cls: "cls" NAME
+    delay: "delay" STRING
+    bw: "bw" DEC_NUMBER
+    link: "link" NAME "src" NAME "dst" NAME cls? delay? bw?
+    up: "up"
+    ping: value+
+    down: "down"
+
+    value: name | STRING | DEC_NUMBER
+    name: NAME
+    ip_addr: STRING
+
+    %import python (NAME, STRING, DEC_NUMBER)
+    %import common.WS
+    %ignore WS
+    """,
+    parser="lalr",
+)
+```
+
+#### Abstract Syntax Tree
+I noted in my description of Nyko that creating an abstract syntax tree was likely to require a good deal of tedious work and be a gating factor. Lark provides an interesting facility for ASTs. It doesn't eliminate the work but it makes it predictable and semi-automated. We define [dataclasses](https://docs.python.org/3/library/dataclasses.html) for AST elements and Lark instantiates and populates them based on the grammar.
+
+## Jinja2
+Jinja2 is a very widely used templating language. Ansible users will be familiar with its syntax. We use it to generate the Containernet Python program by iterating over the statements in a program which is the abstract syntax tree resulting from the Lark parse tree of a Midori program. Here's Midori's code emitter:
+```
+
+
