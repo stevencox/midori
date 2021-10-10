@@ -71,7 +71,7 @@ parser = Lark("""
 ```
 
 #### Abstract Syntax Tree
-I noted in my description of Nyko that creating an abstract syntax tree was likely to require a good deal of tedious work and be a gating factor. Lark provides an interesting facility for ASTs. It doesn't eliminate the work but it makes it predictable and semi-automated. We define [dataclasses](https://docs.python.org/3/library/dataclasses.html) for AST elements and Lark instantiates and populates them based on the grammar.
+I noted in my description of Nyko that creating an abstract syntax tree was likely to require a good deal of tedious work and be a gating factor. Lark provides an interesting facility for ASTs. It doesn't eliminate the work but it makes it predictable and semi-automated. We define [dataclasses](https://docs.python.org/3/library/dataclasses.html) for AST elements and [Lark instantiates and populates](https://github.com/stevencox/midori/blob/main/src/midori/parser.py#L58) them based on the grammar.
 
 ### Emitter
 For now, we have one code emitter for Midori. It writes a Containernet Python program.
