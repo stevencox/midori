@@ -27,10 +27,12 @@ Midori provided a chance to try Lark, a Python parser library I've been looking 
 
 It could be confused with almost any compiler except for a couple of specifics:
 
-### Lark
+### Parser
 
 #### Grammar
-Lark's grammar syntax is very elegant and compact. This is a big contrast to Pyparsing where the grammar syntax is a hybrid domain specific language within Python.  This is the whole Midori parser: 
+The two principal reasons for my positive review of Lark are the grammar syntax and its elegant support for abstract syntax trees.
+
+[Lark](https://lark-parser.readthedocs.io/en/latest/index.html)'s grammar syntax is very elegant and compact. This is a big contrast to [Pyparsing](https://github.com/helxplatform/tranql/blob/master/src/tranql/grammar.py) where the grammar syntax is a hybrid domain specific language within Python.  This is the whole Midori parser: 
 ```
 parser = Lark("""
     start: program
@@ -66,8 +68,59 @@ parser = Lark("""
 #### Abstract Syntax Tree
 I noted in my description of Nyko that creating an abstract syntax tree was likely to require a good deal of tedious work and be a gating factor. Lark provides an interesting facility for ASTs. It doesn't eliminate the work but it makes it predictable and semi-automated. We define [dataclasses](https://docs.python.org/3/library/dataclasses.html) for AST elements and Lark instantiates and populates them based on the grammar.
 
-## Jinja2
-Jinja2 is a very widely used templating language. Ansible users will be familiar with its syntax. We use it to generate the Containernet Python program by iterating over the statements in a program which is the abstract syntax tree resulting from the Lark parse tree of a Midori program. Here's Midori's code emitter:
+### Emitter
+For now, we have one code emitter for Midori. It writes a Containernet Python program.
+
+Jinja2 is a very widely used templating language. Ansible users will be familiar with its syntax. We [use it to generate](https://github.com/stevencox/midori/blob/main/src/midori/network.jinja2) the Containernet Python by iterating over the statements in a `program` which is the abstract syntax tree resulting from the Lark parse tree of a Midori program.
+
+## Using
+
+First, a few environment notes:
+  * I followed the ["bare metal"](https://containernet.github.io/#installation) Container installation instructions with no trouble on an Ubuntu 18.04 VMWare virtual machine. 
+  * I used Python 3.10 for Midori.
+  * Lark's most recent published version seemed out of sync with the docs so I cloned it and installed from source.
+
+We first compile our program with:
 ```
+scox@ubuntu:~/dev/midori$ bin/midori compile examples/net.midori
+2021-10-09 17:43:35,165 - midori.compiler - DEBUG - dry_run=False
+```
+This generates net.py next to the source file. We then switch to the containernet environment which runs as root. I've configured Containernet on . Also, before each run, I use
+```
+$ sudo mn -c
+```
+to clean up remnants of any previous containernet runs.
 
-
+```
+(containernet) root@ubuntu:/home/scox/dev/nyko# python ../midori/examples/net.py 
+*** Adding controller: c0
+*** Adding node:d1 ip:10.0.0.251 img:ubuntu:trusty
+1: 
+d1: kwargs {'ip': '10.0.0.251'}
+d1: update resources {'cpu_quota': -1}
+*** Adding node:d2 ip:10.0.0.252 img:ubuntu:trusty
+1: 
+d2: kwargs {'ip': '10.0.0.252'}
+d2: update resources {'cpu_quota': -1}
+*** Adding switch s1
+*** Adding switch s2
+** Adding link src:d1 dst:s1 cls:None del:None bw:None** Adding link src:s1 dst:s2 cls:TCLink del:100ms bw:1(1.00Mbit 100ms delay) (1.00Mbit 100ms delay) (1.00Mbit 100ms delay) (1.00Mbit 100ms delay) ** Adding link src:s2 dst:d2 cls:None del:None bw:None*** Configuring hosts
+d1 d2 
+*** Starting controller
+c0 
+*** Starting 2 switches
+s1 (1.00Mbit 100ms delay) s2 (1.00Mbit 100ms delay) ...(1.00Mbit 100ms delay) (1.00Mbit 100ms delay) 
+d1 -> d2 
+d2 -> d1 
+*** Results: 0% dropped (2/2 received)
+*** Stopping 1 controllers
+c0 
+*** Stopping 3 links
+...
+*** Stopping 2 switches
+s1 s2 
+*** Stopping 2 hosts
+d1 d2 
+*** Done
+*** Removing NAT rules of 0 SAPs
+```
