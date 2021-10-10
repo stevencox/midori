@@ -21,10 +21,6 @@ loggers:
     level: DEBUG
     handlers: [console]
     propagate: no
-  midori.syntaxtree:
-    level: DEBUG
-    handlers: [console]
-    propagate: no
 root:
   level: DEBUG
   handlers: [console]
