@@ -10,30 +10,42 @@ logger = logging.getLogger ("midori.compiler")
 
 class Compiler:
 
-    def __init__(self, dry_run:bool) -> None:
+    def __init__(self,
+                 dry_run:bool = False) -> None:
         self.dry_run = dry_run
         message = ", ".join ([
             f"dry_run={self.dry_run}"
         ])
         logger.debug (f"{message}")
         self.parser = Parser ()
-
+        
     def _parse (self, source: str) -> None:
         text = Resource.read_file (source)
         return self.parser.parse (text)
 
-    def _emit_network (self, path: str, ast: Program) -> None:
+    def _emit_network (self,
+                       path: str,
+                       ast: Program,
+                       output_path:str=None) -> None:
+        out_path = path.replace (".midori", ".py")
+        if output_path:
+            out_path = output_path
         Resource.render_file (
             template_path="network.jinja2",
             context={
                 "ast": ast
             },
-            path=path.replace (".midori", ".py"))
+            path=out_path)
         
-    def _emit (self, path: str, ast: Program) -> None:
-        self._emit_network (path, ast)
+    def _emit (self,
+               path: str,
+               ast: Program,
+               output_path:str=None) -> None:
+        self._emit_network (path, ast, output_path)
 
-    def process (self, path: str) -> None:
+    def process (self,
+                 path: str,
+                 output_path:str=None) -> None:
         ast: Program = self._parse (path)
         self._emit (path, ast)
 

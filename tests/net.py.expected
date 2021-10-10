@@ -1,0 +1,65 @@
+#!/usr/bin/python
+"""
+Generate a containernet network.
+"""
+from mininet.net import Containernet
+from mininet.node import Controller
+from mininet.cli import CLI
+from mininet.link import TCLink
+from mininet.log import info, setLogLevel
+setLogLevel('info')
+
+
+    
+name = "c0"
+net = Containernet(controller=Controller)
+info(f"*** Adding controller: {name}\n")
+net.addController(name)
+name = "d1"
+ip = "10.0.0.251"
+image = "ubuntu:trusty"
+info(f"*** Adding node:{name} ip:{ip} img:{image}\n")
+d1 = net.addDocker(name, ip=ip, dimage=image)
+  
+name = "d2"
+ip = "10.0.0.252"
+image = "ubuntu:trusty"
+info(f"*** Adding node:{name} ip:{ip} img:{image}\n")
+d2 = net.addDocker(name, ip=ip, dimage=image)
+  
+switch_name = "s1"
+info(f"*** Adding switch {switch_name}\n")
+s1 = net.addSwitch (switch_name)
+    
+switch_name = "s2"
+info(f"*** Adding switch {switch_name}\n")
+s1 = net.addSwitch (switch_name)
+    
+src = "d1"
+dst = "s1"
+cls, delay, bw = None, None, None
+info (f"** Adding link src:{src} dst:{dst} cls:{cls} del:{delay} bw:{bw}")
+net.addLink(src, dst
+)
+src = "s1"
+dst = "s2"
+cls, delay, bw = None, None, None
+cls = "TCLink"
+delay = "100ms"
+bw = int("1")
+info (f"** Adding link src:{src} dst:{dst} cls:{cls} del:{delay} bw:{bw}")
+net.addLink(src, dst
+            ,cls=TCLink
+            ,delay=delay
+            ,bw=bw
+)
+src = "s2"
+dst = "d2"
+cls, delay, bw = None, None, None
+info (f"** Adding link src:{src} dst:{dst} cls:{cls} del:{delay} bw:{bw}")
+net.addLink(src, dst
+)
+net.start()
+net.ping ([
+    d1,d2])
+net.stop()

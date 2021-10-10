@@ -33,4 +33,11 @@ compile () {
     python $MIDORI_ROOT/src/midori/compiler.py --source $*
 }
 
+##
+## Test Midori
+##
+test () {
+    pytest $MIDORI_ROOT/tests/test_compiler.py
+}
+
 $*
