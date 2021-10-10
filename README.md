@@ -35,7 +35,7 @@ Midori also provided a chance to try Lark, a new-ish Python parser library. I've
 
 #### Grammar
 
-Midori's parser uses an LALR parser generated from a grammar described in [Lark's EBNF syntax](https://lark-parser.readthedocs.io/en/latest/grammar.html?highlight=ebnf#general-syntax-and-notes). [Lark](https://lark-parser.readthedocs.io/en/latest/index.html)'s grammar syntax is very elegant and compact. This is a contrast to [Pyparsing](https://github.com/helxplatform/tranql/blob/master/src/tranql/grammar.py) where the syntax is a hybrid domain specific language within Python. While PEG parsing is interesting, I also feel more at home with an LALR grammar. This is the whole Midori parser: 
+Midori's parser uses an LALR parser generated from a grammar described in [Lark's EBNF syntax](https://lark-parser.readthedocs.io/en/latest/grammar.html?highlight=ebnf#general-syntax-and-notes). [Lark](https://lark-parser.readthedocs.io/en/latest/index.html)'s grammar syntax is compact, in contrast to [Pyparsing](https://github.com/helxplatform/tranql/blob/master/src/tranql/grammar.py) where the syntax is a hybrid domain specific language within Python. While Pyparsing's [PEG](https://en.wikipedia.org/wiki/Parsing_expression_grammar) parsing is interesting, I also feel more at home with an LALR grammar. This is the whole Midori parser: 
 ```
 parser = Lark("""
     start: program
