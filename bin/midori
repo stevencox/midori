@@ -3,7 +3,7 @@
 ################################################################
 ##
 ## Midori compiles a domain specific language to target 
-## the Faucet software defined networking stack.
+## the Containernet software defined networking simulation stack.
 ##
 ##   This is the Bash command line interface (CLI) for Midori.
 ##   
@@ -14,7 +14,7 @@
 ##     compile: 
 ##      
 ##       midori compile <program.midori>
-##       ex: midori compile faucet.midori
+##       ex: midori compile examples/net.midori
 ##       
 ################################################################
 set -e
