@@ -1,5 +1,5 @@
 import sys
-from typing import List
+from typing import List, Optional
 from dataclasses import dataclass
 
 from lark import Lark, ast_utils, Transformer, v_args
@@ -34,21 +34,48 @@ class Program(_Ast, ast_utils.AsList):
     statements: List[_Statement]
 
 @dataclass
-class If(_Statement):
-    cond: Value
-    then: Program
-
-@dataclass
-class SetVar(_Statement):
-    # Corresponds to set_var in the grammar
-    name: str
+class Controller(_Statement):
     value: Value
 
 @dataclass
-class Print(_Statement):
-    value: Value
+class IPAddr(Value):
+    pass
 
+@dataclass
+class Image(Value):
+    pass
 
+@dataclass
+class Node(_Statement):
+    name: Name
+    ip_addr: Value
+    image: Value
+
+@dataclass
+class Switch(_Statement, ast_utils.AsList):
+    name: List[Name]
+    
+@dataclass
+class Link(_Statement):
+    name: Value
+    src: Value
+    dst: Value
+    cls: Optional[Name] = None
+    delay: Optional[Name] = None
+    bw: Optional[Name] = None
+
+@dataclass
+class Up(_Ast):
+    pass
+
+@dataclass
+class Down(_Ast):
+    pass
+
+@dataclass
+class Ping(_Statement, ast_utils.AsList):
+    name: List[Name]
+    
 class ToAst(Transformer):
     # Define extra transformation functions, for rules that don't correspond to an AST class.
 
@@ -72,20 +99,23 @@ parser = Lark("""
 
     program: statement+
 
-    ?statement: controller | node | switch | link | start 
-              | ping | stop
+    ?statement: controller | node | switch | link | up
+              | ping | down
 
-    controller: value
-    node: "node" NAME "ip" value "image" value
+    controller: "controller" value
+    node: "node" NAME "ip" ip_addr "image" value
     switch: "switch" name+
-    link: "link" NAME value+
-    start: "start"
+    cls: "cls" NAME
+    delay: "delay" STRING
+    bw: "bw" DEC_NUMBER
+    link: "link" NAME "src" NAME "dst" NAME cls? delay? bw?
+    up: "up"
     ping: value+
-    stop: "stop"
+    down: "down"
 
     value: name | STRING | DEC_NUMBER
     name: NAME
-    ip_addr: NAME
+    ip_addr: STRING
     image: NAME
 
     %import python (NAME, STRING, DEC_NUMBER)

@@ -9,30 +9,75 @@ from mininet.link import TCLink
 from mininet.log import info, setLogLevel
 setLogLevel('info')
 
+{#
+{%- for s in ast.statements %}
+  {{ s }}
+  {%- if 'Node' in s.__class__.__name__ -%}
+  ----> {{ s.__class__.__name__ }} {{ s }}
+name = "{{ s.name.value }}"
+ip = "{{ s.ip_addr.children[0] }}"
+image = "{{ s.image.value }}"
+info(f"*** Adding node:{name} ip:{ip} img:{image}\n")
+d1 = net.addDocker(name, ip=ip, dimage=image)
+
+  {% endif %}
+{%- endfor %}
+#}
+    
+{% for statement in ast.statements -%}
+  {% if 'Controller' in statement.__class__.__name__ -%}
+name = "{{ statement.value.value.name.value }}"
 net = Containernet(controller=Controller)
-
-{% for statement in ast.statements %}
-   {{ statement }}
-{% endfor %}
-
-
-info('*** Adding controller\n')
-net.addController('c0')
-info('*** Adding docker containers\n')
-d1 = net.addDocker('d1', ip='10.0.0.251', dimage="ubuntu:trusty")
-d2 = net.addDocker('d2', ip='10.0.0.252', dimage="ubuntu:trusty")
-info('*** Adding switches\n')
-s1 = net.addSwitch('s1')
-s2 = net.addSwitch('s2')
-info('*** Creating links\n')
-net.addLink(d1, s1)
-net.addLink(s1, s2, cls=TCLink, delay='100ms', bw=1)
-net.addLink(s2, d2)
-info('*** Starting network\n')
+info(f"*** Adding controller: {name}\n")
+net.addController(name)
+  {%- elif 'Node' in statement.__class__.__name__ %}
+name = "{{ statement.name.value }}"
+ip = "{{ statement.ip_addr.children[0] }}"
+image = "{{ statement.image.value }}"
+info(f"*** Adding node:{name} ip:{ip} img:{image}\n")
+{{ statement.name.value }} = net.addDocker(name, ip=ip, dimage=image)
+  {% elif 'Switch' in statement.__class__.__name__ %}
+    {%- for name in statement.name %}
+switch_name = "{{ name.name.value }}"
+info(f"*** Adding switch {switch_name}\n")
+s1 = net.addSwitch (switch_name)
+    {% endfor %}
+  {%- elif 'Link' in statement.__class__.__name__ %}
+src = "{{ statement.src.value }}"
+dst = "{{ statement.dst.value }}"
+cls, delay, bw = None, None, None
+    {%- if statement.cls %}
+cls = "{{ statement.cls.children[0].value }}"
+    {%- endif -%}
+    {% if statement.delay %}
+delay = "{{ statement.delay.children[0] }}"
+    {%- endif -%}
+    {% if statement.bw %}
+bw = int("{{ statement.bw.children[0] }}")
+    {%- endif %}
+info (f"** Adding link src:{src} dst:{dst} cls:{cls} del:{delay} bw:{bw}")
+net.addLink(src, dst
+    {%- if statement.cls %}
+            ,cls={{ statement.cls.children[0].value }}
+    {%- endif %}
+    {%- if statement.delay %}
+            ,delay=delay
+    {%- endif %}
+    {%- if statement.bw %}
+            ,bw=bw
+    {%- endif %}
+)
+  {%- elif 'Up' in statement.__class__.__name__ %}
 net.start()
-info('*** Testing connectivity\n')
-net.ping([d1, d2])
-
-info('*** Stopping network')
+  {%- elif 'Down' in statement.__class__.__name__ %}
 net.stop()
-
+  {%- elif 'Ping' in statement.__class__.__name__ %}
+net.ping ([
+    {% for node in statement.name %}
+      {%- if node.value.name.value != 'ping' -%}
+    {{ node.value.name.value }}{% if not loop.last %},{% endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+    ])
+  {%- endif %}
+{%- endfor %}
