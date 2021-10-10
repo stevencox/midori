@@ -132,3 +132,9 @@ d1 d2
 *** Done
 *** Removing NAT rules of 0 SAPs
 ```
+
+## Next
+  * This work is independent of user input. Who the language is for will be decisive in determining the best syntax and functionality.
+  * I'm persuaded Lark is a good direction for Python parsing.
+  * This is a prototype. Error handling is light. Significant automated tests needed.
+  * A world of expressive power to control complex simulations is unexplored.
