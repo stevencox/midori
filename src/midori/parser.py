@@ -116,7 +116,6 @@ parser = Lark("""
     value: name | STRING | DEC_NUMBER
     name: NAME
     ip_addr: STRING
-    image: NAME
 
     %import python (NAME, STRING, DEC_NUMBER)
     %import common.WS
@@ -125,25 +124,12 @@ parser = Lark("""
     parser="lalr",
 )
 
+""" Use Lark tools to build the abstract syntax tree. """
 transformer = ast_utils.create_transformer(this_module, ToAst())
 
 class Parser:
+    """ The parser performs lexixal analysis, executes gammar productions,
+    and generates the abstract syntax tree. """
     def parse(self, text: str) -> Program:
         tree = parser.parse(text)
         return transformer.transform(tree)
-
-
-#
-#   Test
-#
-
-if __name__ == '__main__':
-    ast = parse("""
-        a = 1;
-        if a {
-            print "a is 1";
-            a = 2;
-        }
-    """)
-    for statement in ast.statements:
-        print (statement)
