@@ -1,9 +1,9 @@
-# midori
+# Midori
 A network simulation compiler for [Containernet](https://containernet.github.io/)
 
 After tinkering with a [compiler](https://github.com/stevencox/nyko/edit/main/README.md) for [Faucet](https://docs.faucet.nz/en/latest/intro.html), I found [Mininet](http://mininet.org/), a virtual network layer that simplifies network simulations. Mininet does awesome things but I've been using containers for years and the virtual machine oriented development environment was cumbersome for me.
 
-Then I found Containernet, a Docker friendly fork of Mininet. Containernet networks are [built in Python](https://containernet.github.io/#get-started), which works fine but it made me wonder if a more idiomatic form would be possible. This Midori program builds the same network:
+Then I found Containernet, a Docker friendly fork of Mininet. Containernet networks are [built in Python](https://containernet.github.io/#get-started), which works great. But it did make me wonder if I could develop a form more idiomatic to folks in a networking domain. This Midori program builds the same network:
 
 ```
 controller c0
@@ -21,18 +21,23 @@ down
 ```
 
 ## Design
-Midori provided a chance to try Lark, a Python parser library I've been looking at for a while. I've been using Pyparsing for years contentedly. But so far, I prefer Lark. More on that in a minute. First, an overview:
 
+
+Midori is a compiler comprising the classic phases:
+  * Lexical analysis scans an input document to generate a token stream
+  * A parser applies grammar productions to determine if the token stream is accepted by the language
+  * Productions are converted into an abstract syntax tree (AST), or structure describing each concept in the language
+  * Code generation (the emitter) generates an executable by processing the AST
 ![image](https://user-images.githubusercontent.com/306971/136678115-dae6a844-a391-400d-bfdd-339ad0e4f567.png)
 
-It could be confused with almost any compiler except for a couple of specifics:
-
 ### Parser
+Midori also provided a chance to try Lark, a Python parser library I've been looking at for a while. I've been using Pyparsing for years contentedly. But so far, I prefer Lark. The two principal reasons for my positive review of Lark are the grammar syntax and its elegant support for abstract syntax trees.
 
 #### Grammar
-The two principal reasons for my positive review of Lark are the grammar syntax and its elegant support for abstract syntax trees.
 
-[Lark](https://lark-parser.readthedocs.io/en/latest/index.html)'s grammar syntax is very elegant and compact. This is a big contrast to [Pyparsing](https://github.com/helxplatform/tranql/blob/master/src/tranql/grammar.py) where the grammar syntax is a hybrid domain specific language within Python.  This is the whole Midori parser: 
+Midori's parser uses an LALR parser generated from a grammar described in [Lark's EBNF syntax](https://lark-parser.readthedocs.io/en/latest/grammar.html?highlight=ebnf#general-syntax-and-notes).
+
+[Lark](https://lark-parser.readthedocs.io/en/latest/index.html)'s grammar syntax is very elegant and compact. This is a contrast to [Pyparsing](https://github.com/helxplatform/tranql/blob/master/src/tranql/grammar.py) where the grammar syntax is a hybrid domain specific language within Python. This is the whole Midori parser: 
 ```
 parser = Lark("""
     start: program
@@ -71,7 +76,7 @@ I noted in my description of Nyko that creating an abstract syntax tree was like
 ### Emitter
 For now, we have one code emitter for Midori. It writes a Containernet Python program.
 
-Jinja2 is a very widely used templating language. Ansible users will be familiar with its syntax. We [use it to generate](https://github.com/stevencox/midori/blob/main/src/midori/network.jinja2) the Containernet Python by iterating over the statements in a `program` which is the abstract syntax tree resulting from the Lark parse tree of a Midori program.
+Jinja2 is a very widely used templating language. Ansible users will be familiar with its syntax. I've used it in [Tycho](https://github.com/helxplatform/tycho/blob/master/tycho/template/pod.yaml) and [smartBag](https://github.com/NCATS-Tangerine/smartBag/blob/master/app.py.j2) in the past. We [use it to generate](https://github.com/stevencox/midori/blob/main/src/midori/network.jinja2) the Containernet Python by iterating over the statements in a `program` which is the abstract syntax tree resulting from the Lark parse tree of a Midori program.
 
 ## Using
 
