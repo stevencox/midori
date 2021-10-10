@@ -88,7 +88,7 @@ We first compile our program with:
 scox@ubuntu:~/dev/midori$ bin/midori compile examples/net.midori
 2021-10-09 17:43:35,165 - midori.compiler - DEBUG - dry_run=False
 ```
-This generates net.py next to the source file. We then switch to the containernet environment which runs as root.
+This generates net.py next to the source file. Then we switch to the containernet environment, running as root.
 
 Before each run, I use
 ```
