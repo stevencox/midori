@@ -76,7 +76,7 @@ I noted in my description of Nyko that creating an abstract syntax tree was like
 ### Emitter
 For now, we have one code emitter for Midori. It writes a Containernet Python program.
 
-Jinja2 is a very widely used templating language. Ansible users will be familiar with its syntax. I've used it in [Tycho](https://github.com/helxplatform/tycho/blob/master/tycho/template/pod.yaml) and [smartBag](https://github.com/NCATS-Tangerine/smartBag/blob/master/app.py.j2) in the past. We [use it to generate](https://github.com/stevencox/midori/blob/main/src/midori/network.jinja2) the Containernet Python by iterating over the statements in a `program` which is the abstract syntax tree resulting from the Lark parse tree of a Midori program.
+Jinja2 is a very widely used templating language. Ansible users will be familiar with its syntax. I've used it in [Tycho](https://github.com/helxplatform/tycho/blob/master/tycho/template/pod.yaml) and [smartBag](https://github.com/NCATS-Tangerine/smartBag/blob/master/app.py.j2) in the past. We [use it to generate](https://github.com/stevencox/midori/blob/main/src/midori/network.jinja2) the Containernet Python code. It does this by iterating over the statements in a `program` which is the abstract syntax tree resulting from the Lark parsing of a Midori program.
 
 ## Using
 
