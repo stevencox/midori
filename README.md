@@ -31,7 +31,7 @@ Midori is a compiler with the classic phases:
 ![image](https://user-images.githubusercontent.com/306971/136678115-dae6a844-a391-400d-bfdd-339ad0e4f567.png)
 
 ### Parser
-Midori also provided a chance to try Lark, a new-ish Python parser library I've been looking at for a while. I've been using Pyparsing for years contentedly. But so far, I prefer Lark. The two principal reasons are the grammar syntax and its elegant support for abstract syntax trees.
+Midori also provided a chance to try Lark, a new-ish Python parser library. I've been using Pyparsing for years, but so far, I prefer Lark. Its grammar syntax and its support for abstract syntax trees are both elegant.
 
 #### Grammar
 
