@@ -1,6 +1,7 @@
 # Midori
 A network simulation compiler for [Containernet](https://containernet.github.io/)
 
+## Overview
 After tinkering with a [compiler](https://github.com/stevencox/nyko) for [Faucet](https://docs.faucet.nz/en/latest/intro.html), I found [Mininet](http://mininet.org/), a virtual network layer that simplifies network simulations. Mininet does awesome things but I've been using containers for years and the virtual machine oriented development environment was cumbersome for me.
 
 Then I found Containernet, a Docker friendly fork of Mininet that lets users simulate networks [built in Python](https://containernet.github.io/#get-started). This made me wonder if I could develop a form more idiomatic to networking folks. This Midori program builds the same network:
@@ -21,8 +22,6 @@ down
 ```
 
 ## Design
-
-
 Midori is a compiler with the classic phases:
   * Lexical analysis scans an input document to generate a token stream
   * A parser applies grammar productions to determine if the token stream is accepted by the language
@@ -79,7 +78,6 @@ For now, we have one code emitter for Midori and it writes a Python program usin
 Jinja2 is a very widely used templating language. Ansible users will be familiar with its syntax. I've used it in [Tycho](https://github.com/helxplatform/tycho/blob/master/tycho/template/pod.yaml) and [smartBag](https://github.com/NCATS-Tangerine/smartBag/blob/master/app.py.j2) in the past. We [use it to generate](https://github.com/stevencox/midori/blob/main/src/midori/network.jinja2) the Containernet Python code. It does this by iterating over the statements in a `program` which is the abstract syntax tree resulting from the Lark parsing of a Midori program.
 
 ## Using
-
 First, a few environment notes:
   * I followed the ["bare metal"](https://containernet.github.io/#installation) Container installation instructions with no trouble on an Ubuntu 18.04 VMWare virtual machine. 
   * I used Python 3.10 for Midori.
