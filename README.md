@@ -23,7 +23,7 @@ down
 ## Design
 
 
-Midori is a compiler comprising the classic phases:
+Midori is a compiler with the classic phases:
   * Lexical analysis scans an input document to generate a token stream
   * A parser applies grammar productions to determine if the token stream is accepted by the language
   * Productions are converted into an abstract syntax tree (AST), or structure describing each concept in the language
