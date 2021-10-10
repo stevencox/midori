@@ -134,7 +134,7 @@ d1 d2
 ```
 
 ## Next
-  * This work is independent of user input. Who the language is for will be decisive in determining the best syntax and functionality.
+  * This work lacks user input. Who the language is for and what they need will steer its functionality.
   * I'm persuaded Lark is a good direction for Python parsing.
   * This is a prototype. Error handling is light. Significant automated tests needed.
   * A world of expressive power to control complex simulations is unexplored.
