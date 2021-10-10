@@ -26,18 +26,16 @@ down
 Midori is a compiler with the classic phases:
   * Lexical analysis scans an input document to generate a token stream
   * A parser applies grammar productions to determine if the token stream is accepted by the language
-  * Productions are converted into an abstract syntax tree (AST), or structure describing each concept in the language
+  * Productions are converted into an abstract syntax tree (AST) modeling each concept in the language
   * Code generation (the emitter) generates an executable by processing the AST
 ![image](https://user-images.githubusercontent.com/306971/136678115-dae6a844-a391-400d-bfdd-339ad0e4f567.png)
 
 ### Parser
-Midori also provided a chance to try Lark, a Python parser library I've been looking at for a while. I've been using Pyparsing for years contentedly. But so far, I prefer Lark. The two principal reasons for my positive review of Lark are the grammar syntax and its elegant support for abstract syntax trees.
+Midori also provided a chance to try Lark, a new-ish Python parser library I've been looking at for a while. I've been using Pyparsing for years contentedly. But so far, I prefer Lark. The two principal reasons are the grammar syntax and its elegant support for abstract syntax trees.
 
 #### Grammar
 
-Midori's parser uses an LALR parser generated from a grammar described in [Lark's EBNF syntax](https://lark-parser.readthedocs.io/en/latest/grammar.html?highlight=ebnf#general-syntax-and-notes).
-
-[Lark](https://lark-parser.readthedocs.io/en/latest/index.html)'s grammar syntax is very elegant and compact. This is a contrast to [Pyparsing](https://github.com/helxplatform/tranql/blob/master/src/tranql/grammar.py) where the grammar syntax is a hybrid domain specific language within Python. This is the whole Midori parser: 
+Midori's parser uses an LALR parser generated from a grammar described in [Lark's EBNF syntax](https://lark-parser.readthedocs.io/en/latest/grammar.html?highlight=ebnf#general-syntax-and-notes). [Lark](https://lark-parser.readthedocs.io/en/latest/index.html)'s grammar syntax is very elegant and compact. This is a contrast to [Pyparsing](https://github.com/helxplatform/tranql/blob/master/src/tranql/grammar.py) where the syntax is a hybrid domain specific language within Python. While PEG parsing is interesting, I also feel more at home with an LALR grammar. This is the whole Midori parser: 
 ```
 parser = Lark("""
     start: program
@@ -74,7 +72,7 @@ parser = Lark("""
 I noted in my description of Nyko that creating an abstract syntax tree was likely to require a good deal of tedious work and be a gating factor. Lark provides an interesting facility for ASTs. It doesn't eliminate the work but it makes it predictable and semi-automated. We define [dataclasses](https://docs.python.org/3/library/dataclasses.html) for AST elements and [Lark instantiates and populates](https://github.com/stevencox/midori/blob/main/src/midori/parser.py#L58) them based on the grammar.
 
 ### Emitter
-For now, we have one code emitter for Midori. It writes a Containernet Python program.
+For now, we have one code emitter for Midori and it writes a Python program using the Containernet library.
 
 Jinja2 is a very widely used templating language. Ansible users will be familiar with its syntax. I've used it in [Tycho](https://github.com/helxplatform/tycho/blob/master/tycho/template/pod.yaml) and [smartBag](https://github.com/NCATS-Tangerine/smartBag/blob/master/app.py.j2) in the past. We [use it to generate](https://github.com/stevencox/midori/blob/main/src/midori/network.jinja2) the Containernet Python code. It does this by iterating over the statements in a `program` which is the abstract syntax tree resulting from the Lark parsing of a Midori program.
 
