@@ -136,5 +136,8 @@ d1 d2
 ## Next
   * This work lacks user input. Who the language is for and what they need will steer its functionality.
   * I'm persuaded Lark is a good direction for Python parsing.
-  * This is a prototype. Error handling is light. Much more granular testing is needed.
+  * This is a prototype. 
+    * Sorting out the version issues with Lark for an easier setup/unboxing experience is first.
+    * Error handling is light. An exception hierarchy is in order.
+    * Much more granular testing is needed.
   * A world of expressive power to control complex simulations is unexplored.
