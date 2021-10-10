@@ -16,8 +16,7 @@ class TestCompiler:
             os.path.dirname (__file__),
             "net.py.expected")
         compiler = Compiler ()
-        compiler.process (path=source,
-                          output_path=expect)
+        compiler.process (path=source)
 
         output_text = Resource.read_file (output)
         expect_text = Resource.read_file (expect)
