@@ -79,7 +79,7 @@ Jinja2 is a very widely used templating language. Ansible users will be familiar
 
 ## Using
 First, a few environment notes:
-  * I followed the ["bare metal"](https://containernet.github.io/#installation) Container installation instructions with no trouble on an Ubuntu 18.04 VMWare virtual machine. 
+  * I followed the ["bare metal"](https://containernet.github.io/#installation) Containernet installation instructions on an Ubuntu 18.04 VMWare virtual machine. 
   * I used Python 3.10 for Midori.
   * Lark's most recent published version seemed out of sync with the docs so I cloned it and installed from source.
 
