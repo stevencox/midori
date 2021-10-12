@@ -2,7 +2,7 @@
 A network simulation compiler for [Containernet](https://containernet.github.io/)
 
 ## Overview
-After tinkering with a [compiler](https://github.com/stevencox/nyko) for [Faucet](https://docs.faucet.nz/en/latest/intro.html), I found [Mininet](http://mininet.org/), a virtual network simulation framework. Mininet looks like a great tool for simulating networks. Then I found Containernet, a Docker friendly fork of Mininet that lets users simulate networks built in Python. I'm very accustomed to the joys of containers and found this an attractive option. This made me wonder if I could develop a form of expressing a test network that's more idiomatic to networking folks. This Midori program builds the same network as the [Containernet example](https://containernet.github.io/#get-started):
+After tinkering with a [compiler](https://github.com/stevencox/nyko) for [Faucet](https://docs.faucet.nz/en/latest/intro.html), I found [Mininet](http://mininet.org/), a virtual network simulation framework. Mininet looks like a great tool for simulating networks. Then I found Containernet, a Docker friendly fork of Mininet that lets users simulate networks by modeling them in Python. I'm very accustomed to the joys of containers and found this an attractive option. This made me wonder if I could develop a form of expressing a test network that's more idiomatic to networking folks. This Midori program builds the same network as the [Containernet example](https://containernet.github.io/#get-started):
 
 ```
 controller c0
