@@ -21,6 +21,8 @@ loggers:
     level: DEBUG
     handlers: [console]
     propagate: no
-root:
-  level: DEBUG
-  handlers: [console]
+  uvicorn.info:
+    propagate: no
+#root:
+#  level: DEBUG
+#  handlers: [console]

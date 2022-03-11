@@ -1,0 +1,69 @@
+#!/bin/bash
+
+set -e
+set -x
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+MIDORI_HOME=$( dirname $DIR )
+
+export MIDORI_VENV=$MIDORI_HOME/venv
+export PYTHONPATH=$MIDORI_HOME/src
+
+export REDIS_HOST=redis
+export REDIS_PORT=6379
+export LOG_LEVEL=info
+
+install_python() {
+    apt update --yes
+    apt upgrade --yes
+    apt install software-properties-common --yes
+    add-apt-repository --yes ppa:deadsnakes/ppa
+    apt install --yes python3.10 python3.10-venv python3-pip
+}
+
+provide_venv() {
+    if [ ! -d $MIDORI_VENV ]; then
+	echo python3.10 -m venv $MIDORI_VENV
+	activate_venv
+	python -m pip install --upgrade pip
+	pip install -r $MIDORI_HOME/requirements.txt
+    fi
+}
+
+activate_venv() {
+    source $MIDORI_VENV/bin/activate
+    python -V
+}
+
+# delete. no systemd in chroot.
+install_services() {
+    cp $MIDORI_HOME/etc/systemd/midori-api.service /etc/systemd/system/
+    cp $MIDORI_HOME/etc/systemd/midori-worker.service /etc/systemd/system/
+    systemctl daemon-reload
+    systemctl enable midori-api.service
+    systemctl enable midori-worker.service
+    systemctl start midori-api.service
+    systemctl start midori-worker.service
+}
+
+start_node() {
+    install_python
+    provide_venv
+}
+
+start_worker() {
+    activate_venv
+    rq worker \
+       --url $REDIS_HOST://redis:$REDIS_PORT \
+       --logging_level $LOG_LEVEL \
+       --exception-handler midori.runtime.midori_job_exception_handler
+}
+
+start_api() {
+    activate_venv
+    python $MIDORI_HOME/src/midori/api.py
+}
+
+$*
+
+exit 0
