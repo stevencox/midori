@@ -2,7 +2,9 @@ from collections import namedtuple
 from dataclasses import dataclass, field
 from fastapi import FastAPI
 from midori.runtime import run_simulation, midori_job_exception_handler
+from midori.config import MidoriConfig
 from pydantic import BaseModel, BaseSettings
+from pympler import summary, muppy
 from redis import Redis
 from rq import Queue
 from rq.job import Job
@@ -11,10 +13,9 @@ import json
 import uvicorn
 
 description = """
-The Midori API compiles network representations into simulations. 🚀
+The Midori API compiles network representations into simulations.
 
 For background on Midori, see the GitHub [repository](https://github.com/stevencox/midori)
-
 
 The API lets you submit networks for simulation. The alpha will support simulation with Containernet (a Mininet fork) and ONOS.
 
@@ -37,25 +38,34 @@ app = FastAPI(
     openapi_tags=[
         {
             "name": "networks",
-            "description": "Operations on midori network specifications.",
+            "description": "Midori network simulation operations.",
         }
     ]
 )
+config = MidoriConfig ()
 
 class NetworkSchema(BaseModel):
     """ Schema for a network. """
+
+    """ A client provided identifier. """
     id: int
+
+    """ Source code in Midori for the network. """
     source: str = ''
+
+    """ An optional description of the network. """
     description: Optional[str] = None
 
 class Settings(BaseSettings):
-    redis_host: str = "localhost"
-    redis_port: int = 6379
-    log_level: str = "debug"
-    midori_api_app: str = "midori.api:app"
-    midori_api_host: str = "0.0.0.0"
-    midori_api_port: int = 8000
-    reload: bool = True
+    """ FastAPI application settings. """
+    redis_host: str = config.get("redis", "host")
+    redis_port: int = config.getint("redis", "port")
+    log_level: str = config.get("log", "level")
+    midori_api_app: str = config.get("api", "app")
+    midori_api_host: str = config.get("api", "host")
+    midori_api_port: int = config.getint("api", "port")
+    """ Reload the API when source changes. """
+    reload: bool = config.getboolean("api", "reload")
     
 settings = Settings()
 
@@ -70,29 +80,45 @@ class Context:
         
 context = Context()
 
-@app.post("/network/", tags=["networks"])
-def create_network(network: NetworkSchema):
+@app.post("/network/queue", tags=["networks"])
+async def create_network(network: NetworkSchema):
     """ Create a network simulation job. """
-    args = {
-        "a" : network.id,
-        "b" : network.source,
-        "c" : network.description
-    }
-    context.jobs.append (
-        context.redis_q.enqueue(
-            f=run_simulation,
-            args=(args,),
-            result_ttl=24 * 60 * 60))
-    return network
+    """ Unescape JSON string. """
+    network.source = json.loads(network.source)
+    """ Enqueue the job for execution. """
+    job = context.redis_q.enqueue(
+        run_simulation,
+        network,
+        result_ttl=24 * 60 * 60)
+    """ Remember this job """
+    context.jobs.append (job)
+    return job.id
 
-@app.get("/networks", tags=["networks"])
-def get_networks():
+@app.get("/network/result", tags=["networks"])
+async def get_network_result(network_id):
+    """ Get network simulation result. """
+    job = Job.fetch(network_id, context.redis_q.connection)
+    return job.result if job else None
+
+@app.get("/network/failed", tags=["networks"])
+async def get_failed():
+    """ Get information about failed jobs. """
+
+    """ todo: move memory profiling. """
+    all_objects = muppy.get_objects()
+    sum1 = summary.summarize(all_objects)
+    summary.print_(sum1)
+
+    return {
+        j : Job.fetch(j, context.redis_q.connection)
+        for j in context.redis_q.failed_job_registry.get_job_ids()
+    }
+    
+@app.get("/network/list", tags=["networks"])
+async def get_networks():
     """ Get all networks. """
     result = {}
     
-    for j in context.redis_q.failed_job_registry.get_job_ids():
-        print (f"failed-job-> {j}")
-        
     for j in context.jobs:
         print(f"{j.exc_info}")
         job = Job.fetch (j.id, context.redis_q.connection)
@@ -100,6 +126,7 @@ def get_networks():
     return result
 
 if __name__ == "__main__":
+    """ Run the API given the provided settings. """
     uvicorn.run(settings.midori_api_app,
                 host=settings.midori_api_host,
                 port=settings.midori_api_port,

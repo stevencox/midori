@@ -1,0 +1,897 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>midori.parser API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>midori.parser</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import sys
+from typing import List, Optional
+from dataclasses import dataclass, field
+
+from lark import Lark, ast_utils, Transformer, v_args
+from lark.tree import Meta
+
+this_module = sys.modules[__name__]
+
+#
+#   Define AST
+#
+class _Ast(ast_utils.Ast):
+    # This will be skipped by create_transformer(), because it starts with an underscore
+    pass
+
+class _Statement(_Ast):
+    # This will be skipped by create_transformer(), because it starts with an underscore
+    pass
+
+@dataclass
+class Value(_Ast, ast_utils.WithMeta):
+    &#34;Uses WithMeta to include line-number metadata in the meta attribute&#34;
+    meta: Meta
+    value: object
+
+@dataclass
+class Name(_Ast):
+    name: str
+
+@dataclass
+class Program(_Ast, ast_utils.AsList):
+    # Corresponds to code_block in the grammar
+    statements: List[_Statement]
+
+@dataclass
+class Controller(_Statement):
+    value: Value
+
+@dataclass
+class RemoteController(Controller):
+    host: Name
+    port: Value
+    
+@dataclass
+class IPAddr(Value):
+    pass
+
+@dataclass
+class Image(Value):
+    pass
+
+@dataclass
+class Node(_Statement):
+    name: Name
+    ip_addr: Value
+    image: Value
+    mac: Optional[Value] = None
+    ports: Optional[Value] = field(default_factory=list)
+    port_bindings: Optional[Value] = field(default_factory=list)
+    env: Optional[Value] = field(default_factory=dict)
+    cmd: Optional[Value] = None
+
+@dataclass
+class Switch(_Statement, ast_utils.AsList):
+    name: List[Name]
+    
+@dataclass
+class Link(_Statement):
+    name: Value
+    src: Value
+    dst: Value
+    port1: Optional[Value] = None
+    port2: Optional[Value] = None
+    cls: Optional[Value] = None
+    delay: Optional[Value] = None
+    bw: Optional[Value] = None
+
+@dataclass
+class Up(_Ast):
+    pass
+
+@dataclass
+class Down(_Ast):
+    pass
+
+@dataclass
+class Ping(_Statement, ast_utils.AsList):
+    name: List[Name]
+    
+class ToAst(Transformer):
+    # Define extra transformation functions, for rules that don&#39;t correspond to an AST class.
+
+    def STRING(self, s):
+        # Remove quotation marks
+        return s[1:-1]
+
+    def DEC_NUMBER(self, n):
+        return int(n)
+
+    @v_args(inline=True)
+    def start(self, x):
+        return x
+
+#
+#   Define Parser
+#
+
+#     link: &#34;link&#34; NAME &#34;src&#34; NAME &#34;dst&#34; NAME cls? delay? bw?
+
+parser = Lark(&#34;&#34;&#34;
+    start: program
+
+    program: statement+
+
+    ?statement: control | node | switch | link | up | ping | down
+
+    control: controller | remote_controller
+    controller: &#34;controller&#34; value
+    remote_controller: &#34;remote_controller&#34; value &#34;host&#34; STRING &#34;port&#34; DEC_NUMBER
+    node: &#34;node&#34; NAME &#34;ip&#34; ip_addr &#34;image&#34; STRING [&#34;mac&#34; STRING] \
+           [&#34;ports&#34; array] [&#34;port_bindings&#34; int_object] [&#34;env&#34; object] \
+           [&#34;cmd&#34; array]
+    switch: &#34;switch&#34; name+
+    cls: &#34;cls&#34; NAME
+    delay: &#34;delay&#34; STRING
+    bw: &#34;bw&#34; DEC_NUMBER
+    link: &#34;link&#34; NAME &#34;src&#34; NAME &#34;dst&#34; NAME \
+           [&#34;port1&#34; DEC_NUMBER] [&#34;port2&#34; DEC_NUMBER] \
+           [&#34;cls&#34; NAME ] [&#34;delay&#34; STRING] [&#34;bw&#34; DEC_NUMBER] 
+    up: &#34;up&#34;
+    ping: &#34;ping&#34; value+
+    down: &#34;down&#34;
+
+    value: name | STRING | DEC_NUMBER
+    name: NAME
+    ip_addr: STRING
+
+    array  : &#34;[&#34; [value (&#34;,&#34; value)*] &#34;]&#34;
+    object : &#34;{&#34; [pair (&#34;,&#34; pair)*] &#34;}&#34;
+    pair   : string &#34;:&#34; value
+
+    int_object : &#34;{&#34; [int_pair (&#34;,&#34; int_pair)*] &#34;}&#34;
+    int_pair   : DEC_NUMBER &#34;:&#34; DEC_NUMBER
+
+    string : ESCAPED_STRING
+
+    %import common.ESCAPED_STRING
+    %import python (NAME, STRING, DEC_NUMBER)
+    %import common.WS
+    %ignore WS
+    &#34;&#34;&#34;,
+    parser=&#34;lalr&#34;,
+)
+
+&#34;&#34;&#34; Use Lark tools to build the abstract syntax tree. &#34;&#34;&#34;
+transformer = ast_utils.create_transformer(this_module, ToAst())
+
+class Parser:
+    &#34;&#34;&#34; The parser performs lexixal analysis, executes gammar productions,
+    and generates the abstract syntax tree. &#34;&#34;&#34;
+    def parse(self, text: str) -&gt; Program:
+        tree = parser.parse(text)
+        print(tree.pretty())
+        return transformer.transform(tree)</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-variables">Global variables</h2>
+<dl>
+<dt id="midori.parser.parser"><code class="name">var <span class="ident">parser</span></code></dt>
+<dd>
+<div class="desc"><p>Use Lark tools to build the abstract syntax tree.</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="midori.parser.Controller"><code class="flex name class">
+<span>class <span class="ident">Controller</span></span>
+<span>(</span><span>value: <a title="midori.parser.Value" href="#midori.parser.Value">Value</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Controller(value: midori.parser.Value)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Controller(_Statement):
+    value: Value</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>midori.parser._Statement</li>
+<li>midori.parser._Ast</li>
+<li>lark.ast_utils.Ast</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="midori.parser.RemoteController" href="#midori.parser.RemoteController">RemoteController</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="midori.parser.Controller.value"><code class="name">var <span class="ident">value</span> : <a title="midori.parser.Value" href="#midori.parser.Value">Value</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="midori.parser.Down"><code class="flex name class">
+<span>class <span class="ident">Down</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Down()</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Down(_Ast):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>midori.parser._Ast</li>
+<li>lark.ast_utils.Ast</li>
+</ul>
+</dd>
+<dt id="midori.parser.IPAddr"><code class="flex name class">
+<span>class <span class="ident">IPAddr</span></span>
+<span>(</span><span>meta: lark.tree.Meta, value: object)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>IPAddr(meta: lark.tree.Meta, value: object)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class IPAddr(Value):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="midori.parser.Value" href="#midori.parser.Value">Value</a></li>
+<li>midori.parser._Ast</li>
+<li>lark.ast_utils.Ast</li>
+<li>lark.ast_utils.WithMeta</li>
+</ul>
+</dd>
+<dt id="midori.parser.Image"><code class="flex name class">
+<span>class <span class="ident">Image</span></span>
+<span>(</span><span>meta: lark.tree.Meta, value: object)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Image(meta: lark.tree.Meta, value: object)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Image(Value):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="midori.parser.Value" href="#midori.parser.Value">Value</a></li>
+<li>midori.parser._Ast</li>
+<li>lark.ast_utils.Ast</li>
+<li>lark.ast_utils.WithMeta</li>
+</ul>
+</dd>
+<dt id="midori.parser.Link"><code class="flex name class">
+<span>class <span class="ident">Link</span></span>
+<span>(</span><span>name: <a title="midori.parser.Value" href="#midori.parser.Value">Value</a>, src: <a title="midori.parser.Value" href="#midori.parser.Value">Value</a>, dst: <a title="midori.parser.Value" href="#midori.parser.Value">Value</a>, port1: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = None, port2: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = None, cls: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = None, delay: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = None, bw: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Link(name: midori.parser.Value, src: midori.parser.Value, dst: midori.parser.Value, port1: Optional[midori.parser.Value] = None, port2: Optional[midori.parser.Value] = None, cls: Optional[midori.parser.Value] = None, delay: Optional[midori.parser.Value] = None, bw: Optional[midori.parser.Value] = None)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Link(_Statement):
+    name: Value
+    src: Value
+    dst: Value
+    port1: Optional[Value] = None
+    port2: Optional[Value] = None
+    cls: Optional[Value] = None
+    delay: Optional[Value] = None
+    bw: Optional[Value] = None</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>midori.parser._Statement</li>
+<li>midori.parser._Ast</li>
+<li>lark.ast_utils.Ast</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="midori.parser.Link.bw"><code class="name">var <span class="ident">bw</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="midori.parser.Link.cls"><code class="name">var <span class="ident">cls</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="midori.parser.Link.delay"><code class="name">var <span class="ident">delay</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="midori.parser.Link.dst"><code class="name">var <span class="ident">dst</span> : <a title="midori.parser.Value" href="#midori.parser.Value">Value</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="midori.parser.Link.name"><code class="name">var <span class="ident">name</span> : <a title="midori.parser.Value" href="#midori.parser.Value">Value</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="midori.parser.Link.port1"><code class="name">var <span class="ident">port1</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="midori.parser.Link.port2"><code class="name">var <span class="ident">port2</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="midori.parser.Link.src"><code class="name">var <span class="ident">src</span> : <a title="midori.parser.Value" href="#midori.parser.Value">Value</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="midori.parser.Name"><code class="flex name class">
+<span>class <span class="ident">Name</span></span>
+<span>(</span><span>name: str)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Name(name: str)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Name(_Ast):
+    name: str</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>midori.parser._Ast</li>
+<li>lark.ast_utils.Ast</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="midori.parser.Name.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="midori.parser.Node"><code class="flex name class">
+<span>class <span class="ident">Node</span></span>
+<span>(</span><span>name: <a title="midori.parser.Name" href="#midori.parser.Name">Name</a>, ip_addr: <a title="midori.parser.Value" href="#midori.parser.Value">Value</a>, image: <a title="midori.parser.Value" href="#midori.parser.Value">Value</a>, mac: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = None, ports: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = &lt;factory&gt;, port_bindings: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = &lt;factory&gt;, env: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = &lt;factory&gt;, cmd: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Node(name: midori.parser.Name, ip_addr: midori.parser.Value, image: midori.parser.Value, mac: Optional[midori.parser.Value] = None, ports: Optional[midori.parser.Value] = <factory>, port_bindings: Optional[midori.parser.Value] = <factory>, env: Optional[midori.parser.Value] = <factory>, cmd: Optional[midori.parser.Value] = None)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Node(_Statement):
+    name: Name
+    ip_addr: Value
+    image: Value
+    mac: Optional[Value] = None
+    ports: Optional[Value] = field(default_factory=list)
+    port_bindings: Optional[Value] = field(default_factory=list)
+    env: Optional[Value] = field(default_factory=dict)
+    cmd: Optional[Value] = None</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>midori.parser._Statement</li>
+<li>midori.parser._Ast</li>
+<li>lark.ast_utils.Ast</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="midori.parser.Node.cmd"><code class="name">var <span class="ident">cmd</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="midori.parser.Node.env"><code class="name">var <span class="ident">env</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="midori.parser.Node.image"><code class="name">var <span class="ident">image</span> : <a title="midori.parser.Value" href="#midori.parser.Value">Value</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="midori.parser.Node.ip_addr"><code class="name">var <span class="ident">ip_addr</span> : <a title="midori.parser.Value" href="#midori.parser.Value">Value</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="midori.parser.Node.mac"><code class="name">var <span class="ident">mac</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="midori.parser.Node.name"><code class="name">var <span class="ident">name</span> : <a title="midori.parser.Name" href="#midori.parser.Name">Name</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="midori.parser.Node.port_bindings"><code class="name">var <span class="ident">port_bindings</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="midori.parser.Node.ports"><code class="name">var <span class="ident">ports</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="midori.parser.Parser"><code class="flex name class">
+<span>class <span class="ident">Parser</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>The parser performs lexixal analysis, executes gammar productions,
+and generates the abstract syntax tree.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Parser:
+    &#34;&#34;&#34; The parser performs lexixal analysis, executes gammar productions,
+    and generates the abstract syntax tree. &#34;&#34;&#34;
+    def parse(self, text: str) -&gt; Program:
+        tree = parser.parse(text)
+        print(tree.pretty())
+        return transformer.transform(tree)</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="midori.parser.Parser.parse"><code class="name flex">
+<span>def <span class="ident">parse</span></span>(<span>self, text: str) ‑> <a title="midori.parser.Program" href="#midori.parser.Program">Program</a></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def parse(self, text: str) -&gt; Program:
+    tree = parser.parse(text)
+    print(tree.pretty())
+    return transformer.transform(tree)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="midori.parser.Ping"><code class="flex name class">
+<span>class <span class="ident">Ping</span></span>
+<span>(</span><span>name: List[<a title="midori.parser.Name" href="#midori.parser.Name">Name</a>])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Ping(name: List[midori.parser.Name])</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Ping(_Statement, ast_utils.AsList):
+    name: List[Name]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>midori.parser._Statement</li>
+<li>midori.parser._Ast</li>
+<li>lark.ast_utils.Ast</li>
+<li>lark.ast_utils.AsList</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="midori.parser.Ping.name"><code class="name">var <span class="ident">name</span> : List[<a title="midori.parser.Name" href="#midori.parser.Name">Name</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="midori.parser.Program"><code class="flex name class">
+<span>class <span class="ident">Program</span></span>
+<span>(</span><span>statements: List[midori.parser._Statement])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Program(statements: List[midori.parser._Statement])</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Program(_Ast, ast_utils.AsList):
+    # Corresponds to code_block in the grammar
+    statements: List[_Statement]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>midori.parser._Ast</li>
+<li>lark.ast_utils.Ast</li>
+<li>lark.ast_utils.AsList</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="midori.parser.Program.statements"><code class="name">var <span class="ident">statements</span> : List[midori.parser._Statement]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="midori.parser.RemoteController"><code class="flex name class">
+<span>class <span class="ident">RemoteController</span></span>
+<span>(</span><span>value: <a title="midori.parser.Value" href="#midori.parser.Value">Value</a>, host: <a title="midori.parser.Name" href="#midori.parser.Name">Name</a>, port: <a title="midori.parser.Value" href="#midori.parser.Value">Value</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>RemoteController(value: midori.parser.Value, host: midori.parser.Name, port: midori.parser.Value)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class RemoteController(Controller):
+    host: Name
+    port: Value</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="midori.parser.Controller" href="#midori.parser.Controller">Controller</a></li>
+<li>midori.parser._Statement</li>
+<li>midori.parser._Ast</li>
+<li>lark.ast_utils.Ast</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="midori.parser.RemoteController.host"><code class="name">var <span class="ident">host</span> : <a title="midori.parser.Name" href="#midori.parser.Name">Name</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="midori.parser.RemoteController.port"><code class="name">var <span class="ident">port</span> : <a title="midori.parser.Value" href="#midori.parser.Value">Value</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="midori.parser.Switch"><code class="flex name class">
+<span>class <span class="ident">Switch</span></span>
+<span>(</span><span>name: List[<a title="midori.parser.Name" href="#midori.parser.Name">Name</a>])</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Switch(name: List[midori.parser.Name])</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Switch(_Statement, ast_utils.AsList):
+    name: List[Name]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>midori.parser._Statement</li>
+<li>midori.parser._Ast</li>
+<li>lark.ast_utils.Ast</li>
+<li>lark.ast_utils.AsList</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="midori.parser.Switch.name"><code class="name">var <span class="ident">name</span> : List[<a title="midori.parser.Name" href="#midori.parser.Name">Name</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="midori.parser.ToAst"><code class="flex name class">
+<span>class <span class="ident">ToAst</span></span>
+<span>(</span><span>visit_tokens: bool = True)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Transformers visit each node of the tree, and run the appropriate method on it according to the node's data.</p>
+<p>Methods are provided by the user via inheritance, and called according to <code>tree.data</code>.
+The returned value from each method replaces the node in the tree structure.</p>
+<p>Transformers work bottom-up (or depth-first), starting with the leaves and ending at the root of the tree.
+Transformers can be used to implement map &amp; reduce patterns. Because nodes are reduced from leaf to root,
+at any point the callbacks may assume the children have already been transformed (if applicable).</p>
+<p><code>Transformer</code> can do anything <code>Visitor</code> can do, but because it reconstructs the tree,
+it is slightly less efficient.</p>
+<p>To discard a node, return Discard (<code>lark.visitors.Discard</code>).</p>
+<p>All these classes implement the transformer interface:</p>
+<ul>
+<li><code>Transformer</code> - Recursively transforms the tree. This is the one you probably want.</li>
+<li><code>Transformer_InPlace</code> - Non-recursive. Changes the tree in-place instead of returning new instances</li>
+<li><code>Transformer_InPlaceRecursive</code> - Recursive. Changes the tree in-place instead of returning new instances</li>
+</ul>
+<h2 id="parameters">Parameters</h2>
+<p>visit_tokens (bool, optional): Should the transformer visit tokens in addition to rules.
+Setting this to <code>False</code> is slightly faster. Defaults to <code>True</code>.
+(For processing ignored tokens, use the <code>lexer_callbacks</code> options)</p>
+<p>NOTE: A transformer without methods essentially performs a non-memoized partial deepcopy.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ToAst(Transformer):
+    # Define extra transformation functions, for rules that don&#39;t correspond to an AST class.
+
+    def STRING(self, s):
+        # Remove quotation marks
+        return s[1:-1]
+
+    def DEC_NUMBER(self, n):
+        return int(n)
+
+    @v_args(inline=True)
+    def start(self, x):
+        return x</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>lark.visitors.Transformer</li>
+<li>lark.visitors._Decoratable</li>
+<li>abc.ABC</li>
+<li>typing.Generic</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="midori.parser.ToAst.DEC_NUMBER"><code class="name flex">
+<span>def <span class="ident">DEC_NUMBER</span></span>(<span>self, n)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def DEC_NUMBER(self, n):
+    return int(n)</code></pre>
+</details>
+</dd>
+<dt id="midori.parser.ToAst.STRING"><code class="name flex">
+<span>def <span class="ident">STRING</span></span>(<span>self, s)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def STRING(self, s):
+    # Remove quotation marks
+    return s[1:-1]</code></pre>
+</details>
+</dd>
+<dt id="midori.parser.ToAst.start"><code class="name flex">
+<span>def <span class="ident">start</span></span>(<span>self, x)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@v_args(inline=True)
+def start(self, x):
+    return x</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="midori.parser.Up"><code class="flex name class">
+<span>class <span class="ident">Up</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Up()</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Up(_Ast):
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>midori.parser._Ast</li>
+<li>lark.ast_utils.Ast</li>
+</ul>
+</dd>
+<dt id="midori.parser.Value"><code class="flex name class">
+<span>class <span class="ident">Value</span></span>
+<span>(</span><span>meta: lark.tree.Meta, value: object)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Uses WithMeta to include line-number metadata in the meta attribute</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Value(_Ast, ast_utils.WithMeta):
+    &#34;Uses WithMeta to include line-number metadata in the meta attribute&#34;
+    meta: Meta
+    value: object</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>midori.parser._Ast</li>
+<li>lark.ast_utils.Ast</li>
+<li>lark.ast_utils.WithMeta</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="midori.parser.IPAddr" href="#midori.parser.IPAddr">IPAddr</a></li>
+<li><a title="midori.parser.Image" href="#midori.parser.Image">Image</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="midori.parser.Value.meta"><code class="name">var <span class="ident">meta</span> : lark.tree.Meta</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="midori.parser.Value.value"><code class="name">var <span class="ident">value</span> : object</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="midori" href="index.html">midori</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-variables">Global variables</a></h3>
+<ul class="">
+<li><code><a title="midori.parser.parser" href="#midori.parser.parser">parser</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="midori.parser.Controller" href="#midori.parser.Controller">Controller</a></code></h4>
+<ul class="">
+<li><code><a title="midori.parser.Controller.value" href="#midori.parser.Controller.value">value</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="midori.parser.Down" href="#midori.parser.Down">Down</a></code></h4>
+</li>
+<li>
+<h4><code><a title="midori.parser.IPAddr" href="#midori.parser.IPAddr">IPAddr</a></code></h4>
+</li>
+<li>
+<h4><code><a title="midori.parser.Image" href="#midori.parser.Image">Image</a></code></h4>
+</li>
+<li>
+<h4><code><a title="midori.parser.Link" href="#midori.parser.Link">Link</a></code></h4>
+<ul class="two-column">
+<li><code><a title="midori.parser.Link.bw" href="#midori.parser.Link.bw">bw</a></code></li>
+<li><code><a title="midori.parser.Link.cls" href="#midori.parser.Link.cls">cls</a></code></li>
+<li><code><a title="midori.parser.Link.delay" href="#midori.parser.Link.delay">delay</a></code></li>
+<li><code><a title="midori.parser.Link.dst" href="#midori.parser.Link.dst">dst</a></code></li>
+<li><code><a title="midori.parser.Link.name" href="#midori.parser.Link.name">name</a></code></li>
+<li><code><a title="midori.parser.Link.port1" href="#midori.parser.Link.port1">port1</a></code></li>
+<li><code><a title="midori.parser.Link.port2" href="#midori.parser.Link.port2">port2</a></code></li>
+<li><code><a title="midori.parser.Link.src" href="#midori.parser.Link.src">src</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="midori.parser.Name" href="#midori.parser.Name">Name</a></code></h4>
+<ul class="">
+<li><code><a title="midori.parser.Name.name" href="#midori.parser.Name.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="midori.parser.Node" href="#midori.parser.Node">Node</a></code></h4>
+<ul class="two-column">
+<li><code><a title="midori.parser.Node.cmd" href="#midori.parser.Node.cmd">cmd</a></code></li>
+<li><code><a title="midori.parser.Node.env" href="#midori.parser.Node.env">env</a></code></li>
+<li><code><a title="midori.parser.Node.image" href="#midori.parser.Node.image">image</a></code></li>
+<li><code><a title="midori.parser.Node.ip_addr" href="#midori.parser.Node.ip_addr">ip_addr</a></code></li>
+<li><code><a title="midori.parser.Node.mac" href="#midori.parser.Node.mac">mac</a></code></li>
+<li><code><a title="midori.parser.Node.name" href="#midori.parser.Node.name">name</a></code></li>
+<li><code><a title="midori.parser.Node.port_bindings" href="#midori.parser.Node.port_bindings">port_bindings</a></code></li>
+<li><code><a title="midori.parser.Node.ports" href="#midori.parser.Node.ports">ports</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="midori.parser.Parser" href="#midori.parser.Parser">Parser</a></code></h4>
+<ul class="">
+<li><code><a title="midori.parser.Parser.parse" href="#midori.parser.Parser.parse">parse</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="midori.parser.Ping" href="#midori.parser.Ping">Ping</a></code></h4>
+<ul class="">
+<li><code><a title="midori.parser.Ping.name" href="#midori.parser.Ping.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="midori.parser.Program" href="#midori.parser.Program">Program</a></code></h4>
+<ul class="">
+<li><code><a title="midori.parser.Program.statements" href="#midori.parser.Program.statements">statements</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="midori.parser.RemoteController" href="#midori.parser.RemoteController">RemoteController</a></code></h4>
+<ul class="">
+<li><code><a title="midori.parser.RemoteController.host" href="#midori.parser.RemoteController.host">host</a></code></li>
+<li><code><a title="midori.parser.RemoteController.port" href="#midori.parser.RemoteController.port">port</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="midori.parser.Switch" href="#midori.parser.Switch">Switch</a></code></h4>
+<ul class="">
+<li><code><a title="midori.parser.Switch.name" href="#midori.parser.Switch.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="midori.parser.ToAst" href="#midori.parser.ToAst">ToAst</a></code></h4>
+<ul class="">
+<li><code><a title="midori.parser.ToAst.DEC_NUMBER" href="#midori.parser.ToAst.DEC_NUMBER">DEC_NUMBER</a></code></li>
+<li><code><a title="midori.parser.ToAst.STRING" href="#midori.parser.ToAst.STRING">STRING</a></code></li>
+<li><code><a title="midori.parser.ToAst.start" href="#midori.parser.ToAst.start">start</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="midori.parser.Up" href="#midori.parser.Up">Up</a></code></h4>
+</li>
+<li>
+<h4><code><a title="midori.parser.Value" href="#midori.parser.Value">Value</a></code></h4>
+<ul class="">
+<li><code><a title="midori.parser.Value.meta" href="#midori.parser.Value.meta">meta</a></code></li>
+<li><code><a title="midori.parser.Value.value" href="#midori.parser.Value.value">value</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>

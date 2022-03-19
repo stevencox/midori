@@ -1,34 +1,87 @@
+###########################################################
+##
+## Midori System
+##
+##   A network simulation SDK.
+##
+##   onos: software defined networking operating system.
+##
+##   containernet: network simulation system.
+##
+##   redis: message cache and data store.
+##
+##   redisinsight: redis gui.
+##
+##
+###########################################################
 version: '3.3'
 
 services:
 
+  # The control plane providing an openflow controller,
+  # an REST API supporting devices, links, paths, intents, etc,
+  # and GUI. We specify onos apps to launch on startup.
   onos:
     image: onosproject/onos:latest
+    environment:
+      - ONOS_APPS=drivers,openflow,fwd,gui2
     restart: always
     ports:
-      - 8181:8181
-      - 6633:6633
-      - 6653:6653
+      - 8181:8181 # GUI
+      - 6633:6633 # Openflow - Mininet interface
+      - 6653:6653 # Openflow - Mininet interface
     container_name: onos
-    
-  containernet:
-    depends_on:
-      - onos
-    image: containernet/containernet:latest
-    command: sudo /midori/start_midori.sh start
+
+  # Midori, an API and compiler for Containernet. Containernet
+  # is a Mininet fork which provides container based
+  # network simulation via a Python API.
+  midori:
+    image: midori/midori:latest
+    entrypoint: /midori/bin/midorictl start
+#    command: /midori/bin/midorictl start
     ports:
       - 8000:8000
     volumes:
+      # The docker socket is shared to allow Docker-in-Docker.
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "/Users/scox/dev/midori:/midori"
+      - $PWD:/midori
+    depends_on:
+      - onos
     privileged: true
     pid: host
     tty: true
-    container_name: containernet
-    
+    container_name: midori
+
+  # Redis cache and message queue for communication
+  # between Midori API and Containernet execution layer.
   redis:
     image: redislabs/redisgraph:2.8.9
     restart: always
     ports:
       - 6379:6379
     container_name: redis
+
+  # Graphical interface for Reds.
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    ports:
+      - 8001:8001
+    volumes:
+      - ${PWD}:/db
+
+
+  #https://groups.google.com/g/sflow-rt/c/SWk8z2wz1Ac
+
+  #https://blog.sflow.com/2018/11/
+
+  #https://stackoverflow.com/questions/64295255/redisinsight-on-docker-and-redis-on-docker-could-not-connect-error-99-connecti
+
+  #https://gist.github.com/pklaus/9638536
+
+  # ip addr: https://stackoverflow.com/questions/21014618/python-randomly-generated-ip-address-as-string
+
+  # pingall: http://mininet.org/api/classmininet_1_1net_1_1Mininet.html#a28793cc4739b246c86195a27d6dcb5bb
+
+  # cleanup: http://mininet.org/api/classmininet_1_1clean_1_1Cleanup.html
+
+  # intents: https://github.com/jorgelopezcoronado/SDNLab#using-the-rest-api

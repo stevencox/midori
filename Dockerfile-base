@@ -1,0 +1,10 @@
+FROM containernet/containernet:latest
+
+WORKDIR /midori
+COPY . /midori
+
+RUN bin/midorictl configure_midori
+RUN apt-get clean -y
+
+# Needed because the entrypoint, from the base image, is a relative path.
+WORKDIR /containernet

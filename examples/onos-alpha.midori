@@ -1,0 +1,41 @@
+remote_controller c0 host "onos" port 6633
+
+node h1 ip "10.0.0.251" image "mymysql:latest" mac "9a:d8:73:d8:90:6a" env {
+    "MYSQL_DATABASE"             : "exampledb", 
+    "MYSQL_USER"                 : "exampleuser",
+    "MYSQL_PASSWORD"             : "examplepass",
+    "MYSQL_RANDOM_ROOT_PASSWORD" : "1" 
+} cmd ["/entrypoint.sh mysqld &"]
+
+node h2 ip "10.0.0.252" image "mywordpress:latest" mac "9a:d8:73:d8:90:6b"
+ports [ 8080 ] port_bindings { 80 : 8080 } env {
+    "WORDPRESS_DB_HOST"     : "10.0.0.251",
+    "WORDPRESS_DB_USER"     : "exampleuser",
+    "WORDPRESS_DB_PASSWORD" : "examplepass",
+    "WORDPRESS_DB_NAME"     : "exampledb"
+} cmd ["/usr/local/bin/docker-entrypoint.sh apache2-foreground &"]
+
+node h3 ip "10.0.0.253" image "lab-api:latest" mac "9a:d8:73:d8:90:6c"
+ports [ 8888 ] port_bindings { 5000 : 8888 } cmd [
+    "ifconfig h3-eth1 10.0.0.253",
+    "python3 /usr/src/app/app.py &"
+]
+
+node h4 ip "10.0.0.254" image "lab-web:latest"  mac "9a:d8:73:d8:90:6d"
+ports [8081] port_bindings { 80 : 8081 }
+cmd ["service nginx start& "]
+
+switch s1 s2 s3 s4
+link l1 src h1 dst s1 port1 1 port2 1
+link l2 src h2 dst s2 port1 1 port2 1
+link l3 src h3 dst s3 port1 1 port2 1
+link l4 src h4 dst s4 port1 1 port2 1
+link l5 src s1 dst s2 port1 2 port2 2
+link l6 src s1 dst s3 port1 3 port2 2
+link l7 src s2 dst s3 port1 3 port2 3
+link l8 src s2 dst s4 port1 4 port2 2
+link l9 src s3 dst s4 port1 4 port2 3
+
+up
+ping h1 h2
+down

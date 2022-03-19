@@ -27,10 +27,17 @@ MIDORI_ROOT=$( dirname $DIR )
 export PYTHONPATH=$MIDORI_ROOT/src
 
 ##
-## Run Midori
+## Compile a Midori program.
 ##
 compile () {
     python $MIDORI_ROOT/src/midori/compiler.py --source $*
+}
+
+##
+## Run a Midori program remotely.
+##
+run () {
+    python $MIDORI_ROOT/src/midori/client.py $*
 }
 
 ##
@@ -38,6 +45,39 @@ compile () {
 ##
 test () {
     pytest $MIDORI_ROOT/tests/test_compiler.py
+}
+
+##
+## Load Midori
+##
+load () {
+    for x in {0..25000}; do
+	curl -X 'GET' \
+	     'http://127.0.0.1:8000/network/result?network_id=98666727-4d3d-4827-97e4-b30826cae35d' \
+	     -H 'accept: application/json'
+	echo hi
+    done
+}
+
+##
+## Configure
+##
+## Tools for keeping Python pip dependencies orderly and minimal.
+##
+configure () {
+    DEPS="fastapi jinja2 docker lark argparse PyYAML uvicorn rq redisgraph jsonpickle pytest pympler"
+    install () {
+	pip install $DEPS
+    }
+    freeze () {
+	pattern=$(echo $DEPS | sed -e "s, ,\|,g")
+	pattern="($pattern)"
+	pip freeze | egrep $pattern
+    }
+    clean () {
+	pip freeze | xargs pip uninstall -y
+    }
+    $*
 }
 
 $*

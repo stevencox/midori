@@ -4,80 +4,167 @@ Generate a containernet network.
 """
 from mininet.net import Containernet
 from mininet.node import Controller
+from mininet.node import RemoteController
 from mininet.cli import CLI
 from mininet.link import TCLink
 from mininet.log import info, setLogLevel
+from midori.runtime import Context, Onos
+from midori.graph import MidoriGraph
+import json
+import socket
+import time
+
 setLogLevel('info')
 
-{#
-{%- for s in ast.statements %}
-  {{ s }}
-  {%- if 'Node' in s.__class__.__name__ -%}
-  ----> {{ s.__class__.__name__ }} {{ s }}
-name = "{{ s.name.value }}"
-ip = "{{ s.ip_addr.children[0] }}"
-image = "{{ s.image.value }}"
-info(f"*** Adding node:{name} ip:{ip} img:{image}\n")
-d1 = net.addDocker(name, ip=ip, dimage=image)
+{#- Write a regular mininet controller. -#}
+{%- macro write_controller(statement) %}
+    name = "{{ statement.value.value.name.value }}"
+    net = Containernet(controller=Controller)
+    info(f"*** Adding controller: {name}\n")
+    net.addController(name)
+{%- endmacro %}
 
-  {% endif %}
-{%- endfor %}
-#}
-    
-{% for statement in ast.statements -%}
-  {% if 'Controller' in statement.__class__.__name__ -%}
-name = "{{ statement.value.value.name.value }}"
-net = Containernet(controller=Controller)
-info(f"*** Adding controller: {name}\n")
-net.addController(name)
-  {%- elif 'Node' in statement.__class__.__name__ %}
-name = "{{ statement.name.value }}"
-ip = "{{ statement.ip_addr.children[0] }}"
-image = "{{ statement.image.value }}"
-info(f"*** Adding node:{name} ip:{ip} img:{image}\n")
-{{ statement.name.value }} = net.addDocker(name, ip=ip, dimage=image)
-  {% elif 'Switch' in statement.__class__.__name__ %}
+{#- Write a remote controller suitable for integration with eg onos -#}
+{% macro write_remote_controller(statement) %}
+    info('*** Adding controller\n')
+    net = Containernet()
+    name, host, port = "{{ statement.value.value.name.value }}", "{{ statement.host }}", {{ statement.port }}
+    ip = socket.gethostbyname(host)
+    controller = RemoteController(name, ip=ip, port=port)
+    net.addController(controller)
+    info(f"*** Added RemoteController(name={name},host={host},port={port})\n")
+    context = Context (
+        controller = Onos(api_host=host),
+        graph = MidoriGraph(host="redis"))
+{%- endmacro %}
+
+{#- Write a host definition specifying container parameters. -#}
+{% macro write_node(statement) -%}
+    name, ip, image, mac = "{{ statement.name.value }}", \
+        "{{ statement.ip_addr.children[0] }}", "{{ statement.image }}", \
+        "{{ statement.mac }}"
+    environment = { {% for pair in statement.env.children %}
+        {{ pair.children[0].children[0].value }} : "{{ pair.children[1].value }}",
+    {%- endfor -%}}
+    ports = [{%- for port in statement.ports.children -%}
+        {{ port.value }},
+    {%- endfor -%}]
+    port_bindings = { {%- for binding in statement.port_bindings.children -%}
+        {{ binding.children[0] }} : {{ binding.children[1] }},
+    {%- endfor -%} }
+    info(f"*** Adding node:{name} ip:{ip} img:{image} mac:{mac} ports:{ports} bindings:{port_bindings} env:{environment}\n")
+    {{ statement.name.value }} = net.addDocker(
+        name, ip=ip, dimage=image,
+        mac=mac, ports=ports,
+        port_bindings=port_bindings,
+        environment=environment)
+    {# { hosts.append(statement) or "" } #}
+    {% set test = hosts.update({ statement.name.value : statement}) %}
+    {# { do hosts.update({ statement.name.value : statement}) #}
+{%- endmacro %}
+
+{#- Write a switch definition. -#}
+{% macro write_switch(statement) -%}
     {%- for name in statement.name %}
-switch_name = "{{ name.name.value }}"
-info(f"*** Adding switch {switch_name}\n")
-s1 = net.addSwitch (switch_name)
+    switch_name = "{{ name.name.value }}"
+    info(f"*** Adding switch {switch_name}\n")
+    {{ name.name.value }} = net.addSwitch (switch_name)
+    {% set test = switches.update({ name.name.value : statement}) %}
     {% endfor %}
-  {%- elif 'Link' in statement.__class__.__name__ %}
-src = "{{ statement.src.value }}"
-dst = "{{ statement.dst.value }}"
-cls, delay, bw = None, None, None
-    {%- if statement.cls %}
-cls = "{{ statement.cls.children[0].value }}"
-    {%- endif -%}
-    {% if statement.delay %}
-delay = "{{ statement.delay.children[0] }}"
-    {%- endif -%}
-    {% if statement.bw %}
-bw = int("{{ statement.bw.children[0] }}")
-    {%- endif %}
-info (f"** Adding link src:{src} dst:{dst} cls:{cls} del:{delay} bw:{bw}")
-net.addLink(src, dst
-    {%- if statement.cls %}
-            ,cls={{ statement.cls.children[0].value }}
-    {%- endif %}
-    {%- if statement.delay %}
-            ,delay=delay
-    {%- endif %}
-    {%- if statement.bw %}
-            ,bw=bw
-    {%- endif %}
-)
-  {%- elif 'Up' in statement.__class__.__name__ %}
-net.start()
-  {%- elif 'Down' in statement.__class__.__name__ %}
-net.stop()
-  {%- elif 'Ping' in statement.__class__.__name__ %}
-net.ping ([
-    {% for node in statement.name %}
+{%- endmacro %}
+
+{#- Write a link. -#}
+{%- macro write_link(statement) -%}
+    src, dst, port1, port2, cls, delay, bw = \
+       {{ statement.src.value }}, {{ statement.dst.value }}, {{ statement.port1 }}, {{ statement.port2 }}, \
+       "{{ statement.cls.value }}", "{{ statement.delay }}", int("{{ statement.bw if statement.bw else -1 }}")
+    info (f"** Adding link src:{src} dst:{dst} p1:{port1} p2:{port2} cls:{cls} del:{delay} bw:{bw}\n")
+    net.addLink(src, dst
+    {%- if statement.port1 %},port1={{ statement.port1 }}{%- endif -%}
+    {%- if statement.port2 %},port2={{ statement.port2 }}{%- endif -%}
+    {%- if statement.cls %},cls={{ statement.cls.value }}{%- endif -%}
+    {%- if statement.delay %},delay=delay{%- endif -%}
+    {%- if statement.bw %},bw=bw{%- endif -%})
+{% endmacro %}
+
+{#- Write a ping statement. -#}
+{%- macro write_ping(statement) -%}
+    net.ping ([
+    {%- for node in statement.name -%}
       {%- if node.value.name.value != 'ping' -%}
-    {{ node.value.name.value }}{% if not loop.last %},{% endif -%}
+      {{ node.value.name.value }}{% if not loop.last %},{% endif -%}
       {%- endif -%}
+    {%- endfor -%}])
+{%- endmacro -%}
+
+{#- Write a start statement. -#}
+{%- macro write_start(statement) -%}
+    net.start()
+    {#
+    {%- for host in hosts %}
+        {%- for command in host.cmd.children %}
+    {{ host.name.value }}.cmd("{{ command.value }}")
+        {% endfor %}
     {%- endfor -%}
-    ])
+    #}
+    {%- for host in hosts.values() %}
+        {%- for command in host.cmd.children %}
+    {{ host.name.value }}.cmd("{{ command.value }}")
+        {%- endfor -%}
+    {%- endfor -%}
+{%- endmacro -%}
+    
+{#- Write a stop statement. -#}
+{%- macro write_stop(statement) -%}
+
+    dst_host_id = "{{ hosts["h2"].mac }}/None"
+    src_host_id = "{{ hosts["h1"].mac }}/None"
+    info(f"intent =========> {src_host_id} {dst_host_id}\n")
+    response = context.controller.calculate_intent(
+        ingress_device=src_host_id,
+        egress_device=dst_host_id)
+    #info (f"json => {json.dumps(response, indent=2)}\n")
+    
+    i = 0
+    while True:
+        net.pingAll()
+        time.sleep (5)
+        i += 1
+        if i > 5:
+           break
+    
+    net.stop()
+{%- endmacro -%}
+
+{# Write the main implementation of the network. #}
+def run_network():
+{# % set hosts = [] % #}
+{% set hosts = {} %}
+{% set switches = {} %}
+{% for statement in ast.statements -%}
+  {% set token_type = statement.__class__.__name__ -%}
+  {% if 'Tree' == token_type -%}
+    {% set statement = statement.children[0] -%}
+    {% set token_type = statement.__class__.__name__ -%}
+  {% endif -%}
+  {% if 'Controller' == token_type %}
+    {{ write_controller(statement) }}
+  {% elif 'RemoteController' == token_type %}
+    {{ write_remote_controller(statement) }}
+  {% elif 'Node' == token_type %}
+    {{ write_node(statement) }}
+  {% elif 'Switch' == token_type %}
+    {{ write_switch(statement) }}
+  {% elif 'Link' == token_type %}
+    {{ write_link(statement) }}
+  {% elif 'Up' == token_type %}
+    {{ write_start(statement) }}
+  {% elif 'Down' == token_type %}
+    {{ write_stop(statement) }}
+  {% elif 'Ping' == token_type %}
+    {{ write_ping(statement) }}
+  {%- else %}
+    print(f"ERROR: unmatched token: {statement}") 
   {%- endif %}
 {%- endfor %}
+   

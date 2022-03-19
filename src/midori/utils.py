@@ -6,7 +6,7 @@ import os
 import string
 import traceback
 import yaml
-from jinja2 import Template
+from jinja2 import Template, Environment
 
 logger = logging.getLogger (__name__)
 
@@ -62,6 +62,7 @@ class Resource:
             os.path.dirname (__file__),
             template_path)
         template_text = Resource.read_file (template_path)
+        jinja_env = Environment(extensions=['jinja2.ext.do'])
         template = Template (template_text)
         template.globals['now'] = datetime.datetime.utcnow
         return template.render (**context)

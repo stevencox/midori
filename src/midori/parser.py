@@ -1,6 +1,6 @@
 import sys
 from typing import List, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from lark import Lark, ast_utils, Transformer, v_args
 from lark.tree import Meta
@@ -38,6 +38,11 @@ class Controller(_Statement):
     value: Value
 
 @dataclass
+class RemoteController(Controller):
+    host: Name
+    port: Value
+    
+@dataclass
 class IPAddr(Value):
     pass
 
@@ -50,6 +55,11 @@ class Node(_Statement):
     name: Name
     ip_addr: Value
     image: Value
+    mac: Optional[Value] = None
+    ports: Optional[Value] = field(default_factory=list)
+    port_bindings: Optional[Value] = field(default_factory=list)
+    env: Optional[Value] = field(default_factory=dict)
+    cmd: Optional[Value] = None
 
 @dataclass
 class Switch(_Statement, ast_utils.AsList):
@@ -60,9 +70,11 @@ class Link(_Statement):
     name: Value
     src: Value
     dst: Value
-    cls: Optional[Name] = None
-    delay: Optional[Name] = None
-    bw: Optional[Name] = None
+    port1: Optional[Value] = None
+    port2: Optional[Value] = None
+    cls: Optional[Value] = None
+    delay: Optional[Value] = None
+    bw: Optional[Value] = None
 
 @dataclass
 class Up(_Ast):
@@ -94,29 +106,46 @@ class ToAst(Transformer):
 #   Define Parser
 #
 
+#     link: "link" NAME "src" NAME "dst" NAME cls? delay? bw?
+
 parser = Lark("""
     start: program
 
     program: statement+
 
-    ?statement: controller | node | switch | link | up
-              | ping | down
+    ?statement: control | node | switch | link | up | ping | down
 
+    control: controller | remote_controller
     controller: "controller" value
-    node: "node" NAME "ip" ip_addr "image" value
+    remote_controller: "remote_controller" value "host" STRING "port" DEC_NUMBER
+    node: "node" NAME "ip" ip_addr "image" STRING ["mac" STRING] \
+           ["ports" array] ["port_bindings" int_object] ["env" object] \
+           ["cmd" array]
     switch: "switch" name+
     cls: "cls" NAME
     delay: "delay" STRING
     bw: "bw" DEC_NUMBER
-    link: "link" NAME "src" NAME "dst" NAME cls? delay? bw?
+    link: "link" NAME "src" NAME "dst" NAME \
+           ["port1" DEC_NUMBER] ["port2" DEC_NUMBER] \
+           ["cls" NAME ] ["delay" STRING] ["bw" DEC_NUMBER] 
     up: "up"
-    ping: value+
+    ping: "ping" value+
     down: "down"
 
     value: name | STRING | DEC_NUMBER
     name: NAME
     ip_addr: STRING
 
+    array  : "[" [value ("," value)*] "]"
+    object : "{" [pair ("," pair)*] "}"
+    pair   : string ":" value
+
+    int_object : "{" [int_pair ("," int_pair)*] "}"
+    int_pair   : DEC_NUMBER ":" DEC_NUMBER
+
+    string : ESCAPED_STRING
+
+    %import common.ESCAPED_STRING
     %import python (NAME, STRING, DEC_NUMBER)
     %import common.WS
     %ignore WS
@@ -132,4 +161,5 @@ class Parser:
     and generates the abstract syntax tree. """
     def parse(self, text: str) -> Program:
         tree = parser.parse(text)
+        print(tree.pretty())
         return transformer.transform(tree)

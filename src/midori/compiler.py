@@ -19,41 +19,48 @@ class Compiler:
         logger.debug (f"{message}")
         self.parser = Parser ()
         
-    def _parse (self, source: str) -> None:
-        text = Resource.read_file (source)
-        return self.parser.parse (text)
-
-    def _emit_network (self,
-                       path: str,
-                       ast: Program,
-                       output_path:str=None) -> None:
-        out_path = path.replace (".midori", ".py")
-        if output_path:
-            out_path = output_path
-        Resource.render_file (
-            template_path="network.jinja2",
-            context={
-                "ast": ast
-            },
-            path=out_path)
-        
     def _emit (self,
-               path: str,
                ast: Program,
-               output_path:str=None) -> None:
-        self._emit_network (path, ast, output_path)
+               path: str=None,
+               output_path:str=None) -> str:
 
+        for statement in ast.statements:
+            logger.debug(f"{statement}")
+            
+        result = None
+        if output_path:
+            Resource.render_file (
+                template_path="network.jinja2",
+                context={
+                    "ast": ast
+                },
+                path=output_path)
+        else:
+            result = Resource.render (
+                template_path="network.jinja2",
+                context={
+                    "ast": ast
+                })
+        return result
+    
+    def process_file (self,
+                      path: str,
+                      output_path:str=None) -> str:
+        text = Resource.read_file (path)
+        return self.process (source=text, path=path, output_path=output_path)
+        
     def process (self,
-                 path: str,
-                 output_path:str=None) -> None:
-        ast: Program = self._parse (path)
-        self._emit (path, ast)
+                 source: str,
+                 path: str=None,
+                 output_path:str=None) -> str:
+        ast: Program = self.parser.parse (source)
+        return self._emit (ast=ast, path=path, output_path=output_path)
 
 def main ():
     
     """ Process arguments. """
     arg_parser = argparse.ArgumentParser(
-        description='Midori',
+        description='Midori Compiler',
         formatter_class=lambda prog: argparse.ArgumentDefaultsHelpFormatter(
             prog,
             max_help_position=180))
@@ -68,7 +75,8 @@ def main ():
     args = arg_parser.parse_args ()
     if args.source:
         compiler = Compiler (dry_run=args.dry_run)
-        compiler.process (args.source)
+        compiler.process_file (path=args.source,
+                               output_path=args.source.replace (".midori", ".py"))
 
 if __name__ == '__main__':
     main ()

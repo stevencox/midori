@@ -1,24 +1,27 @@
 #!/bin/bash
 
+#set -x
 set -e
-set -x
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 MIDORI_HOME=$( dirname $DIR )
 
 export MIDORI_VENV=$MIDORI_HOME/venv
-export PYTHONPATH=$MIDORI_HOME/src
+export PYTHONPATH=$MIDORI_HOME/src:/containernet
 
 export REDIS_HOST=redis
 export REDIS_PORT=6379
 export LOG_LEVEL=info
 
+#
+# Put a fresh Python 3.10.x environment on the system.
 install_python() {
     apt update --yes
     apt upgrade --yes
     apt install software-properties-common --yes
     add-apt-repository --yes ppa:deadsnakes/ppa
-    apt install --yes python3.10 python3.10-venv python3-pip
+    apt install --yes python3.10 python3.10-venv python3.10-dev python3-pip
+    apt-get clean -y
 }
 
 provide_venv() {
