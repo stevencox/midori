@@ -37,7 +37,9 @@ class MidoriConfig(ConfigParser):
             configs = [ "midori.ini", "midori-container.ini" ]
             config_paths = [ os.path.join (os.path.dirname(__file__), f) for f in configs ]
             self.read(config_paths)
-        
+
+config = MidoriConfig()
+
 if __name__ == "__main__":
     config = MidoriConfig ()
     print (config.get("midori", "midori_home"))

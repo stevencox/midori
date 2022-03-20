@@ -2,90 +2,97 @@ import json
 import jsonpickle
 import redis
 from midori.config import MidoriConfig
-from redisgraph import Edge, Graph, Path
-from redisgraph import Node as RNode
+from redisgraph import Node, Edge, Graph, Path
 from typing import Dict, List, Union, Any
 from string import Template
 
 config = MidoriConfig()
 
-class Node:    
-    def __init__(self, name: str) -> None:
-        self.name = name
-    def __repr__(self):
-        return f"{type(self).__name__}: name={self.name}"
-
-class Switch(Node):
-    pass
-
-class Host(Node):    
-    def __init__(self, name: str, environment: Dict) -> None:
-        super().__init__(name)
-        self.environment = environment
-    def __repr__(self):
-        return super().__repr__() + f" env={self.environment}"
-    
-class Link:
-    def __init__(self, src: Node, dst: Node) -> None:
-        self.src = src
-        self.dst = dst
-        
 class MidoriGraph:
     """ Interface to a graph database. To support experimentation with using
-    Cypher as a DSL for manipulating data networs. """
+    Cypher as a DSL for manipulating data networks. """
     def __init__(self,
                  graph: str = config.get("redis", "graph"),
                  host: str = config.get("redis", "host"),
                  port: int = config.getint("redis", "port")) -> None:
         """ Initialze the graph.
         
-        @param graph: The name of the graph to create.
-        @param host: The host Redis is on.
-        @param port: The port Redis is listening on. """
+        Args:
+            graph (str): The name of the graph to create.
+            host (str): The host Redis is on.
+            port (int): The port Redis is listening on.
+
+        """        
         redis_graph = redis.Redis(host=host, port=port)
         self.graph = Graph(graph, redis_graph)
 
-    def create_node(self, node: Node, label: Union[str, List] = []) -> RNode:
-        """ Create a node. """
-        if not label:
-            label = []
-        if isinstance(label, str):
-            label = [label]
-        if not "Node" in label:
-            label.append ("Node")
-        properties = jsonpickle.encode(node)
-        properties = json.loads(properties)
-        print(json.dumps(properties, indent=2))
-        properties["py_object"] = properties["py/object"]
-        del properties["py/object"]
-        rnode = RNode(alias=node.name, label=label, properties=properties)
-        self.graph.add_node(rnode)
-        return rnode
+    def add_node(self,
+                 alias: str,
+                 properties: Dict = {},
+                 labels: List[str] = []
+    ) -> Node:
+        """ Create a graph node.
+        
+        Args:
+            alias (str): A name for the node.
+            properties (dict): Node properties. Values may be primitives or arrays.
+            labels (list[str]): Labels describing the type of the node.
+        Returns:
+            Returns a Redisgraph Node object.
+        """
+        node = Node(alias=alias, label=labels, properties=properties)
+        self.graph.add_node(node)
+        return node
 
-    def create_host(self, node: Host) -> RNode:
-        return graph.create_node(node, label=["Host"])
+    def add_host(self, alias: str, properties: Dict = {}) -> Node:
+        """ Create a host with appropriate labels. """
+        return self.add_node(alias, properties, labels=["Host", "Node"])
     
-    def create_switch(self, node: Host) -> RNode:
-        return graph.create_node(node, label=["Switch"])
+    def add_switch(self, alias: str, properties: Dict = {}) -> Node:
+        """ Create a swtich with appropriate labels. """
+        return self.add_node(alias, properties, labels=["Switch", "Node"])
     
-    def create_edge(self, link: Link) -> None:
-        properties = {} #jsonpickle.encode(link)
-        edge = Edge(link.src, 'visited', link.dst, properties=properties)
+    def add_intent(self, alias: str, properties: Dict = {}) -> Node:
+        """ Create an intent object with appropriate labels. """
+        return self.add_node(alias, properties, labels=["Intent"])
+    
+    def add_edge(self,
+                 subject: Node,
+                 predicate: str,
+                 object: Node,
+                 properties: Dict = {}
+    ) -> None:
+        """ Create an edge linking subject and object via a predicate. """
+        edge = Edge(subject, predicate, object, properties)
         self.graph.add_edge(edge)
         return edge
 
     def commit(self) -> None:
+        """ Commit writes since the last commit.
+        """
         self.graph.commit ()
 
     def query(self, query: str) -> Any:
+        """ Query the database given a Cypher query. 
+
+        Args:
+            query (str): A cypher query.
+
+        Returns:
+            Returns a query result binding to names in the input query.
+        """
         return self.graph.query(query)
 
-    def get_shortest_path(self, src: str, dst: str):
-        
-        # https://oss.redis.com/redisgraph/commands/#allshortestpaths
-        #query = """MATCH (source:Host)-[v:visited]->(s1:Switch)-->(s2:Switch)-->(destination:Host)
-        #RETURN source.name, s1.name, s2.name, destination.name"""
-        
+    def get_shortest_path(self, src: str, dst: str) -> Any:
+        """ Find the shortest path between two nodes where the names correspond to the input values.
+
+        Args:
+            src (str): The name of the source node.
+            dst (str): The name of the destination node.
+            
+        Returns:
+            Returns the result of a shortest path query.
+        """
         query = Template(
             """MATCH (src:Host {name: "$src_name"}), (dst:Host {name: "$dst_name"})
             WITH src, dst
@@ -94,5 +101,7 @@ class MidoriGraph:
                 "src_name" : src,
                 "dst_name" : dst
             })
-
         return self.graph.query(query)
+
+    def clean(self) -> None:
+        self.query("MATCH (n) DELETE n")

@@ -1,9 +1,16 @@
+import logging
+import random
+import ipaddress
 import sys
-from typing import List, Optional
 from dataclasses import dataclass, field
-
 from lark import Lark, ast_utils, Transformer, v_args
 from lark.tree import Meta
+from midori.utils import LoggingUtil, Resource
+from typing import List, Optional
+
+LoggingUtil.setup_logging ()
+
+logger = logging.getLogger (__name__)
 
 this_module = sys.modules[__name__]
 
@@ -35,7 +42,7 @@ class Program(_Ast, ast_utils.AsList):
 
 @dataclass
 class Controller(_Statement):
-    value: Value
+    name: Name
 
 @dataclass
 class RemoteController(Controller):
@@ -51,7 +58,7 @@ class Image(Value):
     pass
 
 @dataclass
-class Node(_Statement):
+class Host(_Statement):
     name: Name
     ip_addr: Value
     image: Value
@@ -75,6 +82,10 @@ class Link(_Statement):
     cls: Optional[Value] = None
     delay: Optional[Value] = None
     bw: Optional[Value] = None
+
+@dataclass
+class Intent(_Statement, ast_utils.AsList):
+    name: List[Name]
 
 @dataclass
 class Up(_Ast):
@@ -102,34 +113,90 @@ class ToAst(Transformer):
     def start(self, x):
         return x
 
-#
-#   Define Parser
-#
+    def NAME(self, item):
+        return item.value
+    
+    def ip_addr(self, item):
+        return item[0]
+    
+    def object(self, item):
+        return item if item else {}
 
-#     link: "link" NAME "src" NAME "dst" NAME cls? delay? bw?
+    def string(self, items):
+        return str(items[0])
 
+    def array(self, items):
+        return [ item.value for item in items ]
+
+    def pair(self, key_value):
+        k, v = key_value
+        return k, v.value
+
+    def int_pair(self, key_value):
+        k, v = key_value
+        return int(k), int(v)
+
+    def int_object(self, items):
+        return items
+
+class MACGenerator:
+    
+    def __init__(self):
+        self.seed = [ 0, 0, 0, 0, 0, 0 ]
+        self.cell = len(self.seed) - 1
+        
+    def next(self):
+        if self.seed[self.cell] >= 255:
+            if self.cell == 0:
+                raise ValueError("MAC address range exceeded")
+            else:
+                self.cell -= 1
+        self.seed[self.cell] += 1
+        return "%02x:%02x:%02x:%02x:%02x:%02x" % tuple(self.seed)
+            
+class IPGenerator:
+    
+    def __init__(self):
+        self.pool = [ str(ip) for ip in ipaddress.IPv4Network('10.0.0.0/22') ]
+        self.index = 0
+        
+    def next(self):
+        self.index += 1
+        if self.index >= len(self.pool):
+            raise ValueError("The pool of random IP addresses has been exhausted.")
+        return self.pool[self.index]
+
+#
+#   Define the Midori language's grammar productions.
+#
 parser = Lark("""
     start: program
 
     program: statement+
 
-    ?statement: control | node | switch | link | up | ping | down
+    ?statement: control | host | switch | link | intent | up | ping | down
 
-    control: controller | remote_controller
+    ?control: controller | remote_controller
     controller: "controller" value
-    remote_controller: "remote_controller" value "host" STRING "port" DEC_NUMBER
-    node: "node" NAME "ip" ip_addr "image" STRING ["mac" STRING] \
+    remote_controller: "remote_controller" NAME "host" STRING "port" DEC_NUMBER
+
+    host: "host" NAME ["ip" ip_addr] "image" STRING ["mac" STRING] \
            ["ports" array] ["port_bindings" int_object] ["env" object] \
            ["cmd" array]
-    switch: "switch" name+
+
+    switch: "switch" NAME+
     cls: "cls" NAME
     delay: "delay" STRING
     bw: "bw" DEC_NUMBER
+
     link: "link" NAME "src" NAME "dst" NAME \
            ["port1" DEC_NUMBER] ["port2" DEC_NUMBER] \
-           ["cls" NAME ] ["delay" STRING] ["bw" DEC_NUMBER] 
+           ["cls" NAME ] ["delay" STRING] ["bw" DEC_NUMBER]
+
+    ?intent: "intent" NAME "->" NAME ("->" NAME)* 
+
     up: "up"
-    ping: "ping" value+
+    ping: "ping" NAME+
     down: "down"
 
     value: name | STRING | DEC_NUMBER
@@ -145,10 +212,13 @@ parser = Lark("""
 
     string : ESCAPED_STRING
 
+    COMMENT: /#.*/
+
     %import common.ESCAPED_STRING
     %import python (NAME, STRING, DEC_NUMBER)
     %import common.WS
     %ignore WS
+    %ignore COMMENT
     """,
     parser="lalr",
 )
@@ -161,5 +231,17 @@ class Parser:
     and generates the abstract syntax tree. """
     def parse(self, text: str) -> Program:
         tree = parser.parse(text)
-        print(tree.pretty())
-        return transformer.transform(tree)
+        logger.debug(tree.pretty())
+        ast = transformer.transform(tree)
+        """ Until we have a better way to ensure default values are set... """
+        if ast:
+            ip_generator = IPGenerator ()
+            mac_generator = MACGenerator ()
+            for statement in ast.statements:
+                if isinstance(statement, Host):
+                    statement.ip_addr = statement.ip_addr if statement.ip_addr else ip_generator.next()
+                    statement.mac = statement.mac if statement.mac else mac_generator.next()
+                    statement.env = statement.env if statement.env else []
+                    statement.ports = statement.ports if statement.ports else []
+                    statement.port_bindings = statement.port_bindings if statement.port_bindings else []
+        return ast

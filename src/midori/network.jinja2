@@ -7,9 +7,10 @@ from mininet.node import Controller
 from mininet.node import RemoteController
 from mininet.cli import CLI
 from mininet.link import TCLink
-from mininet.log import info, setLogLevel
-from midori.runtime import Context, Onos
-from midori.graph import MidoriGraph
+from mininet.log import setLogLevel
+from mininet.log import info as minfo
+from midori.runtime import Context
+from midori.config import config
 import json
 import socket
 import time
@@ -17,146 +18,163 @@ import time
 setLogLevel('info')
 
 {#- Write a regular mininet controller. -#}
-{%- macro write_controller(statement) %}
-    name = "{{ statement.value.value.name.value }}"
+{%- macro write_controller(statement) -%}
+    name = "{{ statement.name }}"
     net = Containernet(controller=Controller)
     info(f"*** Adding controller: {name}\n")
     net.addController(name)
 {%- endmacro %}
 
 {#- Write a remote controller suitable for integration with eg onos -#}
-{% macro write_remote_controller(statement) %}
+{% macro write_remote_controller(statement) -%}
     info('*** Adding controller\n')
     net = Containernet()
-    name, host, port = "{{ statement.value.value.name.value }}", "{{ statement.host }}", {{ statement.port }}
+    name, host, port = "{{ statement.name }}", "{{ statement.host }}", {{ statement.port }}
     ip = socket.gethostbyname(host)
     controller = RemoteController(name, ip=ip, port=port)
     net.addController(controller)
     info(f"*** Added RemoteController(name={name},host={host},port={port})\n")
-    context = Context (
-        controller = Onos(api_host=host),
-        graph = MidoriGraph(host="redis"))
 {%- endmacro %}
 
 {#- Write a host definition specifying container parameters. -#}
-{% macro write_node(statement) -%}
-    name, ip, image, mac = "{{ statement.name.value }}", \
-        "{{ statement.ip_addr.children[0] }}", "{{ statement.image }}", \
-        "{{ statement.mac }}"
-    environment = { {% for pair in statement.env.children %}
-        {{ pair.children[0].children[0].value }} : "{{ pair.children[1].value }}",
-    {%- endfor -%}}
-    ports = [{%- for port in statement.ports.children -%}
-        {{ port.value }},
-    {%- endfor -%}]
-    port_bindings = { {%- for binding in statement.port_bindings.children -%}
-        {{ binding.children[0] }} : {{ binding.children[1] }},
-    {%- endfor -%} }
-    info(f"*** Adding node:{name} ip:{ip} img:{image} mac:{mac} ports:{ports} bindings:{port_bindings} env:{environment}\n")
-    {{ statement.name.value }} = net.addDocker(
+{% macro write_host(statement) -%}
+    name, ip, image, mac = "{{ statement.name }}", "{{ statement.ip_addr }}", "{{ statement.image }}", "{{ statement.mac }}"
+    environment = { {% for pair in statement.env %}{{ pair[0] }} : "{{ pair[1] }}",{%- endfor -%} }
+    ports = [ {% if statement.ports %}{% for port in statement.ports %}{{ port }},{% endfor %}{% endif %} ]
+    port_bindings = { {% for bind in statement.port_bindings -%}{{ bind[0] }} : {{ bind[1] }},{% endfor %} }
+    info(f"*** Adding host:{name} ip:{ip} img:{image} mac:{mac} ports:{ports} bindings:{port_bindings} env:{environment}\n")
+    {{ statement.name }} = net.addDocker(
         name, ip=ip, dimage=image,
         mac=mac, ports=ports,
         port_bindings=port_bindings,
         environment=environment)
-    {# { hosts.append(statement) or "" } #}
-    {% set test = hosts.update({ statement.name.value : statement}) %}
-    {# { do hosts.update({ statement.name.value : statement}) #}
+    {%- set test = hosts.update({ statement.name : statement}) %}
+    {{ statement.name }}_gnode = context.graph.add_host(alias=name, properties={
+        "name" : name, "ip" : ip, "image" : image, "mac":mac, "env": [ f"{k}:{v}" for k, v in environment.items() ],
+        "ports" : ports, "port_bindings" : [ f"{k}:{v}" for k, v in port_bindings.items() ], "cmd" : {{ statement.cmd }}
+        })
 {%- endmacro %}
 
 {#- Write a switch definition. -#}
 {% macro write_switch(statement) -%}
     {%- for name in statement.name %}
-    switch_name = "{{ name.name.value }}"
+    switch_name = "{{ name }}"
     info(f"*** Adding switch {switch_name}\n")
-    {{ name.name.value }} = net.addSwitch (switch_name)
-    {% set test = switches.update({ name.name.value : statement}) %}
-    {% endfor %}
+    {{ name }} = net.addSwitch (switch_name)
+    {{ name }}_gnode = context.graph.add_switch(alias=switch_name, properties={"name":switch_name})
+    {%- endfor -%}
 {%- endmacro %}
 
 {#- Write a link. -#}
 {%- macro write_link(statement) -%}
     src, dst, port1, port2, cls, delay, bw = \
-       {{ statement.src.value }}, {{ statement.dst.value }}, {{ statement.port1 }}, {{ statement.port2 }}, \
-       "{{ statement.cls.value }}", "{{ statement.delay }}", int("{{ statement.bw if statement.bw else -1 }}")
+       {{ statement.src }}, {{ statement.dst }}, {{ statement.port1 }}, {{ statement.port2 }}, \
+       "{{ statement.cls }}", "{{ statement.delay }}", int("{{ statement.bw if statement.bw else -1 }}")
     info (f"** Adding link src:{src} dst:{dst} p1:{port1} p2:{port2} cls:{cls} del:{delay} bw:{bw}\n")
     net.addLink(src, dst
     {%- if statement.port1 %},port1={{ statement.port1 }}{%- endif -%}
     {%- if statement.port2 %},port2={{ statement.port2 }}{%- endif -%}
-    {%- if statement.cls %},cls={{ statement.cls.value }}{%- endif -%}
+    {%- if statement.cls %},cls={{ statement.cls }}{%- endif -%}
     {%- if statement.delay %},delay=delay{%- endif -%}
-    {%- if statement.bw %},bw=bw{%- endif -%})
-{% endmacro %}
+    {%- if statement.bw %},bw=bw{%- endif %})
+    context.graph.add_edge(subject={{ statement.src }}_gnode,
+                           predicate="linked_to",
+                           object={{ statement.dst }}_gnode,
+                           properties={ "port1" : port1, "port2" : port2, "cls" : cls, "delay" : delay, "bw" : bw })
+{%- endmacro %}
+
+{#- Write an intent to the SDN controller linking a path of hosts. -#}
+{#- Currently, only host to host intents are supported. -#}
+{%- macro write_intent(statement) -%}
+    {%- for host in statement.name -%}
+    {%- if loop.index < loop.length -%}
+    {%- set source_host = hosts[host] -%}
+    {%- set dest_host = hosts[statement.name[loop.index]] -%}    
+    info (f"** Adding host-to-host intent: {{ source_host.name }}->{{ dest_host.name }}\n")
+    response = context.controller.create_host_intent(
+        ingress_device="{{ source_host.mac }}/None",
+        egress_device="{{ dest_host.mac }}/None")
+    name = "{{ source_host.name }}_to_{{ dest_host.name }}"
+    intent_node = context.graph.add_intent(alias=name, properties={"name":name})
+    context.graph.add_edge(subject=intent_node,
+                           predicate="from",
+                           object={{ source_host.name }}_gnode)
+    context.graph.add_edge(subject=intent_node,
+                           predicate="to",
+                           object={{ dest_host.name }}_gnode)
+    {%- endif -%}
+    {%- endfor %}
+{% endmacro -%}
 
 {#- Write a ping statement. -#}
 {%- macro write_ping(statement) -%}
+    info (f"** Pinging hosts: {{ statement.name }}\n")
     net.ping ([
     {%- for node in statement.name -%}
-      {%- if node.value.name.value != 'ping' -%}
-      {{ node.value.name.value }}{% if not loop.last %},{% endif -%}
-      {%- endif -%}
+      {{ node }}{% if not loop.last %},{% endif -%}
     {%- endfor -%}])
 {%- endmacro -%}
 
 {#- Write a start statement. -#}
 {%- macro write_start(statement) -%}
+    info (f"** Committing property graph model.\n")
+    context.graph.commit()
+    info (f"** Starting Containernet simullation network.\n")
     net.start()
-    {#
-    {%- for host in hosts %}
-        {%- for command in host.cmd.children %}
-    {{ host.name.value }}.cmd("{{ command.value }}")
-        {% endfor %}
-    {%- endfor -%}
-    #}
     {%- for host in hosts.values() %}
-        {%- for command in host.cmd.children %}
-    {{ host.name.value }}.cmd("{{ command.value }}")
+    info (f"** Executing container initialization commands.\n")
+        {%- for command in host.cmd %}
+    {{ host.name }}.cmd("{{ command }}")
         {%- endfor -%}
     {%- endfor -%}
 {%- endmacro -%}
     
 {#- Write a stop statement. -#}
 {%- macro write_stop(statement) -%}
-
-    dst_host_id = "{{ hosts["h2"].mac }}/None"
-    src_host_id = "{{ hosts["h1"].mac }}/None"
-    info(f"intent =========> {src_host_id} {dst_host_id}\n")
-    response = context.controller.calculate_intent(
-        ingress_device=src_host_id,
-        egress_device=dst_host_id)
-    #info (f"json => {json.dumps(response, indent=2)}\n")
-    
     i = 0
     while True:
-        net.pingAll()
+        net.ping([ blog, db ])
+        net.ping([ web, api ])
         time.sleep (5)
         i += 1
         if i > 5:
-           break
-    
+           break    
+    info (f"** Stopping Containernet simulation.\n")
     net.stop()
-{%- endmacro -%}
+{%- endmacro %}
 
 {# Write the main implementation of the network. #}
-def run_network():
-{# % set hosts = [] % #}
+def run_network(context: Context) -> None:
+    """ Run the simulated network in the environment provided by context.
+
+    Args:
+        context (Context): An environment including an SDN
+        controller and graph database for the simulation.
+
+    """
+    def info(message: str) -> None:
+        """ Write an informational message.
+    
+        Args: 
+            message (str): A string message to write.
+        """
+        context.log(message)
+        minfo(message)
 {% set hosts = {} %}
-{% set switches = {} %}
 {% for statement in ast.statements -%}
   {% set token_type = statement.__class__.__name__ -%}
-  {% if 'Tree' == token_type -%}
-    {% set statement = statement.children[0] -%}
-    {% set token_type = statement.__class__.__name__ -%}
-  {% endif -%}
   {% if 'Controller' == token_type %}
     {{ write_controller(statement) }}
   {% elif 'RemoteController' == token_type %}
     {{ write_remote_controller(statement) }}
-  {% elif 'Node' == token_type %}
-    {{ write_node(statement) }}
+  {% elif 'Host' == token_type %}
+    {{ write_host(statement) }}
   {% elif 'Switch' == token_type %}
     {{ write_switch(statement) }}
   {% elif 'Link' == token_type %}
     {{ write_link(statement) }}
+  {% elif 'Intent' == token_type %}
+    {{ write_intent(statement) }}
   {% elif 'Up' == token_type %}
     {{ write_start(statement) }}
   {% elif 'Down' == token_type %}
@@ -164,7 +182,7 @@ def run_network():
   {% elif 'Ping' == token_type %}
     {{ write_ping(statement) }}
   {%- else %}
-    print(f"ERROR: unmatched token: {statement}") 
+    print(f"ERROR: unmatched token: {{ statement }}") 
   {%- endif %}
 {%- endfor %}
    

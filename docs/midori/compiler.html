@@ -37,15 +37,20 @@ LoggingUtil.setup_logging ()
 logger = logging.getLogger (&#34;midori.compiler&#34;)
 
 class Compiler:
-
-    def __init__(self,
-                 dry_run:bool = False) -&gt; None:
+    &#34;&#34;&#34; The compiler accetps a domain specific language (DSL) describing
+    a network including elements like SDN controllers, hosts as containers,
+    switches, and links. The compiler parses the input source code into an
+    abstract syntax tree, then projects that intermediate representation
+    through a template to generate executable Containernet(Mininet) Python code. &#34;&#34;&#34;
+    def __init__(self, dry_run:bool = False) -&gt; None:
+        &#34;&#34;&#34; Initialize the compiler. &#34;&#34;&#34;
         self.dry_run = dry_run
         message = &#34;, &#34;.join ([
             f&#34;dry_run={self.dry_run}&#34;
         ])
         logger.debug (f&#34;{message}&#34;)
         self.parser = Parser ()
+        &#34;&#34;&#34; The lexical analyzer (parser) that will assemble tokens into an AST. &#34;&#34;&#34;
         
     def _emit (self,
                ast: Program,
@@ -159,21 +164,31 @@ if __name__ == &#39;__main__&#39;:
 <span>(</span><span>dry_run: bool = False)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>The compiler accetps a domain specific language (DSL) describing
+a network including elements like SDN controllers, hosts as containers,
+switches, and links. The compiler parses the input source code into an
+abstract syntax tree, then projects that intermediate representation
+through a template to generate executable Containernet(Mininet) Python code. </p>
+<p>Initialize the compiler.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Compiler:
-
-    def __init__(self,
-                 dry_run:bool = False) -&gt; None:
+    &#34;&#34;&#34; The compiler accetps a domain specific language (DSL) describing
+    a network including elements like SDN controllers, hosts as containers,
+    switches, and links. The compiler parses the input source code into an
+    abstract syntax tree, then projects that intermediate representation
+    through a template to generate executable Containernet(Mininet) Python code. &#34;&#34;&#34;
+    def __init__(self, dry_run:bool = False) -&gt; None:
+        &#34;&#34;&#34; Initialize the compiler. &#34;&#34;&#34;
         self.dry_run = dry_run
         message = &#34;, &#34;.join ([
             f&#34;dry_run={self.dry_run}&#34;
         ])
         logger.debug (f&#34;{message}&#34;)
         self.parser = Parser ()
+        &#34;&#34;&#34; The lexical analyzer (parser) that will assemble tokens into an AST. &#34;&#34;&#34;
         
     def _emit (self,
                ast: Program,
@@ -212,6 +227,13 @@ if __name__ == &#39;__main__&#39;:
         ast: Program = self.parser.parse (source)
         return self._emit (ast=ast, path=path, output_path=output_path)</code></pre>
 </details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="midori.compiler.Compiler.parser"><code class="name">var <span class="ident">parser</span></code></dt>
+<dd>
+<div class="desc"><p>The lexical analyzer (parser) that will assemble tokens into an AST.</p></div>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="midori.compiler.Compiler.process"><code class="name flex">
@@ -273,6 +295,7 @@ if __name__ == &#39;__main__&#39;:
 <li>
 <h4><code><a title="midori.compiler.Compiler" href="#midori.compiler.Compiler">Compiler</a></code></h4>
 <ul class="">
+<li><code><a title="midori.compiler.Compiler.parser" href="#midori.compiler.Compiler.parser">parser</a></code></li>
 <li><code><a title="midori.compiler.Compiler.process" href="#midori.compiler.Compiler.process">process</a></code></li>
 <li><code><a title="midori.compiler.Compiler.process_file" href="#midori.compiler.Compiler.process_file">process_file</a></code></li>
 </ul>

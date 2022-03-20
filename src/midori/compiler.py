@@ -6,25 +6,41 @@ from typing import List, Dict
 
 LoggingUtil.setup_logging ()
 
-logger = logging.getLogger ("midori.compiler")
+logger = logging.getLogger (__name__)
 
 class Compiler:
-
+    """ The compiler accetps a domain specific language (DSL) describing
+    a network including elements like SDN controllers, hosts as containers,
+    switches, and links. The compiler parses the input source code into an
+    abstract syntax tree, then projects that intermediate representation
+    through a template to generate executable Containernet(Mininet) Python code. """
     def __init__(self,
-                 dry_run:bool = False) -> None:
+                 dry_run: bool = False,
+                 debug: bool = False
+    ) -> None:
+        """ Initialize the compiler. 
+        Args:
+            dry_run (bool): Compile but don't actually write output.
+            debug (bool): Print verbose runtime information.
+        """
         self.dry_run = dry_run
-        message = ", ".join ([
-            f"dry_run={self.dry_run}"
-        ])
-        logger.debug (f"{message}")
+        self.debug = debug
+        logger.debug (f"dry_run={self.dry_run}, debug={self.debug}")
         self.parser = Parser ()
+        """ The lexical analyzer (parser) that will assemble tokens into an AST. """
         
     def _emit (self,
                ast: Program,
-               path: str=None,
+#               path: str=None,
                output_path:str=None) -> str:
-
+        """ Write an executable output program.
+        Args:
+            ast (Program): Parsed statements from the grammar.
+            path (str): The path to the input file.
+            output_path (str): Path to the output file.
+        """
         for statement in ast.statements:
+            print(f"{statement}")
             logger.debug(f"{statement}")
             
         result = None
@@ -54,7 +70,8 @@ class Compiler:
                  path: str=None,
                  output_path:str=None) -> str:
         ast: Program = self.parser.parse (source)
-        return self._emit (ast=ast, path=path, output_path=output_path)
+#        return self._emit (ast=ast, path=path, output_path=output_path)
+        return self._emit (ast=ast, output_path=output_path)
 
 def main ():
     
@@ -71,10 +88,14 @@ def main ():
                              help="Don't write any output.",
                              action="store_true",
                              default=False)
+    arg_parser.add_argument('--debug',
+                             help="Print very verbose runtime information.",
+                             action="store_true",
+                             default=False)
     
     args = arg_parser.parse_args ()
     if args.source:
-        compiler = Compiler (dry_run=args.dry_run)
+        compiler = Compiler (dry_run=args.dry_run, debug=args.debug)
         compiler.process_file (path=args.source,
                                output_path=args.source.replace (".midori", ".py"))
 

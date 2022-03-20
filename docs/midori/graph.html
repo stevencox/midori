@@ -67,14 +67,25 @@ class MidoriGraph:
                  port: int = config.getint(&#34;redis&#34;, &#34;port&#34;)) -&gt; None:
         &#34;&#34;&#34; Initialze the graph.
         
-        @param graph: The name of the graph to create.
-        @param host: The host Redis is on.
-        @param port: The port Redis is listening on. &#34;&#34;&#34;
+        Args:
+            graph (str): The name of the graph to create.
+            host (str): The host Redis is on.
+            port (int): The port Redis is listening on.
+
+        &#34;&#34;&#34;        
         redis_graph = redis.Redis(host=host, port=port)
         self.graph = Graph(graph, redis_graph)
 
-    def create_node(self, node: Node, label: Union[str, List] = []) -&gt; RNode:
-        &#34;&#34;&#34; Create a node. &#34;&#34;&#34;
+    def create_node(self, node: Node, label: Union[str, List[str]] = []) -&gt; RNode:
+        &#34;&#34;&#34; Create a graph node.
+        
+        Args:
+            node (Node): A node.
+            label (Union[str, List[str]]): Either a label or a list of labels. Defaults to an empty list.
+
+        Returns:
+            Returns a Redisgraph Node object.
+        &#34;&#34;&#34;
         if not label:
             label = []
         if isinstance(label, str):
@@ -103,13 +114,31 @@ class MidoriGraph:
         return edge
 
     def commit(self) -&gt; None:
+        &#34;&#34;&#34; Commit writes since the last commit.
+        &#34;&#34;&#34;
         self.graph.commit ()
 
     def query(self, query: str) -&gt; Any:
+        &#34;&#34;&#34; Query the database given a Cypher query. 
+
+        Args:
+            query (str): A cypher query.
+
+        Returns:
+            Returns a query result binding to names in the input query.
+        &#34;&#34;&#34;
         return self.graph.query(query)
 
-    def get_shortest_path(self, src: str, dst: str):
-        
+    def get_shortest_path(self, src: str, dst: str) -&gt; Any:
+        &#34;&#34;&#34; Find the shortest path between two nodes where the names correspond to the input values.
+
+        Args:
+            src (str): The name of the source node.
+            dst (str): The name of the destination node.
+            
+        Returns:
+            Returns the result of a shortest path query.
+        &#34;&#34;&#34;
         # https://oss.redis.com/redisgraph/commands/#allshortestpaths
         #query = &#34;&#34;&#34;MATCH (source:Host)-[v:visited]-&gt;(s1:Switch)--&gt;(s2:Switch)--&gt;(destination:Host)
         #RETURN source.name, s1.name, s2.name, destination.name&#34;&#34;&#34;
@@ -122,7 +151,6 @@ class MidoriGraph:
                 &#34;src_name&#34; : src,
                 &#34;dst_name&#34; : dst
             })
-
         return self.graph.query(query)</code></pre>
 </details>
 </section>
@@ -181,9 +209,15 @@ class MidoriGraph:
 <div class="desc"><p>Interface to a graph database. To support experimentation with using
 Cypher as a DSL for manipulating data networs. </p>
 <p>Initialze the graph.</p>
-<p>@param graph: The name of the graph to create.
-@param host: The host Redis is on.
-@param port: The port Redis is listening on.</p></div>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>graph</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the graph to create.</dd>
+<dt><strong><code>host</code></strong> :&ensp;<code>str</code></dt>
+<dd>The host Redis is on.</dd>
+<dt><strong><code>port</code></strong> :&ensp;<code>int</code></dt>
+<dd>The port Redis is listening on.</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -197,14 +231,25 @@ Cypher as a DSL for manipulating data networs. </p>
                  port: int = config.getint(&#34;redis&#34;, &#34;port&#34;)) -&gt; None:
         &#34;&#34;&#34; Initialze the graph.
         
-        @param graph: The name of the graph to create.
-        @param host: The host Redis is on.
-        @param port: The port Redis is listening on. &#34;&#34;&#34;
+        Args:
+            graph (str): The name of the graph to create.
+            host (str): The host Redis is on.
+            port (int): The port Redis is listening on.
+
+        &#34;&#34;&#34;        
         redis_graph = redis.Redis(host=host, port=port)
         self.graph = Graph(graph, redis_graph)
 
-    def create_node(self, node: Node, label: Union[str, List] = []) -&gt; RNode:
-        &#34;&#34;&#34; Create a node. &#34;&#34;&#34;
+    def create_node(self, node: Node, label: Union[str, List[str]] = []) -&gt; RNode:
+        &#34;&#34;&#34; Create a graph node.
+        
+        Args:
+            node (Node): A node.
+            label (Union[str, List[str]]): Either a label or a list of labels. Defaults to an empty list.
+
+        Returns:
+            Returns a Redisgraph Node object.
+        &#34;&#34;&#34;
         if not label:
             label = []
         if isinstance(label, str):
@@ -233,13 +278,31 @@ Cypher as a DSL for manipulating data networs. </p>
         return edge
 
     def commit(self) -&gt; None:
+        &#34;&#34;&#34; Commit writes since the last commit.
+        &#34;&#34;&#34;
         self.graph.commit ()
 
     def query(self, query: str) -&gt; Any:
+        &#34;&#34;&#34; Query the database given a Cypher query. 
+
+        Args:
+            query (str): A cypher query.
+
+        Returns:
+            Returns a query result binding to names in the input query.
+        &#34;&#34;&#34;
         return self.graph.query(query)
 
-    def get_shortest_path(self, src: str, dst: str):
-        
+    def get_shortest_path(self, src: str, dst: str) -&gt; Any:
+        &#34;&#34;&#34; Find the shortest path between two nodes where the names correspond to the input values.
+
+        Args:
+            src (str): The name of the source node.
+            dst (str): The name of the destination node.
+            
+        Returns:
+            Returns the result of a shortest path query.
+        &#34;&#34;&#34;
         # https://oss.redis.com/redisgraph/commands/#allshortestpaths
         #query = &#34;&#34;&#34;MATCH (source:Host)-[v:visited]-&gt;(s1:Switch)--&gt;(s2:Switch)--&gt;(destination:Host)
         #RETURN source.name, s1.name, s2.name, destination.name&#34;&#34;&#34;
@@ -252,7 +315,6 @@ Cypher as a DSL for manipulating data networs. </p>
                 &#34;src_name&#34; : src,
                 &#34;dst_name&#34; : dst
             })
-
         return self.graph.query(query)</code></pre>
 </details>
 <h3>Methods</h3>
@@ -261,12 +323,14 @@ Cypher as a DSL for manipulating data networs. </p>
 <span>def <span class="ident">commit</span></span>(<span>self) ‑> None</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Commit writes since the last commit.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def commit(self) -&gt; None:
+    &#34;&#34;&#34; Commit writes since the last commit.
+    &#34;&#34;&#34;
     self.graph.commit ()</code></pre>
 </details>
 </dd>
@@ -300,16 +364,33 @@ Cypher as a DSL for manipulating data networs. </p>
 </details>
 </dd>
 <dt id="midori.graph.MidoriGraph.create_node"><code class="name flex">
-<span>def <span class="ident">create_node</span></span>(<span>self, node: <a title="midori.graph.Node" href="#midori.graph.Node">Node</a>, label: Union[str, List] = []) ‑> redisgraph.node.Node</span>
+<span>def <span class="ident">create_node</span></span>(<span>self, node: <a title="midori.graph.Node" href="#midori.graph.Node">Node</a>, label: Union[str, List[str]] = []) ‑> redisgraph.node.Node</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Create a node.</p></div>
+<div class="desc"><p>Create a graph node.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>node</code></strong> :&ensp;<code><a title="midori.graph.Node" href="#midori.graph.Node">Node</a></code></dt>
+<dd>A node.</dd>
+<dt><strong><code>label</code></strong> :&ensp;<code>Union[str, List[str]]</code></dt>
+<dd>Either a label or a list of labels. Defaults to an empty list.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Returns a Redisgraph Node object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def create_node(self, node: Node, label: Union[str, List] = []) -&gt; RNode:
-    &#34;&#34;&#34; Create a node. &#34;&#34;&#34;
+<pre><code class="python">def create_node(self, node: Node, label: Union[str, List[str]] = []) -&gt; RNode:
+    &#34;&#34;&#34; Create a graph node.
+    
+    Args:
+        node (Node): A node.
+        label (Union[str, List[str]]): Either a label or a list of labels. Defaults to an empty list.
+
+    Returns:
+        Returns a Redisgraph Node object.
+    &#34;&#34;&#34;
     if not label:
         label = []
     if isinstance(label, str):
@@ -340,16 +421,33 @@ Cypher as a DSL for manipulating data networs. </p>
 </details>
 </dd>
 <dt id="midori.graph.MidoriGraph.get_shortest_path"><code class="name flex">
-<span>def <span class="ident">get_shortest_path</span></span>(<span>self, src: str, dst: str)</span>
+<span>def <span class="ident">get_shortest_path</span></span>(<span>self, src: str, dst: str) ‑> Any</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Find the shortest path between two nodes where the names correspond to the input values.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>src</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the source node.</dd>
+<dt><strong><code>dst</code></strong> :&ensp;<code>str</code></dt>
+<dd>The name of the destination node.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Returns the result of a shortest path query.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_shortest_path(self, src: str, dst: str):
-    
+<pre><code class="python">def get_shortest_path(self, src: str, dst: str) -&gt; Any:
+    &#34;&#34;&#34; Find the shortest path between two nodes where the names correspond to the input values.
+
+    Args:
+        src (str): The name of the source node.
+        dst (str): The name of the destination node.
+        
+    Returns:
+        Returns the result of a shortest path query.
+    &#34;&#34;&#34;
     # https://oss.redis.com/redisgraph/commands/#allshortestpaths
     #query = &#34;&#34;&#34;MATCH (source:Host)-[v:visited]-&gt;(s1:Switch)--&gt;(s2:Switch)--&gt;(destination:Host)
     #RETURN source.name, s1.name, s2.name, destination.name&#34;&#34;&#34;
@@ -362,7 +460,6 @@ Cypher as a DSL for manipulating data networs. </p>
             &#34;src_name&#34; : src,
             &#34;dst_name&#34; : dst
         })
-
     return self.graph.query(query)</code></pre>
 </details>
 </dd>
@@ -370,12 +467,27 @@ Cypher as a DSL for manipulating data networs. </p>
 <span>def <span class="ident">query</span></span>(<span>self, query: str) ‑> Any</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Query the database given a Cypher query. </p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>query</code></strong> :&ensp;<code>str</code></dt>
+<dd>A cypher query.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Returns a query result binding to names in the input query.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def query(self, query: str) -&gt; Any:
+    &#34;&#34;&#34; Query the database given a Cypher query. 
+
+    Args:
+        query (str): A cypher query.
+
+    Returns:
+        Returns a query result binding to names in the input query.
+    &#34;&#34;&#34;
     return self.graph.query(query)</code></pre>
 </details>
 </dd>

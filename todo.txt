@@ -1,0 +1,12 @@
+
+# lark parse tree: https://saytosid.github.io/talk-lark-parser/#/4/5/1
+
+# sflow: https://groups.google.com/g/sflow-rt/c/SWk8z2wz1Ac
+
+# sflow: https://blog.sflow.com/2018/11/
+
+# mac addr: https://gist.github.com/pklaus/9638536
+
+# ip addr: https://stackoverflow.com/questions/21014618/python-randomly-generated-ip-address-as-string
+
+# nox https://github.com/googleapis/google-resumable-media-python/tree/main/tests/unit

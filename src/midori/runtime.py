@@ -7,37 +7,30 @@ import textwrap
 import time
 import traceback as tb
 from requests.auth import HTTPBasicAuth
-from midori.utils import LoggingUtil, Resource
+from midori.config import config
 from midori.graph import MidoriGraph
+from midori.utils import LoggingUtil, Resource
 from typing import Dict
 
 LoggingUtil.setup_logging ()
 
 logger = logging.getLogger (__name__)
 
-class Device:
-    """ Model of a device, for the time being, used to model intents only. """
-    def __init__(self, ip: str, port: int) -> None:
-        self.ip = ip
-        self.port = port
-        
-class Intent:
-    def __init__(self,
-                 priority: int,
-                 ingress: Device,
-                 egress: Device,
-                 protocol: int,
-                 eth_type: str,
-                 dest_port: int) -> None:
-        self.priority = priority
-        self.ingress = ingress
-        self.egress = egress
-        self.protocol = protocol
-        self.eth_type = eth_type
-        self.dest_port = dest_port        
+class MidoriException(Exception):
+    """ A general error pertaining to a simulation has occurred. """
+    pass
+
+class MidoriNetworkError(MidoriException):
+    """ A simulation failed due to a network or communication error. """
+    pass
+
+class MidoriExecutionError(MidoriException):
+    """ A simulation failed due to the failure of a computation or lack of computing resources. """
+    pass
 
 class Controller:
-    
+    """ Abstraction for an Openflow SDN controller. For Midori, this 
+    currently means Onos. """
     def __init__(self,
                  api_host: str,
                  api_port: int,
@@ -50,19 +43,75 @@ class Controller:
         self.password = password
         
     def get_api(self, api:str = "") -> str:
+        """ Build and API URL. """
         return f"http://{self.api_host}:{self.api_port}/{api}"
-        
+
+    def clean(self) -> None:
+        """ Reset the system to a clean state. """
+        pass
+    
+    def create_host_intent(self, ingress_device: str, egress_device: str) -> None:
+        """ Create a host to host network flow intent. """
+        pass
+    
 class Onos(Controller):
+    """ An Onos Openflow SDN controller. """
     def __init__(self,
-                 api_host: str = "localhost",
-                 api_port: int = 8181,
-                 username: str = "onos",
-                 password: str = "rocks"
+                 api_host: str = config.get("onos", "host"),
+                 api_port: int = config.get("onos", "api_port"),
+                 username: str = config.get("onos", "username"),
+                 password: str = config.get("onos", "password")
     ) -> None:
+        """ Initialize the base class """
         super().__init__(api_host=api_host, api_port=api_port,
                          username=username, password=password)
+
+    def get(self, operation: str, args : Dict = {}, nominal=200) -> Dict:
+        """ Perform a generic get operation on the API. """
+        api_url = self.get_api(operation)
+        logger.info(f"request ==> {api_url}: {json.dumps(args, indent=2)}")
+        if len(args) > 0:
+            query_parameters = "&".join ([ f"{k}={v}" for k, v in args.items () ])
+            api_url = f"{api_url}?{query_parameters}"
+        response = requests.get(
+            api_url,
+            auth=HTTPBasicAuth(self.username, self.password))
+        result = None
+        if response.status_code == nominal and response.text:
+            result = response.json ()
+        else:
+            print(f"Response: {response.text}")
+            print(f"Status code: {response.status_code}")
+        return result
+
+    def delete(self, operation: str, args : Dict = {}, nominal=204) -> Dict:
+        """ Perform a generic delete operation on the API. """
+        api_url = self.get_api(operation)
+        logger.info(f"request ==> {api_url}: {json.dumps(args, indent=2)}")
+        if len(args) > 0:
+            query_parameters = "&".join ([ f"{k}={v}" for k, v in args.items () ])
+            api_url = f"{api_url}?{query_parameters}"
+        response = requests.delete(
+            api_url,
+            auth=HTTPBasicAuth(self.username, self.password))
+        result = None
+        if response.status_code == nominal and response.text:
+            result = response.json ()
+        else:
+            print(f"Response: {response.text}")
+            print(f"Status code: {response.status_code}")
+        return result
     
-    def calculate_intent(self, ingress_device: str, egress_device: str) -> None:
+    def clean(self) -> None:
+        intents = self.get ("onos/v1/intents")
+        ids = [ intent["id"] for intent in intents["intents"] ]
+        for i in ids:
+            logger.info(f"Deleting intent: {i}")
+            operation = f"onos/v1/intents/org.onosproject.restconf/{i}"
+            self.delete (operation=operation, nominal=204)
+            
+    def create_host_intent(self, ingress_device: str, egress_device: str) -> None:
+        """ Create a host to host intent. """
         intent_json = {
             "type": "HostToHostIntent",
             "appId": "org.onosproject.restconf",
@@ -96,7 +145,8 @@ class Onos(Controller):
         }
 
         api_url = self.get_api("onos/v1/intents/")
-
+        logger.info(f"intent =========> {ingress_device}-->{egress_device}\n")
+        """ Note: arp forwarding in Onos was required for pings to work: https://groups.google.com/a/onosproject.org/g/onos-dev/c/GrV3xZfaEPs """
         response = requests.post(
             api_url,
             auth=HTTPBasicAuth(self.username, self.password),
@@ -105,37 +155,32 @@ class Onos(Controller):
         if response.status_code != 201:
             print(f"Response: {response.text}")
             print(f"Status code: {response.status_code}")
-
-        # wordpress-[port:3306]->mysql
-        # web-[port:5000]->api
-
-class MidoriException(Exception):
-    """ A general error pertaining to a simulation has occurred. """
-    pass
-
-class MidoriNetworkError(MidoriException):
-    """ A simulation failed due to a network or communication error. """
-    pass
-
-class MidoriExecutionError(MidoriException):
-    """ A simulation failed due to the failure of a computation or lack of computing resources. """
-    pass
+            raise MidoriException(f"Adding intent failed with error: {response.text} and code: {response.status_code}")
 
 class Context:
     """ 
     An execution context for a Midori simulation. Provides acces to system 
-    services including 
-       * An SDN control plane
-       * A graph database
-       * Logging
+    services including an SDN control plane, a graph database, logging services.
     """ 
-    def __init__(self, controller: Controller, graph: MidoriGraph) -> None:
-        self.controller = controller
-        self.graph = graph
+    def __init__(self, controller: Controller = None,
+                 graph: MidoriGraph = None
+    ) -> None:
+        self.controller = controller if controller else Onos ()
+        self.graph = graph if graph else MidoriGraph ()
         self.messages = []
-        
-    def log (self, message):
+
+    def log (self, message: str) -> None:
+        """ Log a message.
+
+        Args:
+            message (str): A log message.
+        """
         self.messages.append(message)
+
+    def clean(self) -> None:
+        """ Clean up the workspace from prior runs. """
+        self.controller.clean()
+        self.graph.clean()
 
 def importCode(code: str, name: str="tmp", add_to_sys_modules: int=0):
     """ code can be any object containing code -- string, file object, or
@@ -157,8 +202,12 @@ def importCode(code: str, name: str="tmp", add_to_sys_modules: int=0):
     return module
 
 def run_simulation(network):
-    result = None
+
+    """ Create an execution context for the simulation. """
+    context = Context()
+    context.clean()
     exception = None
+    
     try:
         start = time.time ()
         print(textwrap.dedent(f"""
@@ -177,23 +226,22 @@ def run_simulation(network):
 
         """ Delete all artifacts of previous simulation. """
         from mininet.clean import Cleanup
-        Cleanup.cleanup ()
-        
+        Cleanup.cleanup()
+
         """ Execute the network. """
-        mininet_network.run_network()
+        mininet_network.run_network(context)
         
     except Exception:
         exception = tb.format_exc()
         print(exception)
 
     """ Generate a response. """
-    response = {
+    return {
         "start_time" : start,
         "end_time"   : time.time (),
-        "result"     : result,
-        "error"      : exception
+        #"error"      : exception,
+        "log"        : context.messages
     }
-    return response
 
 def midori_job_exception_handler(job, exc_type, exc_value, traceback):
     logger.error(textwrap.dedent(f"""
@@ -204,55 +252,3 @@ def midori_job_exception_handler(job, exc_type, exc_value, traceback):
        {traceback}"""))
     tb.print_traceback(traceback)
     raise exc_value
-
-
-
-'''
-result = graph.query("MATCH (n) DELETE n")
-
-wordpress_host = Host("wordpress", environment=json.dumps({ "a" : "b" }))
-wordpress_node = graph.create_host(wordpress_host)
-
-db_host = Host("db", environment=json.dumps({ "q" : "r" }))
-db_node = graph.create_host(db_host)
-
-s1 = Switch("s1")
-s2 = Switch("s2")
-s1_node = graph.create_switch(s1)
-s2_node = graph.create_switch(s2)
-
-l1 = Link(wordpress_node, s1_node)
-l2 = Link(s1_node, s2_node)
-l3 = Link(s2_node, db_node)
-
-graph.create_edge(l1)
-graph.create_edge(l2)
-graph.create_edge(l3)
-
-graph.commit()
-
-result = graph.get_shortest_path(src="wordpress", dst="db")
-result.pretty_print()
-
-print(result.result_set)
-for res in result.result_set:
-    print(res)
-    for nlist in res:
-        for n in nlist:
-            print(n)
-            txt = json.dumps(json.loads(jsonpickle.encode(n, unpicklable=False)), indent=2)
-            print(f"--> {txt}")
-
-            properties = n.properties
-            properties["py/object"] = properties["py_object"] 
-            del properties["py_object"]
-            host: Host = jsonpickle.decode(json.dumps(properties))
-            print(host)
-'''
-
-
-
-if __name__ == "__main__":
-    pass
-    #context = Context ()
-    

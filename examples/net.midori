@@ -1,6 +1,6 @@
 controller c0
-node d1 ip "10.0.0.251" image "ubuntu:trusty"
-node d2 ip "10.0.0.252" image "ubuntu:trusty"
+host d1 ip "10.0.0.251" image "ubuntu:trusty"
+host d2 ip "10.0.0.252" image "ubuntu:trusty"
 
 switch s1 s2
 link l1 src d1 dst s1

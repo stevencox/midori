@@ -42,7 +42,10 @@ app = FastAPI(
         }
     ]
 )
+""" Metadata describing the API. """
+
 config = MidoriConfig ()
+""" The environment configuration object. """
 
 class NetworkSchema(BaseModel):
     """ Schema for a network. """
@@ -64,10 +67,10 @@ class Settings(BaseSettings):
     midori_api_app: str = config.get("api", "app")
     midori_api_host: str = config.get("api", "host")
     midori_api_port: int = config.getint("api", "port")
-    """ Reload the API when source changes. """
     reload: bool = config.getboolean("api", "reload")
     
 settings = Settings()
+""" Settings values controlling the API's deployment behavior. """
 
 class Context:
     """ The API's runtime data model. """
@@ -77,6 +80,7 @@ class Context:
             connection=Redis(
                 host=settings.redis_host,
                 port=settings.redis_port))
+        """ An RQ (Redis Queue) connection to Redis. """
         
 context = Context()
 
@@ -98,6 +102,7 @@ async def create_network(network: NetworkSchema):
 async def get_network_result(network_id):
     """ Get network simulation result. """
     job = Job.fetch(network_id, context.redis_q.connection)
+    print(f"got job: {job} {job.id}")
     return job.result if job else None
 
 @app.get("/network/failed", tags=["networks"])

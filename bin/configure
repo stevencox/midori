@@ -56,14 +56,15 @@ start_node() {
 
 start_worker() {
     activate_venv
+    echo starting Midori RQ Redis job queue service.
     rq worker \
        --url $REDIS_HOST://redis:$REDIS_PORT \
-       --logging_level $LOG_LEVEL \
-       --exception-handler midori.runtime.midori_job_exception_handler
+       --logging_level $LOG_LEVEL
 }
 
 start_api() {
     activate_venv
+    echo starting Midori compiler API service.
     python $MIDORI_HOME/src/midori/api.py
 }
 

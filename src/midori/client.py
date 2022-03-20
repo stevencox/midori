@@ -47,7 +47,7 @@ class MidoriClient:
             result = requests.get (
                 url=self.get_operation(f"network/result?network_id={job_id}")).json ()
             now = time.time ()
-            if result or now - start > 60:
+            if result or now - start > 160:
                 break
             time.sleep (5)
         
