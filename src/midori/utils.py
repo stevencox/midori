@@ -4,22 +4,46 @@ import logging
 import logging.config
 import os
 import string
+import sys
 import traceback
 import yaml
 from jinja2 import Template, Environment
+from types import ModuleType
 
 logger = logging.getLogger (__name__)
 
-class LoggingUtil(object):
-
+class LoggingUtil:
+    """ Log configuration entrypoint. """
     @staticmethod
     def setup_logging () -> None:
-        config_path = os.path.join (
-            os.path.dirname(__file__),
-            "logging.yaml")
+        config_path = os.path.join (os.path.dirname(__file__), "logging.yaml")
         with open(config_path, 'r') as f:
             config = yaml.safe_load(f.read())
             logging.config.dictConfig(config)
+
+class Code:
+    """ Tools for working programmatically with source code. """
+    
+    @staticmethod
+    def importCode(code: str, name: str="tmp", add_to_sys_modules: bool=False) -> ModuleType:
+        """ Import a module given its source code as a string and the name of the module.
+
+        Args:
+           code (str): The Python source code of the module. 
+           name (str): The name of the module.
+           add_to_sys_modules (bool): Add this module to system modules, making it visible for import by others.
+        
+        Returns:
+           ModuleType: The newly created module.
+        """
+        module = ModuleType(name)
+        if add_to_sys_modules:
+            sys.modules[name] = module
+        # populate the module with code
+        logger.debug(f"importing module:=>\n{code}")
+        exec(code, module.__dict__)
+        logger.debug(f"module:=> {module}")
+        return module
     
 class Resource:
 

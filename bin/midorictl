@@ -34,13 +34,12 @@ wait_for_onos() {
 # running. Investigate using Python supervisor instead:
 # http://supervisord.org/index.html
 supervise() {
+    export MIDORI_ENV=container
     while true; do
 	if [ -z "$( pgrep -f 'python.*midori.*api.py' )" ]; then
-	    echo Starting Midori API...
 	    $MIDORI_HOME/bin/configure start_api &
 	fi
-	if [ -z "$( pgrep -f 'rq.*worker.*' )" ]; then
-	    echo Starting Midori RQ worker...
+	if [ -z "$( pgrep -f 'python.*worker.*py' )" ]; then
 	    $MIDORI_HOME/bin/configure start_worker &
 	fi
 	sleep 10;

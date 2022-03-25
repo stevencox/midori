@@ -1,13 +1,13 @@
 remote_controller c0 host "onos" port 6633
 
-host db ip "10.0.0.251" mac "9a:d8:73:d8:90:6a" image "mymysql:latest" env {
+host db ip "10.0.0.251" image "mymysql:latest" mac "9a:d8:73:d8:90:6a" env {
     "MYSQL_DATABASE"             : "exampledb", 
     "MYSQL_USER"                 : "exampleuser",
     "MYSQL_PASSWORD"             : "examplepass",
     "MYSQL_RANDOM_ROOT_PASSWORD" : "1" 
 } cmd ["/entrypoint.sh mysqld &"]
 
-host blog ip "10.0.0.252" mac "9a:d8:73:d8:90:6b" image "mywordpress:latest"
+host blog ip "10.0.0.252" image "mywordpress:latest" mac "9a:d8:73:d8:90:6b"
 ports [ 8080 ] port_bindings { 80 : 8080 } env {
     "WORDPRESS_DB_HOST"     : "10.0.0.251",
     "WORDPRESS_DB_USER"     : "exampleuser",

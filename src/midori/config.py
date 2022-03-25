@@ -1,10 +1,16 @@
+import logging
+import os
 from configparser import ConfigParser
 from configparser import BasicInterpolation
 from configparser import ExtendedInterpolation
+from midori.utils import LoggingUtil
 from typing import List
-import os
 
 #https://gist.github.com/malexer/ee2f93b1973120925e8beb3f36b184b8
+
+LoggingUtil.setup_logging ()
+
+logger = logging.getLogger (__name__)
 
 class EnvInterpolation(BasicInterpolation):
     """Interpolation to expand environment variables in configuration values."""
@@ -23,23 +29,32 @@ class EnvInterpolation(BasicInterpolation):
     
 class MidoriConfig(ConfigParser):
     """ A configuration parser implementing environment variable interpolation. """
-    def __init__(self, configs: List[str] = [], use_defaults=True) -> None:
+    def __init__(self, configs: List[str] = [ "midori.ini", "midori-container.ini" ]) -> None:
         """ Initialize
 
         This class uses the midori.config.EnvInterpolation class to implement interpolation.
 
         @param configs: List of configuration files to read in order.
-        @param use_defaults: Load default configuration files if not are specified.
         """        
         super().__init__(interpolation=EnvInterpolation())
+        self.read_configs(configs)
 
-        if use_defaults:
-            configs = [ "midori.ini", "midori-container.ini" ]
-            config_paths = [ os.path.join (os.path.dirname(__file__), f) for f in configs ]
-            self.read(config_paths)
+    def read_configs(self, configs: List[str]) -> None:
+        config_paths = [ os.path.join (os.path.dirname(__file__), f) for f in configs ]
+        self.read(config_paths)
 
-config = MidoriConfig()
-
+config = None
+def get_config():
+    global config
+    if not config:
+        env = os.environ.get("MIDORI_ENV", "dev")
+        config_files = [ "midori.ini" ]
+        if not env == "dev":
+            config_files.append(f"midori-{env}.ini")
+        logger.info(f"reading configurations: {config_files}")
+        config = MidoriConfig(config_files)
+    return config
+    
 if __name__ == "__main__":
     config = MidoriConfig ()
     print (config.get("midori", "midori_home"))

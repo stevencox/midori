@@ -1,12 +1,15 @@
 import json
 import jsonpickle
 import redis
-from midori.config import MidoriConfig
-from redisgraph import Node, Edge, Graph, Path
+from midori.config import get_config
+from redis.commands.graph.node import Node
+from redis.commands.graph.edge import Edge
+from redis.commands.graph.path import Path
+from redis.commands.graph import Graph
 from typing import Dict, List, Union, Any
 from string import Template
 
-config = MidoriConfig()
+config = get_config()
 
 class MidoriGraph:
     """ Interface to a graph database. To support experimentation with using

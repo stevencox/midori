@@ -9,9 +9,12 @@ MIDORI_HOME=$( dirname $DIR )
 export MIDORI_VENV=$MIDORI_HOME/venv
 export PYTHONPATH=$MIDORI_HOME/src:/containernet
 
-export REDIS_HOST=redis
-export REDIS_PORT=6379
-export LOG_LEVEL=info
+#export REDIS_HOST=redis
+#export REDIS_PORT=6379
+#export LOG_LEVEL=info
+
+# Controls which *.ini files are read at startup.
+export MIDORI_ENV=container
 
 #
 # Put a fresh Python 3.10.x environment on the system.
@@ -33,38 +36,34 @@ provide_venv() {
     fi
 }
 
-activate_venv() {
-    source $MIDORI_VENV/bin/activate
-    python -V
-}
-
-# delete. no systemd in chroot.
-install_services() {
-    cp $MIDORI_HOME/etc/systemd/midori-api.service /etc/systemd/system/
-    cp $MIDORI_HOME/etc/systemd/midori-worker.service /etc/systemd/system/
-    systemctl daemon-reload
-    systemctl enable midori-api.service
-    systemctl enable midori-worker.service
-    systemctl start midori-api.service
-    systemctl start midori-worker.service
-}
-
 start_node() {
     install_python
     provide_venv
 }
 
-start_worker() {
+#------------------------- end installer ----------------------------------
+
+activate_venv() {
+    source $MIDORI_VENV/bin/activate
+    python -V
+}
+
+start_worker0() {
     activate_venv
     echo starting Midori RQ Redis job queue service.
     rq worker \
        --url $REDIS_HOST://redis:$REDIS_PORT \
        --logging_level $LOG_LEVEL
 }
+start_worker() {
+    activate_venv
+    echo starting the midori job queue service.
+    $MIDORI_HOME/bin/midori worker
+}
 
 start_api() {
     activate_venv
-    echo starting Midori compiler API service.
+    echo starting the midori compiler API.
     python $MIDORI_HOME/src/midori/api.py
 }
 

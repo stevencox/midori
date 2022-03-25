@@ -98,6 +98,10 @@ class Down(_Ast):
 @dataclass
 class Ping(_Statement, ast_utils.AsList):
     name: List[Name]
+
+@dataclass
+class Sleep(_Statement):
+    seconds: Value
     
 class ToAst(Transformer):
     # Define extra transformation functions, for rules that don't correspond to an AST class.
@@ -140,12 +144,18 @@ class ToAst(Transformer):
         return items
 
 class MACGenerator:
-    
-    def __init__(self):
+    """ Generate sequentially increasing MAC addresses. """
+    def __init__(self) -> None:
+        """ Initialize all address positions to zeros. """
         self.seed = [ 0, 0, 0, 0, 0, 0 ]
         self.cell = len(self.seed) - 1
         
-    def next(self):
+    def next(self) -> str:
+        """ Generate the next MAC address. 
+
+        Returns:
+           str: Returns the next MAC address.
+        """
         if self.seed[self.cell] >= 255:
             if self.cell == 0:
                 raise ValueError("MAC address range exceeded")
@@ -155,12 +165,22 @@ class MACGenerator:
         return "%02x:%02x:%02x:%02x:%02x:%02x" % tuple(self.seed)
             
 class IPGenerator:
-    
-    def __init__(self):
-        self.pool = [ str(ip) for ip in ipaddress.IPv4Network('10.0.0.0/22') ]
+    """ Generates IP addresses in a range. """
+    def __init__(self, cidr: str="10.0.0.0/24") -> None:
+        """ Initialize the set with a CIDR. 
+        
+        Args:
+            cidr (str): An IP address range in CIDR notation.
+        """
+        self.pool = [ str(ip) for ip in ipaddress.IPv4Network(cidr) ]
         self.index = 0
         
-    def next(self):
+    def next(self) -> str:
+        """ Get the next address. 
+
+        Returns:
+            str: An IP address. 
+        """
         self.index += 1
         if self.index >= len(self.pool):
             raise ValueError("The pool of random IP addresses has been exhausted.")
@@ -174,16 +194,17 @@ parser = Lark("""
 
     program: statement+
 
-    ?statement: control | host | switch | link | intent | up | ping | down
+    ?statement: control | host | switch | link | intent | up | ping | sleep | down
 
     ?control: controller | remote_controller
-    controller: "controller" value
+    controller: "controller" NAME
     remote_controller: "remote_controller" NAME "host" STRING "port" DEC_NUMBER
 
     host: "host" NAME ["ip" ip_addr] "image" STRING ["mac" STRING] \
            ["ports" array] ["port_bindings" int_object] ["env" object] \
            ["cmd" array]
 
+    sleep: "sleep" DEC_NUMBER
     switch: "switch" NAME+
     cls: "cls" NAME
     delay: "delay" STRING
@@ -231,7 +252,8 @@ class Parser:
     and generates the abstract syntax tree. """
     def parse(self, text: str) -> Program:
         tree = parser.parse(text)
-        logger.debug(tree.pretty())
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug(tree.pretty())
         ast = transformer.transform(tree)
         """ Until we have a better way to ensure default values are set... """
         if ast:
@@ -240,6 +262,7 @@ class Parser:
             for statement in ast.statements:
                 if isinstance(statement, Host):
                     statement.ip_addr = statement.ip_addr if statement.ip_addr else ip_generator.next()
+                    statement.cmd = statement.cmd if statement.cmd else []
                     statement.mac = statement.mac if statement.mac else mac_generator.next()
                     statement.env = statement.env if statement.env else []
                     statement.ports = statement.ports if statement.ports else []

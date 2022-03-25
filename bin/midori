@@ -24,7 +24,8 @@ set -e
 ##
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 MIDORI_ROOT=$( dirname $DIR )
-export PYTHONPATH=$MIDORI_ROOT/src
+export PYTHONPATH=${PYTHONPATH:-$MIDORI_ROOT/src}
+echo PYTHONPATH=$PYTHONPATH
 
 ##
 ## Compile a Midori program.
@@ -41,10 +42,25 @@ run () {
 }
 
 ##
+## Run the Midori API.
+##
+api () {
+    python $MIDORI_ROOT/src/midori/api.py $*
+}
+
+##
+## Run the Midori worker.
+##
+worker () {
+    echo $PYTHONPATH
+    python $MIDORI_ROOT/src/midori/worker.py $*
+}
+
+##
 ## Test Midori
 ##
 test () {
-    pytest $MIDORI_ROOT/tests/test_compiler.py
+    pytest --asyncio-mode=strict --capture=no $*
 }
 
 ##
@@ -65,7 +81,7 @@ load () {
 ## Tools for keeping Python pip dependencies orderly and minimal.
 ##
 configure () {
-    DEPS="fastapi jinja2 docker lark argparse PyYAML uvicorn rq redisgraph jsonpickle pytest pympler"
+    DEPS="fastapi jinja2 redis kafka-python docker lark argparse PyYAML uvicorn jsonpickle pytest pympler"
     install () {
 	pip install $DEPS
     }

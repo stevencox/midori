@@ -6,10 +6,13 @@ import time
 import logging
 from typing import Dict
 from midori.utils import LoggingUtil, Resource
+from midori.config import get_config
 
 LoggingUtil.setup_logging ()
 
-logger = logging.getLogger ("midori.client")
+logger = logging.getLogger (__name__)
+
+config = get_config()
 
 class MidoriClient:    
     """ Client for interacting with the Midori API. """
@@ -40,7 +43,7 @@ class MidoriClient:
                 "description" : "Source for an emulated network."
             }).json ()
     
-        logger.debug("Queued network simulation job {source} with job_id {job_id} for execution.")
+        logger.debug(f"Queued network simulation job {source} with job_id {job_id} for execution.")
         start = time.time ()
         result = None
         while True:
@@ -73,7 +76,9 @@ def main() -> None:
     
     args = arg_parser.parse_args ()
     if args.source:
-        client = MidoriClient()
+        client = MidoriClient(
+            host=config.get("api", "host"),
+            port=config.get("api", "port"))
         for iteration in range(0, args.iterations):
             response = client.create_network(source=args.source,
                                              net_id=iteration)

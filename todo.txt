@@ -10,3 +10,31 @@
 # ip addr: https://stackoverflow.com/questions/21014618/python-randomly-generated-ip-address-as-string
 
 # nox https://github.com/googleapis/google-resumable-media-python/tree/main/tests/unit
+
+tests:
+  1. unit
+    * utilities
+      - templates
+    * logging
+    * parser
+    * compiler
+      - host
+      - optional ip, mac, port, etc.
+      - switch
+      - link
+      - intent
+      - container commands
+      - simulation (start/stop)
+      - ping
+    * graph
+    * contoller(onos)
+    * context
+  2. api
+    * each operation
+  3. rq worker
+  4. system
+    * run_network
+    
+    
+    
+

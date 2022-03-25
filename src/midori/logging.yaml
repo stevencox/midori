@@ -1,4 +1,6 @@
 version: 1
+disable_existing_loggers: false
+
 formatters:
   simple:
     format: '%(funcName)s: %(asctime)-15s %(message)s'
@@ -6,23 +8,56 @@ formatters:
     format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
   long:
     format: '%(asctime)-15s %(filename)s %(funcName)s %(levelname)s: %(message)s'
+
 handlers:
   console:
     class: logging.StreamHandler
     level: DEBUG
     formatter: medium
     stream: ext://sys.stdout
+    
 loggers:
   midori.compiler:
-    level: DEBUG
+    level: INFO
     handlers: [console]
     propagate: no
   midori.parser:
+    level: INFO
+    handlers: [console]
+    propagate: no
+  midori.worker:
     level: DEBUG
     handlers: [console]
     propagate: no
-  uvicorn.info:
+  midori.runtime:
+    level: DEBUG
+    handlers: [console]
     propagate: no
+  midori.api:
+    level: DEBUG
+    handlers: [console]
+    propagate: yes
+  __main__:
+    level: DEBUG
+    handlers: [console]
+    propagate: no
+  kafka.conn:
+    level: ERROR
+    handlers: [console]
+    propagate: no
+  uvicorn:
+    error:
+      level: ERROR
+      handlers: [console]
+      propagate: no
+    access:
+      level: INFO
+      handlers: [console]
+      propagate: no
+root:
+  level: INFO
+  handlers: [console]
+  propagate: no
 #root:
 #  level: DEBUG
 #  handlers: [console]

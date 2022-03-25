@@ -31,7 +31,6 @@ class Compiler:
         
     def _emit (self,
                ast: Program,
-#               path: str=None,
                output_path:str=None) -> str:
         """ Write an executable output program.
         Args:
@@ -39,10 +38,10 @@ class Compiler:
             path (str): The path to the input file.
             output_path (str): Path to the output file.
         """
-        for statement in ast.statements:
-            print(f"{statement}")
-            logger.debug(f"{statement}")
-            
+        if logger.isEnabledFor(logging.DEBUG):
+            for statement in ast.statements:
+                logger.debug(f"{statement}")
+                
         result = None
         if output_path:
             Resource.render_file (
@@ -63,14 +62,12 @@ class Compiler:
                       path: str,
                       output_path:str=None) -> str:
         text = Resource.read_file (path)
-        return self.process (source=text, path=path, output_path=output_path)
+        return self.process (source=text, output_path=output_path)
         
     def process (self,
                  source: str,
-                 path: str=None,
                  output_path:str=None) -> str:
         ast: Program = self.parser.parse (source)
-#        return self._emit (ast=ast, path=path, output_path=output_path)
         return self._emit (ast=ast, output_path=output_path)
 
 def main ():

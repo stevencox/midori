@@ -1,20 +1,24 @@
-from midori.compiler import Compiler
-import logging
 import json
+import logging
 import os
 import requests
+import socket
 import textwrap
 import time
 import traceback as tb
-from requests.auth import HTTPBasicAuth
-from midori.config import config
+from dataclasses import dataclass, field
+from midori.compiler import Compiler
+from midori.config import get_config
 from midori.graph import MidoriGraph
-from midori.utils import LoggingUtil, Resource
-from typing import Dict
+from midori.utils import LoggingUtil, Resource, Code
+from requests.auth import HTTPBasicAuth
+from typing import List, Dict
 
 LoggingUtil.setup_logging ()
 
 logger = logging.getLogger (__name__)
+
+config = get_config ()
 
 class MidoriException(Exception):
     """ A general error pertaining to a simulation has occurred. """
@@ -145,7 +149,7 @@ class Onos(Controller):
         }
 
         api_url = self.get_api("onos/v1/intents/")
-        logger.info(f"intent =========> {ingress_device}-->{egress_device}\n")
+        logger.error(f"intent =========> {ingress_device}-->{egress_device}\n")
         """ Note: arp forwarding in Onos was required for pings to work: https://groups.google.com/a/onosproject.org/g/onos-dev/c/GrV3xZfaEPs """
         response = requests.post(
             api_url,
@@ -156,6 +160,55 @@ class Onos(Controller):
             print(f"Response: {response.text}")
             print(f"Status code: {response.status_code}")
             raise MidoriException(f"Adding intent failed with error: {response.text} and code: {response.status_code}")
+'''
+def get_containernet(controller_host: str = config.get("onos", "host"),
+                     controller_port: int = config.getint("onos", "openflow_port")):
+    raise ValueError("--")
+    from mininet.net import Containernet
+    from mininet.node import Controller
+    from mininet.node import RemoteController
+    net = Containernet()
+    name = "onos"
+    controller = RemoteController(name=name, ip=socket.gethostbyname(controller_host), port=controller_port)
+    net.addController(controller)
+    logger.info(f"*** Added RemoteController(name={name},host={controller_host},port={controller_port})\n")
+    return net
+
+def cleanup_containernet ():
+    from mininet.clean import Cleanup
+    Cleanup.cleanup()
+'''
+class ContainernetFactory:
+
+    def get_containernet(self, controller_host: str = config.get("onos", "host"),
+                         controller_port: int = config.getint("onos", "openflow_port")):
+        raise ValueError("--")
+        from mininet.net import Containernet
+        from mininet.node import Controller
+        from mininet.node import RemoteController
+        net = Containernet()
+        name = "onos"
+        controller = RemoteController(name=name, ip=socket.gethostbyname(controller_host), port=controller_port)
+        net.addController(controller)
+        logger.info(f"*** Added RemoteController(name={name},host={controller_host},port={controller_port})\n")
+        return net
+    
+    def cleanup_containernet (self):
+        from mininet.clean import Cleanup
+        Cleanup.cleanup()
+
+@dataclass
+class Node:
+    node: object
+    gnode: object
+
+@dataclass
+class Host(Node):
+    pass
+
+@dataclass
+class Switch(Node):
+    pass
 
 class Context:
     """ 
@@ -165,16 +218,19 @@ class Context:
     def __init__(self, controller: Controller = None,
                  graph: MidoriGraph = None
     ) -> None:
+        containernet_factory = ContainernetFactory() 
+        self.net = containernet_factory.get_containernet()
         self.controller = controller if controller else Onos ()
         self.graph = graph if graph else MidoriGraph ()
         self.messages = []
-
+    
     def log (self, message: str) -> None:
         """ Log a message.
 
         Args:
             message (str): A log message.
         """
+        logger.info(message)
         self.messages.append(message)
 
     def clean(self) -> None:
@@ -182,24 +238,84 @@ class Context:
         self.controller.clean()
         self.graph.clean()
 
-def importCode(code: str, name: str="tmp", add_to_sys_modules: int=0):
-    """ code can be any object containing code -- string, file object, or
-       compiled code object. Returns a new module object initialized
-       by dynamically importing the given code and optionally adds it
-       to sys.modules under the given name.
-    """
-    import imp
-    module = imp.new_module(name)
+    def commit(self) -> None:
+        """ Commit any pending changes. """
+        self.graph.commit()
 
-    if add_to_sys_modules:
-        import sys
-        sys.modules[name] = module
-    print(code)
-    exec (code, module.__dict__)
-
-    print (module)
+    def _get_container_properties(self,
+                                  name: str,
+                                  ip: str,
+                                  image: str,
+                                  mac: str,
+                                  env: Dict[str, str] = {},
+                                  ports: List[int] = [],
+                                  port_bindings: Dict[int, int] = {},
+                                  cmd: List[str] = []) -> None:
+        return {
+            "name"          : name,
+            "ip"            : ip,
+            "image"         : image,
+            "mac"           : mac,
+            "ports"         : ports,
+            "port_bindings" : [ f"{k}:{v}" for k, v in port_bindings.items() ],
+            "env"           : [ f"{k}:{v}" for k, v in env.items() ],
+            "cmd"           : cmd
+        }
     
-    return module
+    def add_container(self,
+                      name: str,
+                      ip: str,
+                      image: str,
+                      mac: str,
+                      env: Dict[str, str] = {},
+                      ports: List[int] = [],
+                      port_bindings: Dict[int, int] = {},
+                      cmd: List[str] = []) -> Host:        
+        self.log(f"*** Adding host:{name} ip:{ip} img:{image} mac:{mac} ports:{ports} bindings:{port_bindings} env:{env}\n")
+        container = self.net.addDocker(
+            name, ip=ip, dimage=image, mac=mac, ports=ports, port_bindings=port_bindings, environment=env)
+        node_properties = self._get_container_properties(
+            name=name, ip=ip, image=image, mac=mac, env=env, ports=ports, port_bindings=port_bindings, cmd=cmd)
+        graph_node = self.graph.add_host(
+            alias=name, properties=node_properties)
+        return Host(container, graph_node)
+
+    def add_switch(self,                   
+                   name : str) -> Switch:
+        self.log(f"*** Adding switch {name}\n")
+        switch = self.net.addSwitch (name)
+        gnode = self.graph.add_switch(alias=name, properties={"name":name})
+        return Switch(switch, gnode)
+
+    def add_link(self,
+                 src : Node,
+                 dst : Node,
+                 port1 : int = None,
+                 port2 : int = None,
+                 cls : str = None,
+                 delay : str = None,
+                 bw : int = None) -> object:
+        self.log(f"** Adding link src:{src.node.name} dst:{dst.node.name} p1:{port1} p2:{port2} cls:{cls} del:{delay} bw:{bw}\n")
+        self.net.addLink(src.node, dst.node, port1=port1, port2=port2, cls=cls, delay=delay, bw=bw)
+        self.graph.add_edge(
+            subject=src.gnode, predicate="linked_to", object=dst.gnode,
+            properties={ "port1" : port1, "port2" : port2, "cls" : cls, "delay" : delay, "bw" : bw })
+
+    def add_host2host_intent(self,
+                             src: Host,
+                             src_mac: str,
+                             dst: Host,
+                             dst_mac : str) -> None:
+        ingress_host_id = f"{src_mac}/None"
+        egress_host_id = f"{dst_mac}/None"
+        self.log (f"** Adding host-to-host intent: {src.node.name}->{dst.node.name} srcmac: {ingress_host_id} dst_mac:{egress_host_id}\n")
+        response = self.controller.create_host_intent(
+            ingress_device=ingress_host_id,
+            egress_device=egress_host_id)
+        name = f"{src.node.name }_to_{dst.node.name}"
+        intent_node = self.graph.add_intent(alias=name, properties={"name":name})
+        self.graph.add_edge(subject=intent_node, predicate="from", object=src.gnode)
+        self.graph.add_edge(subject=intent_node, predicate="to", object=dst.gnode)
 
 def run_simulation(network):
 
@@ -210,25 +326,20 @@ def run_simulation(network):
     
     try:
         start = time.time ()
-        print(textwrap.dedent(f"""
-        network:
-          id={network.id}
-          source={network.source}
-          description={network.description}
-        """))
-        midori = Compiler()
+        logger.info(f"simulating network: {network}")
 
         """ Compile the network. """
-        result = midori.process(source=network.source)
+        midori = Compiler()
+        network_python = midori.process(source=network["source"])
 
-        """ Load the generated network. """
-        mininet_network = importCode(result)
+        """ Load the generated network's python implementation as a module."""
+        mininet_network = Code.importCode(network_python)
 
-        """ Delete all artifacts of previous simulation. """
-        from mininet.clean import Cleanup
-        Cleanup.cleanup()
+        """ Delete all Containernet artifacts of previous simulation. """
+        containernet_factory = ContainernetFactory() 
+        containernet_factory.cleanup_containernet()
 
-        """ Execute the network. """
+        """ Execute the simulation network. """
         mininet_network.run_network(context)
         
     except Exception:
@@ -239,7 +350,7 @@ def run_simulation(network):
     return {
         "start_time" : start,
         "end_time"   : time.time (),
-        #"error"      : exception,
+        "error"      : exception,
         "log"        : context.messages
     }
 
@@ -252,3 +363,17 @@ def midori_job_exception_handler(job, exc_type, exc_value, traceback):
        {traceback}"""))
     tb.print_traceback(traceback)
     raise exc_value
+
+def main():
+    text = None
+    with open("examples/onos-alpha.midori", "r") as stream:
+        text = stream.read ()
+    response = run_simulation({
+        "id" : 0,
+        "source" : text,
+        "description" : "main, test"
+    })
+    print (f"{json.dumps(response, indent=2)}")
+    
+if __name__ == '__main__':
+    main ()
