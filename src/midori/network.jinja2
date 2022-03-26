@@ -92,7 +92,7 @@ setLogLevel('info')
 {%- macro write_start(statement) -%}
     info (f"** Committing property graph model.\n")
     context.commit()
-    info (f"** Starting Containernet simullation network.\n")
+    info (f"** Starting Containernet simulation network.\n")
     context.net.start()
     {%- for host in hosts.values() %}
     info (f"** Executing container initialization commands.\n")

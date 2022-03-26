@@ -1,13 +1,15 @@
-FROM midori/base:latest
+#FROM midori/base:latest
+FROM python:3.10-slim-bullseye
 
-ENV API_PORT=8000
-ENV PYTHONPATH=/midori:/containernet
+ENV API_PORT 8000
+#ENV PYTHONPATH=/midori
 
+RUN useradd -s /bin/bash midori
+COPY --chown=midori . /midori
 RUN mkdir -p /midori/logs
-#RUN useradd -s /bin/bash midori
-#RUN chown -R midori:midori /midori
 
-EXPOSE $API_PORT
-#USER midori
-WORKDIR /containernet
-CMD [ "/midori/bin/midorictl", "start" ]
+# Install all Python dependencies globally.
+RUN /midori/bin/midori configure install
+
+USER midori
+CMD [ "/midori/bin/midorictl", "start", "api" ]

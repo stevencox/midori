@@ -13,15 +13,51 @@
 #set -x
 set -e
 
+# Find home.
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 MIDORI_HOME=$( dirname $DIR )
+# Python virtual environment location.
+export MIDORI_VENV=$MIDORI_HOME/venv
+# Add containernet to the path.
+export PYTHONPATH=$MIDORI_HOME/src:/containernet
+# Controls which *.ini files are read at startup.
+export MIDORI_ENV=container
 
-# Install all required components.
-configure_midori() {
-    $MIDORI_HOME/bin/configure start_node
+######################################################################
+##
+## Extend and configure a Containernet environment to accept Midori.
+## Install all required components.
+## Put a fresh Python 3.10.x environment on the system.
+##
+######################################################################
+install_python() {
+    apt update --yes
+    apt upgrade --yes
+    apt install software-properties-common --yes
+    add-apt-repository --yes ppa:deadsnakes/ppa
+    apt install --yes python3.10 python3.10-venv python3.10-dev python3-pip
+    apt-get clean -y
 }
 
-# Pause until the ONOS service is accepting requests.
+provide_venv() {
+    if [ ! -d $MIDORI_VENV ]; then
+	echo python3.10 -m venv $MIDORI_VENV
+	activate_venv
+	python -m pip install --upgrade pip
+	pip install -r $MIDORI_HOME/requirements.txt
+    fi
+}
+
+extend_containernet() {
+    install_python
+    provide_venv
+}
+
+######################################################################
+##
+## Pause until the ONOS service is accepting requests.
+##
+######################################################################
 wait_for_onos() {
     cd /containernet
     until $(wget --quiet http://onos:8181/onos/ui); do
@@ -30,6 +66,11 @@ wait_for_onos() {
     done
 }
 
+activate_venv() {
+    source $MIDORI_VENV/bin/activate
+    python -V
+}
+# deprecated:
 # In lieu of systemd in the container, keep midori API and job queue worker
 # running. Investigate using Python supervisor instead:
 # http://supervisord.org/index.html
@@ -46,16 +87,55 @@ supervise() {
     done;
 }
 
+######################################################################
+##
+## Serve the Midori API service, monitoring to restart if it fails.
+##
+######################################################################
+start_api() {
+    echo starting the midori compiler API.
+    $MIDORI_HOME/bin/midori serve 2
+}
+api() {
+    export MIDORI_ENV=container
+    while true; do
+	if [ -z "$( pgrep -f '.*python.*midori.*api*' )" ]; then
+	    start_api &
+	fi
+	sleep 10;
+    done;
+}
+
+######################################################################
+##
+## Serve the Midori worker, monitoring to restart if it fails.
+##
+######################################################################
+start_worker() {
+    echo starting the midori job queue service.
+    $MIDORI_HOME/bin/midori worker
+}
+worker() {
+    activate_venv
+    export MIDORI_ENV=container
+    while true; do
+	if [ -z "$( pgrep -f 'python.*worker.py' )" ]; then
+	    start_worker &
+	fi
+	sleep 10;
+    done;
+}
+
 # Set up the environment and supervise services.
 # The entrypoint.sh script is from the Containernet base
 # and is essential to providing required Mininet infrastructure.
 start() {
     cd /containernet
-    util/docker/entrypoint.sh &
+#    util/docker/entrypoint.sh &
     wait_for_onos
-    supervise
+    $*
 }
 
 $*
 
-
+exit 0

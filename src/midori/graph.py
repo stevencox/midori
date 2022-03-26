@@ -26,8 +26,8 @@ class MidoriGraph:
             port (int): The port Redis is listening on.
 
         """        
-        redis_graph = redis.Redis(host=host, port=port)
-        self.graph = Graph(graph, redis_graph)
+        redis_client = redis.Redis(host=host, port=port)
+        self.graph = Graph(client=redis_client, name=graph)
 
     def add_node(self,
                  alias: str,

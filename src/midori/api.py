@@ -8,7 +8,6 @@ from midori.config import get_config
 from midori.messaging import get_producer
 from midori.utils import LoggingUtil
 from pydantic import BaseModel, BaseSettings
-from pympler import summary, muppy
 from redis import Redis
 from uuid import uuid4
 from typing import Any, Optional

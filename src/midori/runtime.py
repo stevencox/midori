@@ -160,29 +160,11 @@ class Onos(Controller):
             print(f"Response: {response.text}")
             print(f"Status code: {response.status_code}")
             raise MidoriException(f"Adding intent failed with error: {response.text} and code: {response.status_code}")
-'''
-def get_containernet(controller_host: str = config.get("onos", "host"),
-                     controller_port: int = config.getint("onos", "openflow_port")):
-    raise ValueError("--")
-    from mininet.net import Containernet
-    from mininet.node import Controller
-    from mininet.node import RemoteController
-    net = Containernet()
-    name = "onos"
-    controller = RemoteController(name=name, ip=socket.gethostbyname(controller_host), port=controller_port)
-    net.addController(controller)
-    logger.info(f"*** Added RemoteController(name={name},host={controller_host},port={controller_port})\n")
-    return net
 
-def cleanup_containernet ():
-    from mininet.clean import Cleanup
-    Cleanup.cleanup()
-'''
 class ContainernetFactory:
-
+    """ Abstract Containernet specific functionality not available in local dev environments. """
     def get_containernet(self, controller_host: str = config.get("onos", "host"),
                          controller_port: int = config.getint("onos", "openflow_port")):
-        raise ValueError("--")
         from mininet.net import Containernet
         from mininet.node import Controller
         from mininet.node import RemoteController
@@ -326,13 +308,14 @@ def run_simulation(network):
     
     try:
         start = time.time ()
-        logger.info(f"simulating network: {network}")
+        logger.debug(f"Simulating network: {network}")
 
         """ Compile the network. """
         midori = Compiler()
         network_python = midori.process(source=network["source"])
 
         """ Load the generated network's python implementation as a module."""
+        logger.debug(f"Generated code: {network_python}")
         mininet_network = Code.importCode(network_python)
 
         """ Delete all Containernet artifacts of previous simulation. """
@@ -341,17 +324,27 @@ def run_simulation(network):
 
         """ Execute the simulation network. """
         mininet_network.run_network(context)
+        context.controller.clean()
         
     except Exception:
         exception = tb.format_exc()
         print(exception)
 
     """ Generate a response. """
+    return make_result(start=start, end=time.time(),
+                       error=exception, log=context.messages)
+
+def make_result(
+        start:float,
+        end:float,
+        error:str,
+        log:List[str]
+) -> Dict[str, object]:
     return {
         "start_time" : start,
         "end_time"   : time.time (),
-        "error"      : exception,
-        "log"        : context.messages
+        "error"      : error,
+        "log"        : log
     }
 
 def midori_job_exception_handler(job, exc_type, exc_value, traceback):

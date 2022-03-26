@@ -1,0 +1,14 @@
+FROM containernet/containernet:latest
+
+# Install Midori source.
+WORKDIR /midori
+COPY . /midori
+
+# Install Python 3.10 and Midori requirements.
+RUN /midori/bin/midorictl extend_containernet
+
+# Needed because the entrypoint, from the base image, is a relative path.
+WORKDIR /containernet
+
+# Start and monitor the Midori worker.
+CMD [ "/midori/bin/midorictl", "start", "worker" ]

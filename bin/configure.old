@@ -9,10 +9,6 @@ MIDORI_HOME=$( dirname $DIR )
 export MIDORI_VENV=$MIDORI_HOME/venv
 export PYTHONPATH=$MIDORI_HOME/src:/containernet
 
-#export REDIS_HOST=redis
-#export REDIS_PORT=6379
-#export LOG_LEVEL=info
-
 # Controls which *.ini files are read at startup.
 export MIDORI_ENV=container
 

@@ -1,897 +1,2009 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.10.0" />
-<title>midori.parser API documentation</title>
-<meta name="description" content="" />
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
-<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
-<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
-<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
-<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
-<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
-</head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="pdoc 10.0.4"/>
+    <title>midori.parser API documentation</title>
+
+    <style>/*! * Bootstrap Reboot v5.0.0 (https://getbootstrap.com/) * Copyright 2011-2021 The Bootstrap Authors * Copyright 2011-2021 Twitter, Inc. * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE) * Forked from Normalize.css, licensed MIT (https://github.com/necolas/normalize.css/blob/master/LICENSE.md) */*,::after,::before{box-sizing:border-box}@media (prefers-reduced-motion:no-preference){:root{scroll-behavior:smooth}}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";font-size:1rem;font-weight:400;line-height:1.5;color:#212529;background-color:#fff;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}hr{margin:1rem 0;color:inherit;background-color:currentColor;border:0;opacity:.25}hr:not([size]){height:1px}h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:.5rem;font-weight:500;line-height:1.2}h1{font-size:calc(1.375rem + 1.5vw)}@media (min-width:1200px){h1{font-size:2.5rem}}h2{font-size:calc(1.325rem + .9vw)}@media (min-width:1200px){h2{font-size:2rem}}h3{font-size:calc(1.3rem + .6vw)}@media (min-width:1200px){h3{font-size:1.75rem}}h4{font-size:calc(1.275rem + .3vw)}@media (min-width:1200px){h4{font-size:1.5rem}}h5{font-size:1.25rem}h6{font-size:1rem}p{margin-top:0;margin-bottom:1rem}abbr[data-bs-original-title],abbr[title]{-webkit-text-decoration:underline dotted;text-decoration:underline dotted;cursor:help;-webkit-text-decoration-skip-ink:none;text-decoration-skip-ink:none}address{margin-bottom:1rem;font-style:normal;line-height:inherit}ol,ul{padding-left:2rem}dl,ol,ul{margin-top:0;margin-bottom:1rem}ol ol,ol ul,ul ol,ul ul{margin-bottom:0}dt{font-weight:700}dd{margin-bottom:.5rem;margin-left:0}blockquote{margin:0 0 1rem}b,strong{font-weight:bolder}small{font-size:.875em}mark{padding:.2em;background-color:#fcf8e3}sub,sup{position:relative;font-size:.75em;line-height:0;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}a{color:#0d6efd;text-decoration:underline}a:hover{color:#0a58ca}a:not([href]):not([class]),a:not([href]):not([class]):hover{color:inherit;text-decoration:none}code,kbd,pre,samp{font-family:SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:1em;direction:ltr;unicode-bidi:bidi-override}pre{display:block;margin-top:0;margin-bottom:1rem;overflow:auto;font-size:.875em}pre code{font-size:inherit;color:inherit;word-break:normal}code{font-size:.875em;color:#d63384;word-wrap:break-word}a>code{color:inherit}kbd{padding:.2rem .4rem;font-size:.875em;color:#fff;background-color:#212529;border-radius:.2rem}kbd kbd{padding:0;font-size:1em;font-weight:700}figure{margin:0 0 1rem}img,svg{vertical-align:middle}table{caption-side:bottom;border-collapse:collapse}caption{padding-top:.5rem;padding-bottom:.5rem;color:#6c757d;text-align:left}th{text-align:inherit;text-align:-webkit-match-parent}tbody,td,tfoot,th,thead,tr{border-color:inherit;border-style:solid;border-width:0}label{display:inline-block}button{border-radius:0}button:focus:not(:focus-visible){outline:0}button,input,optgroup,select,textarea{margin:0;font-family:inherit;font-size:inherit;line-height:inherit}button,select{text-transform:none}[role=button]{cursor:pointer}select{word-wrap:normal}select:disabled{opacity:1}[list]::-webkit-calendar-picker-indicator{display:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]:not(:disabled),[type=reset]:not(:disabled),[type=submit]:not(:disabled),button:not(:disabled){cursor:pointer}::-moz-focus-inner{padding:0;border-style:none}textarea{resize:vertical}fieldset{min-width:0;padding:0;margin:0;border:0}legend{float:left;width:100%;padding:0;margin-bottom:.5rem;font-size:calc(1.275rem + .3vw);line-height:inherit}@media (min-width:1200px){legend{font-size:1.5rem}}legend+*{clear:left}::-webkit-datetime-edit-day-field,::-webkit-datetime-edit-fields-wrapper,::-webkit-datetime-edit-hour-field,::-webkit-datetime-edit-minute,::-webkit-datetime-edit-month-field,::-webkit-datetime-edit-text,::-webkit-datetime-edit-year-field{padding:0}::-webkit-inner-spin-button{height:auto}[type=search]{outline-offset:-2px;-webkit-appearance:textfield}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-color-swatch-wrapper{padding:0}::file-selector-button{font:inherit}::-webkit-file-upload-button{font:inherit;-webkit-appearance:button}output{display:inline-block}iframe{border:0}summary{display:list-item;cursor:pointer}progress{vertical-align:baseline}[hidden]{display:none!important}</style>
+    <style>/*! syntax-highlighting.css */pre{line-height:125%;}span.linenos{color:inherit; background-color:transparent; padding-left:5px; padding-right:20px;}.pdoc-code .hll{background-color:#ffffcc}.pdoc-code{background:#f8f8f8;}.pdoc-code .c{color:#3D7B7B; font-style:italic}.pdoc-code .err{border:1px solid #FF0000}.pdoc-code .k{color:#008000; font-weight:bold}.pdoc-code .o{color:#666666}.pdoc-code .ch{color:#3D7B7B; font-style:italic}.pdoc-code .cm{color:#3D7B7B; font-style:italic}.pdoc-code .cp{color:#9C6500}.pdoc-code .cpf{color:#3D7B7B; font-style:italic}.pdoc-code .c1{color:#3D7B7B; font-style:italic}.pdoc-code .cs{color:#3D7B7B; font-style:italic}.pdoc-code .gd{color:#A00000}.pdoc-code .ge{font-style:italic}.pdoc-code .gr{color:#E40000}.pdoc-code .gh{color:#000080; font-weight:bold}.pdoc-code .gi{color:#008400}.pdoc-code .go{color:#717171}.pdoc-code .gp{color:#000080; font-weight:bold}.pdoc-code .gs{font-weight:bold}.pdoc-code .gu{color:#800080; font-weight:bold}.pdoc-code .gt{color:#0044DD}.pdoc-code .kc{color:#008000; font-weight:bold}.pdoc-code .kd{color:#008000; font-weight:bold}.pdoc-code .kn{color:#008000; font-weight:bold}.pdoc-code .kp{color:#008000}.pdoc-code .kr{color:#008000; font-weight:bold}.pdoc-code .kt{color:#B00040}.pdoc-code .m{color:#666666}.pdoc-code .s{color:#BA2121}.pdoc-code .na{color:#687822}.pdoc-code .nb{color:#008000}.pdoc-code .nc{color:#0000FF; font-weight:bold}.pdoc-code .no{color:#880000}.pdoc-code .nd{color:#AA22FF}.pdoc-code .ni{color:#717171; font-weight:bold}.pdoc-code .ne{color:#CB3F38; font-weight:bold}.pdoc-code .nf{color:#0000FF}.pdoc-code .nl{color:#767600}.pdoc-code .nn{color:#0000FF; font-weight:bold}.pdoc-code .nt{color:#008000; font-weight:bold}.pdoc-code .nv{color:#19177C}.pdoc-code .ow{color:#AA22FF; font-weight:bold}.pdoc-code .w{color:#bbbbbb}.pdoc-code .mb{color:#666666}.pdoc-code .mf{color:#666666}.pdoc-code .mh{color:#666666}.pdoc-code .mi{color:#666666}.pdoc-code .mo{color:#666666}.pdoc-code .sa{color:#BA2121}.pdoc-code .sb{color:#BA2121}.pdoc-code .sc{color:#BA2121}.pdoc-code .dl{color:#BA2121}.pdoc-code .sd{color:#BA2121; font-style:italic}.pdoc-code .s2{color:#BA2121}.pdoc-code .se{color:#AA5D1F; font-weight:bold}.pdoc-code .sh{color:#BA2121}.pdoc-code .si{color:#A45A77; font-weight:bold}.pdoc-code .sx{color:#008000}.pdoc-code .sr{color:#A45A77}.pdoc-code .s1{color:#BA2121}.pdoc-code .ss{color:#19177C}.pdoc-code .bp{color:#008000}.pdoc-code .fm{color:#0000FF}.pdoc-code .vc{color:#19177C}.pdoc-code .vg{color:#19177C}.pdoc-code .vi{color:#19177C}.pdoc-code .vm{color:#19177C}.pdoc-code .il{color:#666666}</style>
+    <style>/*! theme.css */:root{--pdoc-background:#fff;}.pdoc{--text:#212529;--muted:#6c757d;--link:#3660a5;--link-hover:#1659c5;--code:#f8f8f8;--active:#fff598;--accent:#eee;--accent2:#c1c1c1;--nav-hover:rgba(255, 255, 255, 0.5);--name:#0066BB;--def:#008800;--annotation:#007020;}</style>
+    <style>/*! layout.css */html, body{width:100%;height:100%;}html, main{scroll-behavior:smooth;}body{background-color:var(--pdoc-background);}@media (max-width:769px){#navtoggle{cursor:pointer;position:absolute;width:50px;height:40px;top:1rem;right:1rem;border-color:var(--text);color:var(--text);display:flex;opacity:0.8;}#navtoggle:hover{opacity:1;}#togglestate + div{display:none;}#togglestate:checked + div{display:inherit;}main, header{padding:2rem 3vw;}header + main{margin-top:-3rem;}.git-button{display:none !important;}nav input[type="search"]{max-width:77%;}nav input[type="search"]:first-child{margin-top:-6px;}nav input[type="search"]:valid ~ *{display:none !important;}}@media (min-width:770px){:root{--sidebar-width:clamp(12.5rem, 28vw, 22rem);}nav{position:fixed;overflow:auto;height:100vh;width:var(--sidebar-width);}main, header{padding:3rem 2rem 3rem calc(var(--sidebar-width) + 3rem);width:calc(54rem + var(--sidebar-width));max-width:100%;}header + main{margin-top:-4rem;}#navtoggle{display:none;}}#togglestate{position:absolute;height:0;}nav.pdoc{--pad:1.75rem;--indent:1.5rem;background-color:var(--accent);border-right:1px solid var(--accent2);box-shadow:0 0 20px rgba(50, 50, 50, .2) inset;padding:0 0 0 var(--pad);overflow-wrap:anywhere;scrollbar-width:thin; scrollbar-color:var(--accent2) transparent }nav.pdoc::-webkit-scrollbar{width:.4rem; }nav.pdoc::-webkit-scrollbar-thumb{background-color:var(--accent2); }nav.pdoc > div{padding:var(--pad) 0;}nav.pdoc .module-list-button{display:inline-flex;align-items:center;color:var(--text);border-color:var(--muted);margin-bottom:1rem;}nav.pdoc .module-list-button:hover{border-color:var(--text);}nav.pdoc input[type=search]{display:block;outline-offset:0;width:calc(100% - var(--pad));}nav.pdoc .logo{max-width:calc(100% - var(--pad));max-height:35vh;display:block;margin:0 auto 1rem;transform:translate(calc(-.5 * var(--pad)), 0);}nav.pdoc ul{list-style:none;padding-left:0;}nav.pdoc li{display:block;margin:0;padding:.2rem 0 .2rem var(--indent);transition:all 100ms;}nav.pdoc > div > ul > li{padding-left:0;}nav.pdoc li:hover{background-color:var(--nav-hover);}nav.pdoc a, nav.pdoc a:hover{color:var(--text);}nav.pdoc a{display:block;}nav.pdoc > h2:first-of-type{margin-top:1.5rem;}nav.pdoc .class:before{content:"class ";color:var(--muted);}nav.pdoc .function:after{content:"()";color:var(--muted);}nav.pdoc footer:before{content:"";display:block;width:calc(100% - var(--pad));border-top:solid var(--accent2) 1px;margin-top:1.5rem;padding-top:.5rem;}nav.pdoc footer{font-size:small;}</style>
+    <style>/*! content.css */.pdoc{color:var(--text);box-sizing:border-box;line-height:1.5;background:none;}.pdoc .pdoc-button{display:inline-block;border:solid black 1px;border-radius:2px;font-size:.75rem;padding:calc(0.5em - 1px) 1em;transition:100ms all;}.pdoc .visually-hidden{position:absolute !important;width:1px !important;height:1px !important;padding:0 !important;margin:-1px !important;overflow:hidden !important;clip:rect(0, 0, 0, 0) !important;white-space:nowrap !important;border:0 !important;}.pdoc h1, .pdoc h2, .pdoc h3{font-weight:300;margin:.3em 0;padding:.2em 0;}.pdoc a{text-decoration:none;color:var(--link);}.pdoc a:hover{color:var(--link-hover);}.pdoc blockquote{margin-left:2rem;}.pdoc pre{border-top:1px solid var(--accent2);border-bottom:1px solid var(--accent2);margin-top:0;margin-bottom:1em;padding:.5rem 0 .5rem .5rem;overflow-x:auto;background-color:var(--code);}.pdoc code{color:var(--text);padding:.2em .4em;margin:0;font-size:85%;background-color:var(--code);border-radius:6px;}.pdoc a > code{color:inherit;}.pdoc pre > code{display:inline-block;font-size:inherit;background:none;border:none;padding:0;}.pdoc section{margin-bottom:1.5rem;}.pdoc .modulename{margin-top:0;font-weight:bold;}.pdoc .modulename a{color:var(--link);transition:100ms all;}.pdoc .git-button{float:right;border:solid var(--link) 1px;}.pdoc .git-button:hover{background-color:var(--link);color:var(--pdoc-background);}.pdoc details{filter:opacity(1);}.pdoc details:not([open]){height:0;}.pdoc details > summary{position:absolute;top:-35px;right:0;font-size:.75rem;color:var(--muted);padding:0 .7em;user-select:none;cursor:pointer;}.pdoc details > summary:focus{outline:0;}.pdoc .docstring{margin-bottom:1.5rem;}.pdoc > section:first-of-type > .docstring{margin-bottom:2.5rem;}.pdoc .docstring .pdoc-code{margin-left:1em;margin-right:1em;}.pdoc h1:target,.pdoc h2:target,.pdoc h3:target,.pdoc h4:target,.pdoc h5:target,.pdoc h6:target{background-color:var(--active);box-shadow:-1rem 0 0 0 var(--active);}.pdoc div:target > .attr,.pdoc section:target > .attr,.pdoc dd:target > a{background-color:var(--active);}.pdoc .attr:hover{filter:contrast(0.95);}.pdoc .headerlink{position:absolute;width:0;margin-left:-1.5rem;line-height:1.4rem;font-size:1.5rem;font-weight:normal;transition:all 100ms ease-in-out;opacity:0;user-select:none;}.pdoc .attr > .headerlink{margin-left:-2.5rem;}.pdoc *:hover > .headerlink,.pdoc *:target > .attr > .headerlink{opacity:1;}.pdoc .attr{display:block;color:var(--text);margin:.5rem 0 .5rem;padding:.4rem 5rem .4rem 1rem;background-color:var(--accent);}.pdoc .classattr{margin-left:2rem;}.pdoc .name{color:var(--name);font-weight:bold;}.pdoc .def{color:var(--def);font-weight:bold;}.pdoc .signature{white-space:pre-wrap;}.pdoc .annotation{color:var(--annotation);}.pdoc .inherited{margin-left:2rem;}.pdoc .inherited dt{font-weight:700;}.pdoc .inherited dt, .pdoc .inherited dd{display:inline;margin-left:0;margin-bottom:.5rem;}.pdoc .inherited dd:not(:last-child):after{content:", ";}.pdoc .inherited .class:before{content:"class ";}.pdoc .inherited .function a:after{content:"()";}.pdoc .search-result .docstring{overflow:auto;max-height:25vh;}.pdoc .search-result.focused > .attr{background-color:var(--active);}.pdoc .attribution{margin-top:2rem;display:block;opacity:0.5;transition:all 200ms;filter:grayscale(100%);}.pdoc .attribution:hover{opacity:1;filter:grayscale(0%);}.pdoc .attribution img{margin-left:5px;height:35px;vertical-align:middle;width:70px;transition:all 200ms;}.pdoc table{display:block;width:max-content;max-width:100%;overflow:auto;margin-bottom:1rem;}.pdoc table th{font-weight:600;}.pdoc table th, .pdoc table td{padding:6px 13px;border:1px solid var(--accent2);}</style>
+    <style>/*! custom.css */</style></head>
 <body>
-<main>
-<article id="content">
-<header>
-<h1 class="title">Module <code>midori.parser</code></h1>
-</header>
-<section id="section-intro">
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">import sys
-from typing import List, Optional
-from dataclasses import dataclass, field
+    <nav class="pdoc">
+        <label id="navtoggle" for="togglestate" class="pdoc-button"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke-linecap='round' stroke="currentColor" stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg></label>
+        <input id="togglestate" type="checkbox" aria-hidden="true" tabindex="-1">
+        <div>            <a class="pdoc-button module-list-button" href="../midori.html">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-left" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M10 3.5a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 1 1 0v2A1.5 1.5 0 0 1 9.5 14h-8A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2h8A1.5 1.5 0 0 1 11 3.5v2a.5.5 0 0 1-1 0v-2z"/>
+  <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+</svg>                &nbsp;midori</a>
 
-from lark import Lark, ast_utils, Transformer, v_args
-from lark.tree import Meta
 
-this_module = sys.modules[__name__]
+            <input type="search" placeholder="Search..." role="searchbox" aria-label="search"
+                   pattern=".+" required>
 
-#
-#   Define AST
-#
-class _Ast(ast_utils.Ast):
-    # This will be skipped by create_transformer(), because it starts with an underscore
-    pass
 
-class _Statement(_Ast):
-    # This will be skipped by create_transformer(), because it starts with an underscore
-    pass
 
-@dataclass
-class Value(_Ast, ast_utils.WithMeta):
-    &#34;Uses WithMeta to include line-number metadata in the meta attribute&#34;
-    meta: Meta
-    value: object
+        <h2>API Documentation</h2>
+            <ul class="memberlist">
+            <li>
+                    <a class="class" href="#Value">Value</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Value.__init__">Value</a>
+                        </li>
+                </ul>
 
-@dataclass
-class Name(_Ast):
-    name: str
+            </li>
+            <li>
+                    <a class="class" href="#Name">Name</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Name.__init__">Name</a>
+                        </li>
+                </ul>
 
-@dataclass
-class Program(_Ast, ast_utils.AsList):
-    # Corresponds to code_block in the grammar
-    statements: List[_Statement]
+            </li>
+            <li>
+                    <a class="class" href="#Program">Program</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Program.__init__">Program</a>
+                        </li>
+                </ul>
 
-@dataclass
-class Controller(_Statement):
-    value: Value
+            </li>
+            <li>
+                    <a class="class" href="#Controller">Controller</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Controller.__init__">Controller</a>
+                        </li>
+                </ul>
 
-@dataclass
-class RemoteController(Controller):
-    host: Name
-    port: Value
+            </li>
+            <li>
+                    <a class="class" href="#RemoteController">RemoteController</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#RemoteController.__init__">RemoteController</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#IPAddr">IPAddr</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#IPAddr.__init__">IPAddr</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#Image">Image</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Image.__init__">Image</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#Host">Host</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Host.__init__">Host</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Host.mac">mac</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Host.cmd">cmd</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#Switch">Switch</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Switch.__init__">Switch</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#Link">Link</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Link.__init__">Link</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Link.port1">port1</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Link.port2">port2</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Link.cls">cls</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Link.delay">delay</a>
+                        </li>
+                        <li>
+                                <a class="variable" href="#Link.bw">bw</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#Intent">Intent</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Intent.__init__">Intent</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#Up">Up</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Up.__init__">Up</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#Down">Down</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Down.__init__">Down</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#Ping">Ping</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Ping.__init__">Ping</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#Sleep">Sleep</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Sleep.__init__">Sleep</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#ToAst">ToAst</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#ToAst.STRING">STRING</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ToAst.DEC_NUMBER">DEC_NUMBER</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ToAst.start">start</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ToAst.NAME">NAME</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ToAst.ip_addr">ip_addr</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ToAst.object">object</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ToAst.string">string</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ToAst.array">array</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ToAst.pair">pair</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ToAst.int_pair">int_pair</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#ToAst.int_object">int_object</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#MACGenerator">MACGenerator</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#MACGenerator.__init__">MACGenerator</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#MACGenerator.next">next</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="class" href="#IPGenerator">IPGenerator</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#IPGenerator.__init__">IPGenerator</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#IPGenerator.next">next</a>
+                        </li>
+                </ul>
+
+            </li>
+            <li>
+                    <a class="variable" href="#parser">parser</a>
+            </li>
+            <li>
+                    <a class="variable" href="#transformer">transformer</a>
+            </li>
+            <li>
+                    <a class="class" href="#Parser">Parser</a>
+                            <ul class="memberlist">
+                        <li>
+                                <a class="function" href="#Parser.__init__">Parser</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#Parser.parse">parse</a>
+                        </li>
+                </ul>
+
+            </li>
+    </ul>
+
+
+
+        <a class="attribution" title="pdoc: Python API documentation generator" href="https://pdoc.dev">
+            built with <span class="visually-hidden">pdoc</span><img
+                alt="pdoc logo"
+                src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20role%3D%22img%22%20aria-label%3D%22pdoc%20logo%22%20width%3D%22300%22%20height%3D%22150%22%20viewBox%3D%22-1%200%2060%2030%22%3E%3Ctitle%3Epdoc%3C/title%3E%3Cpath%20d%3D%22M29.621%2021.293c-.011-.273-.214-.475-.511-.481a.5.5%200%200%200-.489.503l-.044%201.393c-.097.551-.695%201.215-1.566%201.704-.577.428-1.306.486-2.193.182-1.426-.617-2.467-1.654-3.304-2.487l-.173-.172a3.43%203.43%200%200%200-.365-.306.49.49%200%200%200-.286-.196c-1.718-1.06-4.931-1.47-7.353.191l-.219.15c-1.707%201.187-3.413%202.131-4.328%201.03-.02-.027-.49-.685-.141-1.763.233-.721.546-2.408.772-4.076.042-.09.067-.187.046-.288.166-1.347.277-2.625.241-3.351%201.378-1.008%202.271-2.586%202.271-4.362%200-.976-.272-1.935-.788-2.774-.057-.094-.122-.18-.184-.268.033-.167.052-.339.052-.516%200-1.477-1.202-2.679-2.679-2.679-.791%200-1.496.352-1.987.9a6.3%206.3%200%200%200-1.001.029c-.492-.564-1.207-.929-2.012-.929-1.477%200-2.679%201.202-2.679%202.679A2.65%202.65%200%200%200%20.97%206.554c-.383.747-.595%201.572-.595%202.41%200%202.311%201.507%204.29%203.635%205.107-.037.699-.147%202.27-.423%203.294l-.137.461c-.622%202.042-2.515%208.257%201.727%2010.643%201.614.908%203.06%201.248%204.317%201.248%202.665%200%204.492-1.524%205.322-2.401%201.476-1.559%202.886-1.854%206.491.82%201.877%201.393%203.514%201.753%204.861%201.068%202.223-1.713%202.811-3.867%203.399-6.374.077-.846.056-1.469.054-1.537zm-4.835%204.313c-.054.305-.156.586-.242.629-.034-.007-.131-.022-.307-.157-.145-.111-.314-.478-.456-.908.221.121.432.25.675.355.115.039.219.051.33.081zm-2.251-1.238c-.05.33-.158.648-.252.694-.022.001-.125-.018-.307-.157-.217-.166-.488-.906-.639-1.573.358.344.754.693%201.198%201.036zm-3.887-2.337c-.006-.116-.018-.231-.041-.342.635.145%201.189.368%201.599.625.097.231.166.481.174.642-.03.049-.055.101-.067.158-.046.013-.128.026-.298.004-.278-.037-.901-.57-1.367-1.087zm-1.127-.497c.116.306.176.625.12.71-.019.014-.117.045-.345.016-.206-.027-.604-.332-.986-.695.41-.051.816-.056%201.211-.031zm-4.535%201.535c.209.22.379.47.358.598-.006.041-.088.138-.351.234-.144.055-.539-.063-.979-.259a11.66%2011.66%200%200%200%20.972-.573zm.983-.664c.359-.237.738-.418%201.126-.554.25.237.479.548.457.694-.006.042-.087.138-.351.235-.174.064-.694-.105-1.232-.375zm-3.381%201.794c-.022.145-.061.29-.149.401-.133.166-.358.248-.69.251h-.002c-.133%200-.306-.26-.45-.621.417.091.854.07%201.291-.031zm-2.066-8.077a4.78%204.78%200%200%201-.775-.584c.172-.115.505-.254.88-.378l-.105.962zm-.331%202.302a10.32%2010.32%200%200%201-.828-.502c.202-.143.576-.328.984-.49l-.156.992zm-.45%202.157l-.701-.403c.214-.115.536-.249.891-.376a11.57%2011.57%200%200%201-.19.779zm-.181%201.716c.064.398.194.702.298.893-.194-.051-.435-.162-.736-.398.061-.119.224-.3.438-.495zM8.87%204.141c0%20.152-.123.276-.276.276s-.275-.124-.275-.276.123-.276.276-.276.275.124.275.276zm-.735-.389a1.15%201.15%200%200%200-.314.783%201.16%201.16%200%200%200%201.162%201.162c.457%200%20.842-.27%201.032-.653.026.117.042.238.042.362a1.68%201.68%200%200%201-1.679%201.679%201.68%201.68%200%200%201-1.679-1.679c0-.843.626-1.535%201.436-1.654zM5.059%205.406A1.68%201.68%200%200%201%203.38%207.085a1.68%201.68%200%200%201-1.679-1.679c0-.037.009-.072.011-.109.21.3.541.508.935.508a1.16%201.16%200%200%200%201.162-1.162%201.14%201.14%200%200%200-.474-.912c.015%200%20.03-.005.045-.005.926.001%201.679.754%201.679%201.68zM3.198%204.141c0%20.152-.123.276-.276.276s-.275-.124-.275-.276.123-.276.276-.276.275.124.275.276zM1.375%208.964c0-.52.103-1.035.288-1.52.466.394%201.06.64%201.717.64%201.144%200%202.116-.725%202.499-1.738.383%201.012%201.355%201.738%202.499%201.738.867%200%201.631-.421%202.121-1.062.307.605.478%201.267.478%201.942%200%202.486-2.153%204.51-4.801%204.51s-4.801-2.023-4.801-4.51zm24.342%2019.349c-.985.498-2.267.168-3.813-.979-3.073-2.281-5.453-3.199-7.813-.705-1.315%201.391-4.163%203.365-8.423.97-3.174-1.786-2.239-6.266-1.261-9.479l.146-.492c.276-1.02.395-2.457.444-3.268a6.11%206.11%200%200%200%201.18.115%206.01%206.01%200%200%200%202.536-.562l-.006.175c-.802.215-1.848.612-2.021%201.25-.079.295.021.601.274.837.219.203.415.364.598.501-.667.304-1.243.698-1.311%201.179-.02.144-.022.507.393.787.213.144.395.26.564.365-1.285.521-1.361.96-1.381%201.126-.018.142-.011.496.427.746l.854.489c-.473.389-.971.914-.999%201.429-.018.278.095.532.316.713.675.556%201.231.721%201.653.721.059%200%20.104-.014.158-.02.207.707.641%201.64%201.513%201.64h.013c.8-.008%201.236-.345%201.462-.626.173-.216.268-.457.325-.692.424.195.93.374%201.372.374.151%200%20.294-.021.423-.068.732-.27.944-.704.993-1.021.009-.061.003-.119.002-.179.266.086.538.147.789.147.15%200%20.294-.021.423-.069.542-.2.797-.489.914-.754.237.147.478.258.704.288.106.014.205.021.296.021.356%200%20.595-.101.767-.229.438.435%201.094.992%201.656%201.067.106.014.205.021.296.021a1.56%201.56%200%200%200%20.323-.035c.17.575.453%201.289.866%201.605.358.273.665.362.914.362a.99.99%200%200%200%20.421-.093%201.03%201.03%200%200%200%20.245-.164c.168.428.39.846.68%201.068.358.273.665.362.913.362a.99.99%200%200%200%20.421-.093c.317-.148.512-.448.639-.762.251.157.495.257.726.257.127%200%20.25-.024.37-.071.427-.17.706-.617.841-1.314.022-.015.047-.022.068-.038.067-.051.133-.104.196-.159-.443%201.486-1.107%202.761-2.086%203.257zM8.66%209.925a.5.5%200%201%200-1%200c0%20.653-.818%201.205-1.787%201.205s-1.787-.552-1.787-1.205a.5.5%200%201%200-1%200c0%201.216%201.25%202.205%202.787%202.205s2.787-.989%202.787-2.205zm4.4%2015.965l-.208.097c-2.661%201.258-4.708%201.436-6.086.527-1.542-1.017-1.88-3.19-1.844-4.198a.4.4%200%200%200-.385-.414c-.242-.029-.406.164-.414.385-.046%201.249.367%203.686%202.202%204.896.708.467%201.547.7%202.51.7%201.248%200%202.706-.392%204.362-1.174l.185-.086a.4.4%200%200%200%20.205-.527c-.089-.204-.326-.291-.527-.206zM9.547%202.292c.093.077.205.114.317.114a.5.5%200%200%200%20.318-.886L8.817.397a.5.5%200%200%200-.703.068.5.5%200%200%200%20.069.703l1.364%201.124zm-7.661-.065c.086%200%20.173-.022.253-.068l1.523-.893a.5.5%200%200%200-.506-.863l-1.523.892a.5.5%200%200%200-.179.685c.094.158.261.247.432.247z%22%20transform%3D%22matrix%28-1%200%200%201%2058%200%29%22%20fill%3D%22%233bb300%22/%3E%3Cpath%20d%3D%22M.3%2021.86V10.18q0-.46.02-.68.04-.22.18-.5.28-.54%201.34-.54%201.06%200%201.42.28.38.26.44.78.76-1.04%202.38-1.04%201.64%200%203.1%201.54%201.46%201.54%201.46%203.58%200%202.04-1.46%203.58-1.44%201.54-3.08%201.54-1.64%200-2.38-.92v4.04q0%20.46-.04.68-.02.22-.18.5-.14.3-.5.42-.36.12-.98.12-.62%200-1-.12-.36-.12-.52-.4-.14-.28-.18-.5-.02-.22-.02-.68zm3.96-9.42q-.46.54-.46%201.18%200%20.64.46%201.18.48.52%201.2.52.74%200%201.24-.52.52-.52.52-1.18%200-.66-.48-1.18-.48-.54-1.26-.54-.76%200-1.22.54zm14.741-8.36q.16-.3.54-.42.38-.12%201-.12.64%200%201.02.12.38.12.52.42.16.3.18.54.04.22.04.68v11.94q0%20.46-.04.7-.02.22-.18.5-.3.54-1.7.54-1.38%200-1.54-.98-.84.96-2.34.96-1.8%200-3.28-1.56-1.48-1.58-1.48-3.66%200-2.1%201.48-3.68%201.5-1.58%203.28-1.58%201.48%200%202.3%201v-4.2q0-.46.02-.68.04-.24.18-.52zm-3.24%2010.86q.52.54%201.26.54.74%200%201.22-.54.5-.54.5-1.18%200-.66-.48-1.22-.46-.56-1.26-.56-.8%200-1.28.56-.48.54-.48%201.2%200%20.66.52%201.2zm7.833-1.2q0-2.4%201.68-3.96%201.68-1.56%203.84-1.56%202.16%200%203.82%201.56%201.66%201.54%201.66%203.94%200%201.66-.86%202.96-.86%201.28-2.1%201.9-1.22.6-2.54.6-1.32%200-2.56-.64-1.24-.66-2.1-1.92-.84-1.28-.84-2.88zm4.18%201.44q.64.48%201.3.48.66%200%201.32-.5.66-.5.66-1.48%200-.98-.62-1.46-.62-.48-1.34-.48-.72%200-1.34.5-.62.5-.62%201.48%200%20.96.64%201.46zm11.412-1.44q0%20.84.56%201.32.56.46%201.18.46.64%200%201.18-.36.56-.38.9-.38.6%200%201.46%201.06.46.58.46%201.04%200%20.76-1.1%201.42-1.14.8-2.8.8-1.86%200-3.58-1.34-.82-.64-1.34-1.7-.52-1.08-.52-2.36%200-1.3.52-2.34.52-1.06%201.34-1.7%201.66-1.32%203.54-1.32.76%200%201.48.22.72.2%201.06.4l.32.2q.36.24.56.38.52.4.52.92%200%20.5-.42%201.14-.72%201.1-1.38%201.1-.38%200-1.08-.44-.36-.34-1.04-.34-.66%200-1.24.48-.58.48-.58%201.34z%22%20fill%3D%22green%22/%3E%3C/svg%3E"/>
+        </a>
+</div>
+    </nav>
+    <main class="pdoc">
+            <section>
+                    <h1 class="modulename">
+<a href="./../midori.html">midori</a><wbr>.parser    </h1>
+
+                
+                        <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">ipaddress</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">lark</span> <span class="kn">import</span> <span class="n">Lark</span><span class="p">,</span> <span class="n">ast_utils</span><span class="p">,</span> <span class="n">Transformer</span><span class="p">,</span> <span class="n">v_args</span>
+<span class="kn">from</span> <span class="nn">lark.tree</span> <span class="kn">import</span> <span class="n">Meta</span>
+<span class="kn">from</span> <span class="nn">midori.utils</span> <span class="kn">import</span> <span class="n">LoggingUtil</span><span class="p">,</span> <span class="n">Resource</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="n">LoggingUtil</span><span class="o">.</span><span class="n">setup_logging</span> <span class="p">()</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span> <span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">this_module</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span>
+
+<span class="c1">#</span>
+<span class="c1">#   Define AST</span>
+<span class="c1">#</span>
+<span class="k">class</span> <span class="nc">_Ast</span><span class="p">(</span><span class="n">ast_utils</span><span class="o">.</span><span class="n">Ast</span><span class="p">):</span>
+    <span class="c1"># This will be skipped by create_transformer(), because it starts with an underscore</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">_Statement</span><span class="p">(</span><span class="n">_Ast</span><span class="p">):</span>
+    <span class="c1"># This will be skipped by create_transformer(), because it starts with an underscore</span>
+    <span class="k">pass</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Value</span><span class="p">(</span><span class="n">_Ast</span><span class="p">,</span> <span class="n">ast_utils</span><span class="o">.</span><span class="n">WithMeta</span><span class="p">):</span>
+    <span class="s2">&quot;Uses WithMeta to include line-number metadata in the meta attribute&quot;</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="n">Meta</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">object</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Name</span><span class="p">(</span><span class="n">_Ast</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Program</span><span class="p">(</span><span class="n">_Ast</span><span class="p">,</span> <span class="n">ast_utils</span><span class="o">.</span><span class="n">AsList</span><span class="p">):</span>
+    <span class="c1"># Corresponds to code_block in the grammar</span>
+    <span class="n">statements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">_Statement</span><span class="p">]</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Controller</span><span class="p">(</span><span class="n">_Statement</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Name</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">RemoteController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+    <span class="n">host</span><span class="p">:</span> <span class="n">Name</span>
+    <span class="n">port</span><span class="p">:</span> <span class="n">Value</span>
     
-@dataclass
-class IPAddr(Value):
-    pass
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">IPAddr</span><span class="p">(</span><span class="n">Value</span><span class="p">):</span>
+    <span class="k">pass</span>
 
-@dataclass
-class Image(Value):
-    pass
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Image</span><span class="p">(</span><span class="n">Value</span><span class="p">):</span>
+    <span class="k">pass</span>
 
-@dataclass
-class Node(_Statement):
-    name: Name
-    ip_addr: Value
-    image: Value
-    mac: Optional[Value] = None
-    ports: Optional[Value] = field(default_factory=list)
-    port_bindings: Optional[Value] = field(default_factory=list)
-    env: Optional[Value] = field(default_factory=dict)
-    cmd: Optional[Value] = None
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Host</span><span class="p">(</span><span class="n">_Statement</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Name</span>
+    <span class="n">ip_addr</span><span class="p">:</span> <span class="n">Value</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">Value</span>
+    <span class="n">mac</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">ports</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">port_bindings</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">cmd</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
-@dataclass
-class Switch(_Statement, ast_utils.AsList):
-    name: List[Name]
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Switch</span><span class="p">(</span><span class="n">_Statement</span><span class="p">,</span> <span class="n">ast_utils</span><span class="o">.</span><span class="n">AsList</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Name</span><span class="p">]</span>
     
-@dataclass
-class Link(_Statement):
-    name: Value
-    src: Value
-    dst: Value
-    port1: Optional[Value] = None
-    port2: Optional[Value] = None
-    cls: Optional[Value] = None
-    delay: Optional[Value] = None
-    bw: Optional[Value] = None
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Link</span><span class="p">(</span><span class="n">_Statement</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Value</span>
+    <span class="n">src</span><span class="p">:</span> <span class="n">Value</span>
+    <span class="n">dst</span><span class="p">:</span> <span class="n">Value</span>
+    <span class="n">port1</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">port2</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">delay</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">bw</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
-@dataclass
-class Up(_Ast):
-    pass
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Intent</span><span class="p">(</span><span class="n">_Statement</span><span class="p">,</span> <span class="n">ast_utils</span><span class="o">.</span><span class="n">AsList</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Name</span><span class="p">]</span>
 
-@dataclass
-class Down(_Ast):
-    pass
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Up</span><span class="p">(</span><span class="n">_Ast</span><span class="p">):</span>
+    <span class="k">pass</span>
 
-@dataclass
-class Ping(_Statement, ast_utils.AsList):
-    name: List[Name]
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Down</span><span class="p">(</span><span class="n">_Ast</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Ping</span><span class="p">(</span><span class="n">_Statement</span><span class="p">,</span> <span class="n">ast_utils</span><span class="o">.</span><span class="n">AsList</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Name</span><span class="p">]</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Sleep</span><span class="p">(</span><span class="n">_Statement</span><span class="p">):</span>
+    <span class="n">seconds</span><span class="p">:</span> <span class="n">Value</span>
     
-class ToAst(Transformer):
-    # Define extra transformation functions, for rules that don&#39;t correspond to an AST class.
+<span class="k">class</span> <span class="nc">ToAst</span><span class="p">(</span><span class="n">Transformer</span><span class="p">):</span>
+    <span class="c1"># Define extra transformation functions, for rules that don&#39;t correspond to an AST class.</span>
 
-    def STRING(self, s):
-        # Remove quotation marks
-        return s[1:-1]
+    <span class="k">def</span> <span class="nf">STRING</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="c1"># Remove quotation marks</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-    def DEC_NUMBER(self, n):
-        return int(n)
+    <span class="k">def</span> <span class="nf">DEC_NUMBER</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 
-    @v_args(inline=True)
-    def start(self, x):
-        return x
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span>
 
-#
-#   Define Parser
-#
+    <span class="k">def</span> <span class="nf">NAME</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">value</span>
+    
+    <span class="k">def</span> <span class="nf">ip_addr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">item</span> <span class="k">if</span> <span class="n">item</span> <span class="k">else</span> <span class="p">{}</span>
 
-#     link: &#34;link&#34; NAME &#34;src&#34; NAME &#34;dst&#34; NAME cls? delay? bw?
+    <span class="k">def</span> <span class="nf">string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-parser = Lark(&#34;&#34;&#34;
-    start: program
+    <span class="k">def</span> <span class="nf">array</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span> <span class="n">item</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span> <span class="p">]</span>
 
-    program: statement+
+    <span class="k">def</span> <span class="nf">pair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_value</span><span class="p">):</span>
+        <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">key_value</span>
+        <span class="k">return</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">value</span>
 
-    ?statement: control | node | switch | link | up | ping | down
+    <span class="k">def</span> <span class="nf">int_pair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_value</span><span class="p">):</span>
+        <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">key_value</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 
-    control: controller | remote_controller
-    controller: &#34;controller&#34; value
-    remote_controller: &#34;remote_controller&#34; value &#34;host&#34; STRING &#34;port&#34; DEC_NUMBER
-    node: &#34;node&#34; NAME &#34;ip&#34; ip_addr &#34;image&#34; STRING [&#34;mac&#34; STRING] \
-           [&#34;ports&#34; array] [&#34;port_bindings&#34; int_object] [&#34;env&#34; object] \
-           [&#34;cmd&#34; array]
-    switch: &#34;switch&#34; name+
-    cls: &#34;cls&#34; NAME
-    delay: &#34;delay&#34; STRING
-    bw: &#34;bw&#34; DEC_NUMBER
-    link: &#34;link&#34; NAME &#34;src&#34; NAME &#34;dst&#34; NAME \
-           [&#34;port1&#34; DEC_NUMBER] [&#34;port2&#34; DEC_NUMBER] \
-           [&#34;cls&#34; NAME ] [&#34;delay&#34; STRING] [&#34;bw&#34; DEC_NUMBER] 
-    up: &#34;up&#34;
-    ping: &#34;ping&#34; value+
-    down: &#34;down&#34;
+    <span class="k">def</span> <span class="nf">int_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">items</span>
 
-    value: name | STRING | DEC_NUMBER
-    name: NAME
-    ip_addr: STRING
+<span class="k">class</span> <span class="nc">MACGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Generate sequentially increasing MAC addresses. &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Initialize all address positions to zeros. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Generate the next MAC address. </span>
 
-    array  : &#34;[&#34; [value (&#34;,&#34; value)*] &#34;]&#34;
-    object : &#34;{&#34; [pair (&#34;,&#34; pair)*] &#34;}&#34;
-    pair   : string &#34;:&#34; value
+<span class="sd">        Returns:</span>
+<span class="sd">           str: Returns the next MAC address.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">255</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;MAC address range exceeded&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%02x</span><span class="s2">:</span><span class="si">%02x</span><span class="s2">:</span><span class="si">%02x</span><span class="s2">:</span><span class="si">%02x</span><span class="s2">:</span><span class="si">%02x</span><span class="s2">:</span><span class="si">%02x</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+            
+<span class="k">class</span> <span class="nc">IPGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Generates IP addresses in a range. &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cidr</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;10.0.0.0/24&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Initialize the set with a CIDR. </span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            cidr (str): An IP address range in CIDR notation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">str</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> <span class="k">for</span> <span class="n">ip</span> <span class="ow">in</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Network</span><span class="p">(</span><span class="n">cidr</span><span class="p">)</span> <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+        
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Get the next address. </span>
 
-    int_object : &#34;{&#34; [int_pair (&#34;,&#34; int_pair)*] &#34;}&#34;
-    int_pair   : DEC_NUMBER &#34;:&#34; DEC_NUMBER
+<span class="sd">        Returns:</span>
+<span class="sd">            str: An IP address. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The pool of random IP addresses has been exhausted.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
 
-    string : ESCAPED_STRING
+<span class="c1">#</span>
+<span class="c1">#   Define the Midori language&#39;s grammar productions.</span>
+<span class="c1">#</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">Lark</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    start: program</span>
 
-    %import common.ESCAPED_STRING
-    %import python (NAME, STRING, DEC_NUMBER)
-    %import common.WS
-    %ignore WS
-    &#34;&#34;&#34;,
-    parser=&#34;lalr&#34;,
-)
+<span class="s2">    program: statement+</span>
 
-&#34;&#34;&#34; Use Lark tools to build the abstract syntax tree. &#34;&#34;&#34;
-transformer = ast_utils.create_transformer(this_module, ToAst())
+<span class="s2">    ?statement: control | host | switch | link | intent | up | ping | sleep | down</span>
 
-class Parser:
-    &#34;&#34;&#34; The parser performs lexixal analysis, executes gammar productions,
-    and generates the abstract syntax tree. &#34;&#34;&#34;
-    def parse(self, text: str) -&gt; Program:
-        tree = parser.parse(text)
-        print(tree.pretty())
-        return transformer.transform(tree)</code></pre>
-</details>
-</section>
-<section>
-</section>
-<section>
-<h2 class="section-title" id="header-variables">Global variables</h2>
-<dl>
-<dt id="midori.parser.parser"><code class="name">var <span class="ident">parser</span></code></dt>
-<dd>
-<div class="desc"><p>Use Lark tools to build the abstract syntax tree.</p></div>
-</dd>
-</dl>
-</section>
-<section>
-</section>
-<section>
-<h2 class="section-title" id="header-classes">Classes</h2>
-<dl>
-<dt id="midori.parser.Controller"><code class="flex name class">
-<span>class <span class="ident">Controller</span></span>
-<span>(</span><span>value: <a title="midori.parser.Value" href="#midori.parser.Value">Value</a>)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Controller(value: midori.parser.Value)</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@dataclass
-class Controller(_Statement):
-    value: Value</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>midori.parser._Statement</li>
-<li>midori.parser._Ast</li>
-<li>lark.ast_utils.Ast</li>
-</ul>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="midori.parser.RemoteController" href="#midori.parser.RemoteController">RemoteController</a></li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="midori.parser.Controller.value"><code class="name">var <span class="ident">value</span> : <a title="midori.parser.Value" href="#midori.parser.Value">Value</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
-<dt id="midori.parser.Down"><code class="flex name class">
-<span>class <span class="ident">Down</span></span>
-</code></dt>
-<dd>
-<div class="desc"><p>Down()</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@dataclass
-class Down(_Ast):
-    pass</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>midori.parser._Ast</li>
-<li>lark.ast_utils.Ast</li>
-</ul>
-</dd>
-<dt id="midori.parser.IPAddr"><code class="flex name class">
-<span>class <span class="ident">IPAddr</span></span>
-<span>(</span><span>meta: lark.tree.Meta, value: object)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>IPAddr(meta: lark.tree.Meta, value: object)</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@dataclass
-class IPAddr(Value):
-    pass</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="midori.parser.Value" href="#midori.parser.Value">Value</a></li>
-<li>midori.parser._Ast</li>
-<li>lark.ast_utils.Ast</li>
-<li>lark.ast_utils.WithMeta</li>
-</ul>
-</dd>
-<dt id="midori.parser.Image"><code class="flex name class">
-<span>class <span class="ident">Image</span></span>
-<span>(</span><span>meta: lark.tree.Meta, value: object)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Image(meta: lark.tree.Meta, value: object)</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@dataclass
-class Image(Value):
-    pass</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="midori.parser.Value" href="#midori.parser.Value">Value</a></li>
-<li>midori.parser._Ast</li>
-<li>lark.ast_utils.Ast</li>
-<li>lark.ast_utils.WithMeta</li>
-</ul>
-</dd>
-<dt id="midori.parser.Link"><code class="flex name class">
-<span>class <span class="ident">Link</span></span>
-<span>(</span><span>name: <a title="midori.parser.Value" href="#midori.parser.Value">Value</a>, src: <a title="midori.parser.Value" href="#midori.parser.Value">Value</a>, dst: <a title="midori.parser.Value" href="#midori.parser.Value">Value</a>, port1: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = None, port2: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = None, cls: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = None, delay: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = None, bw: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = None)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Link(name: midori.parser.Value, src: midori.parser.Value, dst: midori.parser.Value, port1: Optional[midori.parser.Value] = None, port2: Optional[midori.parser.Value] = None, cls: Optional[midori.parser.Value] = None, delay: Optional[midori.parser.Value] = None, bw: Optional[midori.parser.Value] = None)</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@dataclass
-class Link(_Statement):
-    name: Value
-    src: Value
-    dst: Value
-    port1: Optional[Value] = None
-    port2: Optional[Value] = None
-    cls: Optional[Value] = None
-    delay: Optional[Value] = None
-    bw: Optional[Value] = None</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>midori.parser._Statement</li>
-<li>midori.parser._Ast</li>
-<li>lark.ast_utils.Ast</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="midori.parser.Link.bw"><code class="name">var <span class="ident">bw</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="midori.parser.Link.cls"><code class="name">var <span class="ident">cls</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="midori.parser.Link.delay"><code class="name">var <span class="ident">delay</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="midori.parser.Link.dst"><code class="name">var <span class="ident">dst</span> : <a title="midori.parser.Value" href="#midori.parser.Value">Value</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="midori.parser.Link.name"><code class="name">var <span class="ident">name</span> : <a title="midori.parser.Value" href="#midori.parser.Value">Value</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="midori.parser.Link.port1"><code class="name">var <span class="ident">port1</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="midori.parser.Link.port2"><code class="name">var <span class="ident">port2</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="midori.parser.Link.src"><code class="name">var <span class="ident">src</span> : <a title="midori.parser.Value" href="#midori.parser.Value">Value</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
-<dt id="midori.parser.Name"><code class="flex name class">
-<span>class <span class="ident">Name</span></span>
-<span>(</span><span>name: str)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Name(name: str)</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@dataclass
-class Name(_Ast):
-    name: str</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>midori.parser._Ast</li>
-<li>lark.ast_utils.Ast</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="midori.parser.Name.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
-<dt id="midori.parser.Node"><code class="flex name class">
-<span>class <span class="ident">Node</span></span>
-<span>(</span><span>name: <a title="midori.parser.Name" href="#midori.parser.Name">Name</a>, ip_addr: <a title="midori.parser.Value" href="#midori.parser.Value">Value</a>, image: <a title="midori.parser.Value" href="#midori.parser.Value">Value</a>, mac: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = None, ports: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = &lt;factory&gt;, port_bindings: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = &lt;factory&gt;, env: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = &lt;factory&gt;, cmd: Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>] = None)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Node(name: midori.parser.Name, ip_addr: midori.parser.Value, image: midori.parser.Value, mac: Optional[midori.parser.Value] = None, ports: Optional[midori.parser.Value] = <factory>, port_bindings: Optional[midori.parser.Value] = <factory>, env: Optional[midori.parser.Value] = <factory>, cmd: Optional[midori.parser.Value] = None)</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@dataclass
-class Node(_Statement):
-    name: Name
-    ip_addr: Value
-    image: Value
-    mac: Optional[Value] = None
-    ports: Optional[Value] = field(default_factory=list)
-    port_bindings: Optional[Value] = field(default_factory=list)
-    env: Optional[Value] = field(default_factory=dict)
-    cmd: Optional[Value] = None</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>midori.parser._Statement</li>
-<li>midori.parser._Ast</li>
-<li>lark.ast_utils.Ast</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="midori.parser.Node.cmd"><code class="name">var <span class="ident">cmd</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="midori.parser.Node.env"><code class="name">var <span class="ident">env</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="midori.parser.Node.image"><code class="name">var <span class="ident">image</span> : <a title="midori.parser.Value" href="#midori.parser.Value">Value</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="midori.parser.Node.ip_addr"><code class="name">var <span class="ident">ip_addr</span> : <a title="midori.parser.Value" href="#midori.parser.Value">Value</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="midori.parser.Node.mac"><code class="name">var <span class="ident">mac</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="midori.parser.Node.name"><code class="name">var <span class="ident">name</span> : <a title="midori.parser.Name" href="#midori.parser.Name">Name</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="midori.parser.Node.port_bindings"><code class="name">var <span class="ident">port_bindings</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="midori.parser.Node.ports"><code class="name">var <span class="ident">ports</span> : Optional[<a title="midori.parser.Value" href="#midori.parser.Value">Value</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
-<dt id="midori.parser.Parser"><code class="flex name class">
-<span>class <span class="ident">Parser</span></span>
-</code></dt>
-<dd>
-<div class="desc"><p>The parser performs lexixal analysis, executes gammar productions,
-and generates the abstract syntax tree.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class Parser:
-    &#34;&#34;&#34; The parser performs lexixal analysis, executes gammar productions,
-    and generates the abstract syntax tree. &#34;&#34;&#34;
-    def parse(self, text: str) -&gt; Program:
-        tree = parser.parse(text)
-        print(tree.pretty())
-        return transformer.transform(tree)</code></pre>
-</details>
-<h3>Methods</h3>
-<dl>
-<dt id="midori.parser.Parser.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>self, text: str) ‑> <a title="midori.parser.Program" href="#midori.parser.Program">Program</a></span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def parse(self, text: str) -&gt; Program:
-    tree = parser.parse(text)
-    print(tree.pretty())
-    return transformer.transform(tree)</code></pre>
-</details>
-</dd>
-</dl>
-</dd>
-<dt id="midori.parser.Ping"><code class="flex name class">
-<span>class <span class="ident">Ping</span></span>
-<span>(</span><span>name: List[<a title="midori.parser.Name" href="#midori.parser.Name">Name</a>])</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Ping(name: List[midori.parser.Name])</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@dataclass
-class Ping(_Statement, ast_utils.AsList):
-    name: List[Name]</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>midori.parser._Statement</li>
-<li>midori.parser._Ast</li>
-<li>lark.ast_utils.Ast</li>
-<li>lark.ast_utils.AsList</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="midori.parser.Ping.name"><code class="name">var <span class="ident">name</span> : List[<a title="midori.parser.Name" href="#midori.parser.Name">Name</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
-<dt id="midori.parser.Program"><code class="flex name class">
-<span>class <span class="ident">Program</span></span>
-<span>(</span><span>statements: List[midori.parser._Statement])</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Program(statements: List[midori.parser._Statement])</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@dataclass
-class Program(_Ast, ast_utils.AsList):
-    # Corresponds to code_block in the grammar
-    statements: List[_Statement]</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>midori.parser._Ast</li>
-<li>lark.ast_utils.Ast</li>
-<li>lark.ast_utils.AsList</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="midori.parser.Program.statements"><code class="name">var <span class="ident">statements</span> : List[midori.parser._Statement]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
-<dt id="midori.parser.RemoteController"><code class="flex name class">
-<span>class <span class="ident">RemoteController</span></span>
-<span>(</span><span>value: <a title="midori.parser.Value" href="#midori.parser.Value">Value</a>, host: <a title="midori.parser.Name" href="#midori.parser.Name">Name</a>, port: <a title="midori.parser.Value" href="#midori.parser.Value">Value</a>)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>RemoteController(value: midori.parser.Value, host: midori.parser.Name, port: midori.parser.Value)</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@dataclass
-class RemoteController(Controller):
-    host: Name
-    port: Value</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="midori.parser.Controller" href="#midori.parser.Controller">Controller</a></li>
-<li>midori.parser._Statement</li>
-<li>midori.parser._Ast</li>
-<li>lark.ast_utils.Ast</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="midori.parser.RemoteController.host"><code class="name">var <span class="ident">host</span> : <a title="midori.parser.Name" href="#midori.parser.Name">Name</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="midori.parser.RemoteController.port"><code class="name">var <span class="ident">port</span> : <a title="midori.parser.Value" href="#midori.parser.Value">Value</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
-<dt id="midori.parser.Switch"><code class="flex name class">
-<span>class <span class="ident">Switch</span></span>
-<span>(</span><span>name: List[<a title="midori.parser.Name" href="#midori.parser.Name">Name</a>])</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Switch(name: List[midori.parser.Name])</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@dataclass
-class Switch(_Statement, ast_utils.AsList):
-    name: List[Name]</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>midori.parser._Statement</li>
-<li>midori.parser._Ast</li>
-<li>lark.ast_utils.Ast</li>
-<li>lark.ast_utils.AsList</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="midori.parser.Switch.name"><code class="name">var <span class="ident">name</span> : List[<a title="midori.parser.Name" href="#midori.parser.Name">Name</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
-<dt id="midori.parser.ToAst"><code class="flex name class">
-<span>class <span class="ident">ToAst</span></span>
-<span>(</span><span>visit_tokens: bool = True)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Transformers visit each node of the tree, and run the appropriate method on it according to the node's data.</p>
+<span class="s2">    ?control: controller | remote_controller</span>
+<span class="s2">    controller: &quot;controller&quot; NAME</span>
+<span class="s2">    remote_controller: &quot;remote_controller&quot; NAME &quot;host&quot; STRING &quot;port&quot; DEC_NUMBER</span>
+
+<span class="s2">    host: &quot;host&quot; NAME [&quot;ip&quot; ip_addr] &quot;image&quot; STRING [&quot;mac&quot; STRING] </span><span class="se">\</span>
+<span class="s2">           [&quot;ports&quot; array] [&quot;port_bindings&quot; int_object] [&quot;env&quot; object] </span><span class="se">\</span>
+<span class="s2">           [&quot;cmd&quot; array]</span>
+
+<span class="s2">    sleep: &quot;sleep&quot; DEC_NUMBER</span>
+<span class="s2">    switch: &quot;switch&quot; NAME+</span>
+<span class="s2">    cls: &quot;cls&quot; NAME</span>
+<span class="s2">    delay: &quot;delay&quot; STRING</span>
+<span class="s2">    bw: &quot;bw&quot; DEC_NUMBER</span>
+
+<span class="s2">    link: &quot;link&quot; NAME &quot;src&quot; NAME &quot;dst&quot; NAME </span><span class="se">\</span>
+<span class="s2">           [&quot;port1&quot; DEC_NUMBER] [&quot;port2&quot; DEC_NUMBER] </span><span class="se">\</span>
+<span class="s2">           [&quot;cls&quot; NAME ] [&quot;delay&quot; STRING] [&quot;bw&quot; DEC_NUMBER]</span>
+
+<span class="s2">    ?intent: &quot;intent&quot; NAME &quot;-&gt;&quot; NAME (&quot;-&gt;&quot; NAME)* </span>
+
+<span class="s2">    up: &quot;up&quot;</span>
+<span class="s2">    ping: &quot;ping&quot; NAME+</span>
+<span class="s2">    down: &quot;down&quot;</span>
+
+<span class="s2">    value: name | STRING | DEC_NUMBER</span>
+<span class="s2">    name: NAME</span>
+<span class="s2">    ip_addr: STRING</span>
+
+<span class="s2">    array  : &quot;[&quot; [value (&quot;,&quot; value)*] &quot;]&quot;</span>
+<span class="s2">    object : &quot;{&quot; [pair (&quot;,&quot; pair)*] &quot;}&quot;</span>
+<span class="s2">    pair   : string &quot;:&quot; value</span>
+
+<span class="s2">    int_object : &quot;{&quot; [int_pair (&quot;,&quot; int_pair)*] &quot;}&quot;</span>
+<span class="s2">    int_pair   : DEC_NUMBER &quot;:&quot; DEC_NUMBER</span>
+
+<span class="s2">    string : ESCAPED_STRING</span>
+
+<span class="s2">    COMMENT: /#.*/</span>
+
+<span class="s2">    </span><span class="si">%i</span><span class="s2">mport common.ESCAPED_STRING</span>
+<span class="s2">    </span><span class="si">%i</span><span class="s2">mport python (NAME, STRING, DEC_NUMBER)</span>
+<span class="s2">    </span><span class="si">%i</span><span class="s2">mport common.WS</span>
+<span class="s2">    </span><span class="si">%i</span><span class="s2">gnore WS</span>
+<span class="s2">    </span><span class="si">%i</span><span class="s2">gnore COMMENT</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">,</span>
+    <span class="n">parser</span><span class="o">=</span><span class="s2">&quot;lalr&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot; Use Lark tools to build the abstract syntax tree. &quot;&quot;&quot;</span>
+<span class="n">transformer</span> <span class="o">=</span> <span class="n">ast_utils</span><span class="o">.</span><span class="n">create_transformer</span><span class="p">(</span><span class="n">this_module</span><span class="p">,</span> <span class="n">ToAst</span><span class="p">())</span>
+
+<span class="k">class</span> <span class="nc">Parser</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; The parser performs lexixal analysis, executes gammar productions,</span>
+<span class="sd">    and generates the abstract syntax tree. &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Program</span><span class="p">:</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">pretty</span><span class="p">())</span>
+        <span class="n">ast</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot; Until we have a better way to ensure default values are set... &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ast</span><span class="p">:</span>
+            <span class="n">ip_generator</span> <span class="o">=</span> <span class="n">IPGenerator</span> <span class="p">()</span>
+            <span class="n">mac_generator</span> <span class="o">=</span> <span class="n">MACGenerator</span> <span class="p">()</span>
+            <span class="k">for</span> <span class="n">statement</span> <span class="ow">in</span> <span class="n">ast</span><span class="o">.</span><span class="n">statements</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">statement</span><span class="p">,</span> <span class="n">Host</span><span class="p">):</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">ip_addr</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">ip_addr</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">ip_addr</span> <span class="k">else</span> <span class="n">ip_generator</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">cmd</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">cmd</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">cmd</span> <span class="k">else</span> <span class="p">[]</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">mac</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">mac</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">mac</span> <span class="k">else</span> <span class="n">mac_generator</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">env</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">env</span> <span class="k">else</span> <span class="p">[]</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">ports</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">ports</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">ports</span> <span class="k">else</span> <span class="p">[]</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">port_bindings</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">port_bindings</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">port_bindings</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="n">ast</span>
+</pre></div>
+
+        </details>
+
+            </section>
+                <section id="Value">
+                                <div class="attr class">
+        <a class="headerlink" href="#Value">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@dataclass</div>
+
+        <span class="def">class</span>
+        <span class="name">Value</span><wbr>(<span class="base"><a href="#_Ast">_Ast</a></span>, <span class="base">lark.ast_utils.WithMeta</span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Value</span><span class="p">(</span><span class="n">_Ast</span><span class="p">,</span> <span class="n">ast_utils</span><span class="o">.</span><span class="n">WithMeta</span><span class="p">):</span>
+    <span class="s2">&quot;Uses WithMeta to include line-number metadata in the meta attribute&quot;</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="n">Meta</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">object</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Uses WithMeta to include line-number metadata in the meta attribute</p>
+</div>
+
+
+                            <div id="Value.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Value.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Value</span><span class="signature">(meta: lark.tree.Meta, value: object)</span>
+    </div>
+
+    
+    
+
+                            </div>
+                </section>
+                <section id="Name">
+                                <div class="attr class">
+        <a class="headerlink" href="#Name">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@dataclass</div>
+
+        <span class="def">class</span>
+        <span class="name">Name</span><wbr>(<span class="base"><a href="#_Ast">_Ast</a></span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Name</span><span class="p">(</span><span class="n">_Ast</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Name(name: str)</p>
+</div>
+
+
+                            <div id="Name.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Name.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Name</span><span class="signature">(name: str)</span>
+    </div>
+
+    
+    
+
+                            </div>
+                </section>
+                <section id="Program">
+                                <div class="attr class">
+        <a class="headerlink" href="#Program">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@dataclass</div>
+
+        <span class="def">class</span>
+        <span class="name">Program</span><wbr>(<span class="base"><a href="#_Ast">_Ast</a></span>, <span class="base">lark.ast_utils.AsList</span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Program</span><span class="p">(</span><span class="n">_Ast</span><span class="p">,</span> <span class="n">ast_utils</span><span class="o">.</span><span class="n">AsList</span><span class="p">):</span>
+    <span class="c1"># Corresponds to code_block in the grammar</span>
+    <span class="n">statements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">_Statement</span><span class="p">]</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Program(statements: List[midori.parser._Statement])</p>
+</div>
+
+
+                            <div id="Program.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Program.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Program</span><span class="signature">(statements: List[midori.parser._Statement])</span>
+    </div>
+
+    
+    
+
+                            </div>
+                </section>
+                <section id="Controller">
+                                <div class="attr class">
+        <a class="headerlink" href="#Controller">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@dataclass</div>
+
+        <span class="def">class</span>
+        <span class="name">Controller</span><wbr>(<span class="base"><a href="#_Statement">_Statement</a></span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Controller</span><span class="p">(</span><span class="n">_Statement</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Name</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Controller(name: <a href="#Name">midori.parser.Name</a>)</p>
+</div>
+
+
+                            <div id="Controller.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Controller.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Controller</span><span class="signature">(name: <a href="#Name">midori.parser.Name</a>)</span>
+    </div>
+
+    
+    
+
+                            </div>
+                </section>
+                <section id="RemoteController">
+                                <div class="attr class">
+        <a class="headerlink" href="#RemoteController">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@dataclass</div>
+
+        <span class="def">class</span>
+        <span class="name">RemoteController</span><wbr>(<span class="base"><a href="#Controller">Controller</a></span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">RemoteController</span><span class="p">(</span><span class="n">Controller</span><span class="p">):</span>
+    <span class="n">host</span><span class="p">:</span> <span class="n">Name</span>
+    <span class="n">port</span><span class="p">:</span> <span class="n">Value</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>RemoteController(name: <a href="#Name">midori.parser.Name</a>, host: <a href="#Name">midori.parser.Name</a>, port: <a href="#Value">midori.parser.Value</a>)</p>
+</div>
+
+
+                            <div id="RemoteController.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#RemoteController.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">RemoteController</span><span class="signature">(
+    name: <a href="#Name">midori.parser.Name</a>,
+    host: <a href="#Name">midori.parser.Name</a>,
+    port: <a href="#Value">midori.parser.Value</a>
+)</span>
+    </div>
+
+    
+    
+
+                            </div>
+                </section>
+                <section id="IPAddr">
+                                <div class="attr class">
+        <a class="headerlink" href="#IPAddr">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@dataclass</div>
+
+        <span class="def">class</span>
+        <span class="name">IPAddr</span><wbr>(<span class="base"><a href="#Value">Value</a></span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">IPAddr</span><span class="p">(</span><span class="n">Value</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>IPAddr(meta: lark.tree.Meta, value: object)</p>
+</div>
+
+
+                            <div id="IPAddr.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#IPAddr.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">IPAddr</span><span class="signature">(meta: lark.tree.Meta, value: object)</span>
+    </div>
+
+    
+    
+
+                            </div>
+                </section>
+                <section id="Image">
+                                <div class="attr class">
+        <a class="headerlink" href="#Image">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@dataclass</div>
+
+        <span class="def">class</span>
+        <span class="name">Image</span><wbr>(<span class="base"><a href="#Value">Value</a></span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Image</span><span class="p">(</span><span class="n">Value</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Image(meta: lark.tree.Meta, value: object)</p>
+</div>
+
+
+                            <div id="Image.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Image.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Image</span><span class="signature">(meta: lark.tree.Meta, value: object)</span>
+    </div>
+
+    
+    
+
+                            </div>
+                </section>
+                <section id="Host">
+                                <div class="attr class">
+        <a class="headerlink" href="#Host">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@dataclass</div>
+
+        <span class="def">class</span>
+        <span class="name">Host</span><wbr>(<span class="base"><a href="#_Statement">_Statement</a></span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Host</span><span class="p">(</span><span class="n">_Statement</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Name</span>
+    <span class="n">ip_addr</span><span class="p">:</span> <span class="n">Value</span>
+    <span class="n">image</span><span class="p">:</span> <span class="n">Value</span>
+    <span class="n">mac</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">ports</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">port_bindings</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">cmd</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Host(name: <a href="#Name">midori.parser.Name</a>, ip_addr: <a href="#Value">midori.parser.Value</a>, image: <a href="#Value">midori.parser.Value</a>, mac: Optional[<a href="#Value">midori.parser.Value</a>] = None, ports: Optional[<a href="#Value">midori.parser.Value</a>] = <factory>, port_bindings: Optional[<a href="#Value">midori.parser.Value</a>] = <factory>, env: Optional[<a href="#Value">midori.parser.Value</a>] = <factory>, cmd: Optional[<a href="#Value">midori.parser.Value</a>] = None)</p>
+</div>
+
+
+                            <div id="Host.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Host.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Host</span><span class="signature">(
+    name: <a href="#Name">midori.parser.Name</a>,
+    ip_addr: <a href="#Value">midori.parser.Value</a>,
+    image: <a href="#Value">midori.parser.Value</a>,
+    mac: Optional[<a href="#Value">midori.parser.Value</a>] = None,
+    ports: Optional[<a href="#Value">midori.parser.Value</a>] = &lt;factory&gt;,
+    port_bindings: Optional[<a href="#Value">midori.parser.Value</a>] = &lt;factory&gt;,
+    env: Optional[<a href="#Value">midori.parser.Value</a>] = &lt;factory&gt;,
+    cmd: Optional[<a href="#Value">midori.parser.Value</a>] = None
+)</span>
+    </div>
+
+    
+    
+
+                            </div>
+                            <div id="Host.mac" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#Host.mac">#&nbsp;&nbsp</a>
+
+        <span class="name">mac</span><span class="annotation">: Optional[<a href="#Value">midori.parser.Value</a>]</span><span class="default_value"> = None</span>
+    </div>
+
+    
+    
+
+                            </div>
+                            <div id="Host.cmd" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#Host.cmd">#&nbsp;&nbsp</a>
+
+        <span class="name">cmd</span><span class="annotation">: Optional[<a href="#Value">midori.parser.Value</a>]</span><span class="default_value"> = None</span>
+    </div>
+
+    
+    
+
+                            </div>
+                </section>
+                <section id="Switch">
+                                <div class="attr class">
+        <a class="headerlink" href="#Switch">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@dataclass</div>
+
+        <span class="def">class</span>
+        <span class="name">Switch</span><wbr>(<span class="base"><a href="#_Statement">_Statement</a></span>, <span class="base">lark.ast_utils.AsList</span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Switch</span><span class="p">(</span><span class="n">_Statement</span><span class="p">,</span> <span class="n">ast_utils</span><span class="o">.</span><span class="n">AsList</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Name</span><span class="p">]</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Switch(name: List[<a href="#Name">midori.parser.Name</a>])</p>
+</div>
+
+
+                            <div id="Switch.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Switch.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Switch</span><span class="signature">(name: List[<a href="#Name">midori.parser.Name</a>])</span>
+    </div>
+
+    
+    
+
+                            </div>
+                </section>
+                <section id="Link">
+                                <div class="attr class">
+        <a class="headerlink" href="#Link">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@dataclass</div>
+
+        <span class="def">class</span>
+        <span class="name">Link</span><wbr>(<span class="base"><a href="#_Statement">_Statement</a></span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Link</span><span class="p">(</span><span class="n">_Statement</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Value</span>
+    <span class="n">src</span><span class="p">:</span> <span class="n">Value</span>
+    <span class="n">dst</span><span class="p">:</span> <span class="n">Value</span>
+    <span class="n">port1</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">port2</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">delay</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">bw</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Link(name: <a href="#Value">midori.parser.Value</a>, src: <a href="#Value">midori.parser.Value</a>, dst: <a href="#Value">midori.parser.Value</a>, port1: Optional[<a href="#Value">midori.parser.Value</a>] = None, port2: Optional[<a href="#Value">midori.parser.Value</a>] = None, cls: Optional[<a href="#Value">midori.parser.Value</a>] = None, delay: Optional[<a href="#Value">midori.parser.Value</a>] = None, bw: Optional[<a href="#Value">midori.parser.Value</a>] = None)</p>
+</div>
+
+
+                            <div id="Link.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Link.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Link</span><span class="signature">(
+    name: <a href="#Value">midori.parser.Value</a>,
+    src: <a href="#Value">midori.parser.Value</a>,
+    dst: <a href="#Value">midori.parser.Value</a>,
+    port1: Optional[<a href="#Value">midori.parser.Value</a>] = None,
+    port2: Optional[<a href="#Value">midori.parser.Value</a>] = None,
+    cls: Optional[<a href="#Value">midori.parser.Value</a>] = None,
+    delay: Optional[<a href="#Value">midori.parser.Value</a>] = None,
+    bw: Optional[<a href="#Value">midori.parser.Value</a>] = None
+)</span>
+    </div>
+
+    
+    
+
+                            </div>
+                            <div id="Link.port1" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#Link.port1">#&nbsp;&nbsp</a>
+
+        <span class="name">port1</span><span class="annotation">: Optional[<a href="#Value">midori.parser.Value</a>]</span><span class="default_value"> = None</span>
+    </div>
+
+    
+    
+
+                            </div>
+                            <div id="Link.port2" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#Link.port2">#&nbsp;&nbsp</a>
+
+        <span class="name">port2</span><span class="annotation">: Optional[<a href="#Value">midori.parser.Value</a>]</span><span class="default_value"> = None</span>
+    </div>
+
+    
+    
+
+                            </div>
+                            <div id="Link.cls" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#Link.cls">#&nbsp;&nbsp</a>
+
+        <span class="name">cls</span><span class="annotation">: Optional[<a href="#Value">midori.parser.Value</a>]</span><span class="default_value"> = None</span>
+    </div>
+
+    
+    
+
+                            </div>
+                            <div id="Link.delay" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#Link.delay">#&nbsp;&nbsp</a>
+
+        <span class="name">delay</span><span class="annotation">: Optional[<a href="#Value">midori.parser.Value</a>]</span><span class="default_value"> = None</span>
+    </div>
+
+    
+    
+
+                            </div>
+                            <div id="Link.bw" class="classattr">
+                                            <div class="attr variable"><a class="headerlink" href="#Link.bw">#&nbsp;&nbsp</a>
+
+        <span class="name">bw</span><span class="annotation">: Optional[<a href="#Value">midori.parser.Value</a>]</span><span class="default_value"> = None</span>
+    </div>
+
+    
+    
+
+                            </div>
+                </section>
+                <section id="Intent">
+                                <div class="attr class">
+        <a class="headerlink" href="#Intent">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@dataclass</div>
+
+        <span class="def">class</span>
+        <span class="name">Intent</span><wbr>(<span class="base"><a href="#_Statement">_Statement</a></span>, <span class="base">lark.ast_utils.AsList</span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Intent</span><span class="p">(</span><span class="n">_Statement</span><span class="p">,</span> <span class="n">ast_utils</span><span class="o">.</span><span class="n">AsList</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Name</span><span class="p">]</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Intent(name: List[<a href="#Name">midori.parser.Name</a>])</p>
+</div>
+
+
+                            <div id="Intent.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Intent.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Intent</span><span class="signature">(name: List[<a href="#Name">midori.parser.Name</a>])</span>
+    </div>
+
+    
+    
+
+                            </div>
+                </section>
+                <section id="Up">
+                                <div class="attr class">
+        <a class="headerlink" href="#Up">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@dataclass</div>
+
+        <span class="def">class</span>
+        <span class="name">Up</span><wbr>(<span class="base"><a href="#_Ast">_Ast</a></span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Up</span><span class="p">(</span><span class="n">_Ast</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Up()</p>
+</div>
+
+
+                            <div id="Up.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Up.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Up</span><span class="signature">()</span>
+    </div>
+
+    
+    
+
+                            </div>
+                </section>
+                <section id="Down">
+                                <div class="attr class">
+        <a class="headerlink" href="#Down">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@dataclass</div>
+
+        <span class="def">class</span>
+        <span class="name">Down</span><wbr>(<span class="base"><a href="#_Ast">_Ast</a></span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Down</span><span class="p">(</span><span class="n">_Ast</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Down()</p>
+</div>
+
+
+                            <div id="Down.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Down.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Down</span><span class="signature">()</span>
+    </div>
+
+    
+    
+
+                            </div>
+                </section>
+                <section id="Ping">
+                                <div class="attr class">
+        <a class="headerlink" href="#Ping">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@dataclass</div>
+
+        <span class="def">class</span>
+        <span class="name">Ping</span><wbr>(<span class="base"><a href="#_Statement">_Statement</a></span>, <span class="base">lark.ast_utils.AsList</span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Ping</span><span class="p">(</span><span class="n">_Statement</span><span class="p">,</span> <span class="n">ast_utils</span><span class="o">.</span><span class="n">AsList</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Name</span><span class="p">]</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Ping(name: List[<a href="#Name">midori.parser.Name</a>])</p>
+</div>
+
+
+                            <div id="Ping.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Ping.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Ping</span><span class="signature">(name: List[<a href="#Name">midori.parser.Name</a>])</span>
+    </div>
+
+    
+    
+
+                            </div>
+                </section>
+                <section id="Sleep">
+                                <div class="attr class">
+        <a class="headerlink" href="#Sleep">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@dataclass</div>
+
+        <span class="def">class</span>
+        <span class="name">Sleep</span><wbr>(<span class="base"><a href="#_Statement">_Statement</a></span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Sleep</span><span class="p">(</span><span class="n">_Statement</span><span class="p">):</span>
+    <span class="n">seconds</span><span class="p">:</span> <span class="n">Value</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Sleep(seconds: <a href="#Value">midori.parser.Value</a>)</p>
+</div>
+
+
+                            <div id="Sleep.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Sleep.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Sleep</span><span class="signature">(seconds: <a href="#Value">midori.parser.Value</a>)</span>
+    </div>
+
+    
+    
+
+                            </div>
+                </section>
+                <section id="ToAst">
+                                <div class="attr class">
+        <a class="headerlink" href="#ToAst">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">ToAst</span><wbr>(<span class="base">lark.visitors._Decoratable</span>, <span class="base">abc.ABC</span>, <span class="base">typing.Generic[~_Leaf_T, ~_Return_T]</span>):
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ToAst</span><span class="p">(</span><span class="n">Transformer</span><span class="p">):</span>
+    <span class="c1"># Define extra transformation functions, for rules that don&#39;t correspond to an AST class.</span>
+
+    <span class="k">def</span> <span class="nf">STRING</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="c1"># Remove quotation marks</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">DEC_NUMBER</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+    <span class="k">def</span> <span class="nf">NAME</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">value</span>
+    
+    <span class="k">def</span> <span class="nf">ip_addr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">item</span> <span class="k">if</span> <span class="n">item</span> <span class="k">else</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">array</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span> <span class="n">item</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span> <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">pair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_value</span><span class="p">):</span>
+        <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">key_value</span>
+        <span class="k">return</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">int_pair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_value</span><span class="p">):</span>
+        <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">key_value</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">int_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">items</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Transformers visit each node of the tree, and run the appropriate method on it according to the node's data.</p>
+
 <p>Methods are provided by the user via inheritance, and called according to <code>tree.data</code>.
 The returned value from each method replaces the node in the tree structure.</p>
+
 <p>Transformers work bottom-up (or depth-first), starting with the leaves and ending at the root of the tree.
 Transformers can be used to implement map &amp; reduce patterns. Because nodes are reduced from leaf to root,
 at any point the callbacks may assume the children have already been transformed (if applicable).</p>
+
 <p><code>Transformer</code> can do anything <code>Visitor</code> can do, but because it reconstructs the tree,
 it is slightly less efficient.</p>
+
 <p>To discard a node, return Discard (<code>lark.visitors.Discard</code>).</p>
+
 <p>All these classes implement the transformer interface:</p>
+
 <ul>
 <li><code>Transformer</code> - Recursively transforms the tree. This is the one you probably want.</li>
 <li><code>Transformer_InPlace</code> - Non-recursive. Changes the tree in-place instead of returning new instances</li>
 <li><code>Transformer_InPlaceRecursive</code> - Recursive. Changes the tree in-place instead of returning new instances</li>
 </ul>
-<h2 id="parameters">Parameters</h2>
-<p>visit_tokens (bool, optional): Should the transformer visit tokens in addition to rules.
-Setting this to <code>False</code> is slightly faster. Defaults to <code>True</code>.
-(For processing ignored tokens, use the <code>lexer_callbacks</code> options)</p>
-<p>NOTE: A transformer without methods essentially performs a non-memoized partial deepcopy.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class ToAst(Transformer):
-    # Define extra transformation functions, for rules that don&#39;t correspond to an AST class.
 
-    def STRING(self, s):
-        # Remove quotation marks
-        return s[1:-1]
+<h6 id="parameters">Parameters</h6>
 
-    def DEC_NUMBER(self, n):
-        return int(n)
+<blockquote>
+  <p>visit_tokens (bool, optional): Should the transformer visit tokens in addition to rules.
+                                 Setting this to <code>False</code> is slightly faster. Defaults to <code>True</code>.
+                                 (For processing ignored tokens, use the <code>lexer_callbacks</code> options)</p>
+</blockquote>
 
-    @v_args(inline=True)
-    def start(self, x):
-        return x</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>lark.visitors.Transformer</li>
-<li>lark.visitors._Decoratable</li>
-<li>abc.ABC</li>
-<li>typing.Generic</li>
-</ul>
-<h3>Methods</h3>
-<dl>
-<dt id="midori.parser.ToAst.DEC_NUMBER"><code class="name flex">
-<span>def <span class="ident">DEC_NUMBER</span></span>(<span>self, n)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def DEC_NUMBER(self, n):
-    return int(n)</code></pre>
-</details>
-</dd>
-<dt id="midori.parser.ToAst.STRING"><code class="name flex">
-<span>def <span class="ident">STRING</span></span>(<span>self, s)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def STRING(self, s):
-    # Remove quotation marks
-    return s[1:-1]</code></pre>
-</details>
-</dd>
-<dt id="midori.parser.ToAst.start"><code class="name flex">
-<span>def <span class="ident">start</span></span>(<span>self, x)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@v_args(inline=True)
-def start(self, x):
-    return x</code></pre>
-</details>
-</dd>
-</dl>
-</dd>
-<dt id="midori.parser.Up"><code class="flex name class">
-<span>class <span class="ident">Up</span></span>
-</code></dt>
-<dd>
-<div class="desc"><p>Up()</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@dataclass
-class Up(_Ast):
-    pass</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>midori.parser._Ast</li>
-<li>lark.ast_utils.Ast</li>
-</ul>
-</dd>
-<dt id="midori.parser.Value"><code class="flex name class">
-<span>class <span class="ident">Value</span></span>
-<span>(</span><span>meta: lark.tree.Meta, value: object)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Uses WithMeta to include line-number metadata in the meta attribute</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@dataclass
-class Value(_Ast, ast_utils.WithMeta):
-    &#34;Uses WithMeta to include line-number metadata in the meta attribute&#34;
-    meta: Meta
-    value: object</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>midori.parser._Ast</li>
-<li>lark.ast_utils.Ast</li>
-<li>lark.ast_utils.WithMeta</li>
-</ul>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="midori.parser.IPAddr" href="#midori.parser.IPAddr">IPAddr</a></li>
-<li><a title="midori.parser.Image" href="#midori.parser.Image">Image</a></li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="midori.parser.Value.meta"><code class="name">var <span class="ident">meta</span> : lark.tree.Meta</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="midori.parser.Value.value"><code class="name">var <span class="ident">value</span> : object</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
-</dl>
-</section>
-</article>
-<nav id="sidebar">
-<h1>Index</h1>
-<div class="toc">
-<ul></ul>
+<p>NOTE: A transformer without methods essentially performs a non-memoized partial deepcopy.</p>
 </div>
-<ul id="index">
-<li><h3>Super-module</h3>
+
+
+                            <div id="ToAst.STRING" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ToAst.STRING">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">STRING</span><span class="signature">(self, s)</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">STRING</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="c1"># Remove quotation marks</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+
+        </details>
+
+    
+
+                            </div>
+                            <div id="ToAst.DEC_NUMBER" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ToAst.DEC_NUMBER">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">DEC_NUMBER</span><span class="signature">(self, n)</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">DEC_NUMBER</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</pre></div>
+
+        </details>
+
+    
+
+                            </div>
+                            <div id="ToAst.start" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ToAst.start">#&nbsp;&nbsp</a>
+
+                <div class="decorator">@v_args(inline=True)</div>
+
+            <span class="def">def</span>
+            <span class="name">start</span><span class="signature">(self, x)</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="nd">@v_args</span><span class="p">(</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span>
+</pre></div>
+
+        </details>
+
+    
+
+                            </div>
+                            <div id="ToAst.NAME" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ToAst.NAME">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">NAME</span><span class="signature">(self, item)</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">NAME</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">item</span><span class="o">.</span><span class="n">value</span>
+</pre></div>
+
+        </details>
+
+    
+
+                            </div>
+                            <div id="ToAst.ip_addr" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ToAst.ip_addr">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">ip_addr</span><span class="signature">(self, item)</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">ip_addr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+        </details>
+
+    
+
+                            </div>
+                            <div id="ToAst.object" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ToAst.object">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">object</span><span class="signature">(self, item)</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">item</span> <span class="k">if</span> <span class="n">item</span> <span class="k">else</span> <span class="p">{}</span>
+</pre></div>
+
+        </details>
+
+    
+
+                            </div>
+                            <div id="ToAst.string" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ToAst.string">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">string</span><span class="signature">(self, items)</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+
+        </details>
+
+    
+
+                            </div>
+                            <div id="ToAst.array" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ToAst.array">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">array</span><span class="signature">(self, items)</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">array</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span> <span class="n">item</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span> <span class="p">]</span>
+</pre></div>
+
+        </details>
+
+    
+
+                            </div>
+                            <div id="ToAst.pair" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ToAst.pair">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">pair</span><span class="signature">(self, key_value)</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">pair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_value</span><span class="p">):</span>
+        <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">key_value</span>
+        <span class="k">return</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">value</span>
+</pre></div>
+
+        </details>
+
+    
+
+                            </div>
+                            <div id="ToAst.int_pair" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ToAst.int_pair">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">int_pair</span><span class="signature">(self, key_value)</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">int_pair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_value</span><span class="p">):</span>
+        <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">key_value</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+</pre></div>
+
+        </details>
+
+    
+
+                            </div>
+                            <div id="ToAst.int_object" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#ToAst.int_object">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">int_object</span><span class="signature">(self, items)</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">int_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">items</span>
+</pre></div>
+
+        </details>
+
+    
+
+                            </div>
+                            <div class="inherited">
+                                <h5>Inherited Members</h5>
+                                <dl>
+                                    <div><dt>lark.visitors.Transformer</dt>
+                                <dd id="ToAst.__init__" class="function">Transformer</dd>
+                <dd id="ToAst.transform" class="function">transform</dd>
+
+            </div>
+                                </dl>
+                            </div>
+                </section>
+                <section id="MACGenerator">
+                                <div class="attr class">
+        <a class="headerlink" href="#MACGenerator">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">MACGenerator</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">class</span> <span class="nc">MACGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Generate sequentially increasing MAC addresses. &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Initialize all address positions to zeros. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Generate the next MAC address. </span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           str: Returns the next MAC address.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">255</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;MAC address range exceeded&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%02x</span><span class="s2">:</span><span class="si">%02x</span><span class="s2">:</span><span class="si">%02x</span><span class="s2">:</span><span class="si">%02x</span><span class="s2">:</span><span class="si">%02x</span><span class="s2">:</span><span class="si">%02x</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Generate sequentially increasing MAC addresses.</p>
+</div>
+
+
+                            <div id="MACGenerator.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#MACGenerator.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">MACGenerator</span><span class="signature">()</span>
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Initialize all address positions to zeros. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Initialize all address positions to zeros.</p>
+</div>
+
+
+                            </div>
+                            <div id="MACGenerator.next" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#MACGenerator.next">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">next</span><span class="signature">(self) -&gt; str</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Generate the next MAC address. </span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           str: Returns the next MAC address.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">255</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;MAC address range exceeded&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%02x</span><span class="s2">:</span><span class="si">%02x</span><span class="s2">:</span><span class="si">%02x</span><span class="s2">:</span><span class="si">%02x</span><span class="s2">:</span><span class="si">%02x</span><span class="s2">:</span><span class="si">%02x</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Generate the next MAC address. </p>
+
+<h6 id="returns">Returns</h6>
+
+<blockquote>
+  <p>str: Returns the next MAC address.</p>
+</blockquote>
+</div>
+
+
+                            </div>
+                </section>
+                <section id="IPGenerator">
+                                <div class="attr class">
+        <a class="headerlink" href="#IPGenerator">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">IPGenerator</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">class</span> <span class="nc">IPGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Generates IP addresses in a range. &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cidr</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;10.0.0.0/24&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Initialize the set with a CIDR. </span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            cidr (str): An IP address range in CIDR notation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">str</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> <span class="k">for</span> <span class="n">ip</span> <span class="ow">in</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Network</span><span class="p">(</span><span class="n">cidr</span><span class="p">)</span> <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+        
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Get the next address. </span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: An IP address. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The pool of random IP addresses has been exhausted.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Generates IP addresses in a range.</p>
+</div>
+
+
+                            <div id="IPGenerator.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#IPGenerator.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">IPGenerator</span><span class="signature">(cidr: str = &#39;10.0.0.0/24&#39;)</span>
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cidr</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s2">&quot;10.0.0.0/24&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Initialize the set with a CIDR. </span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            cidr (str): An IP address range in CIDR notation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">str</span><span class="p">(</span><span class="n">ip</span><span class="p">)</span> <span class="k">for</span> <span class="n">ip</span> <span class="ow">in</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Network</span><span class="p">(</span><span class="n">cidr</span><span class="p">)</span> <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Initialize the set with a CIDR. </p>
+
+<h6 id="args">Args</h6>
+
 <ul>
-<li><code><a title="midori" href="index.html">midori</a></code></li>
+<li><strong>cidr (str):</strong>  An IP address range in CIDR notation.</li>
 </ul>
-</li>
-<li><h3><a href="#header-variables">Global variables</a></h3>
-<ul class="">
-<li><code><a title="midori.parser.parser" href="#midori.parser.parser">parser</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-classes">Classes</a></h3>
-<ul>
-<li>
-<h4><code><a title="midori.parser.Controller" href="#midori.parser.Controller">Controller</a></code></h4>
-<ul class="">
-<li><code><a title="midori.parser.Controller.value" href="#midori.parser.Controller.value">value</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="midori.parser.Down" href="#midori.parser.Down">Down</a></code></h4>
-</li>
-<li>
-<h4><code><a title="midori.parser.IPAddr" href="#midori.parser.IPAddr">IPAddr</a></code></h4>
-</li>
-<li>
-<h4><code><a title="midori.parser.Image" href="#midori.parser.Image">Image</a></code></h4>
-</li>
-<li>
-<h4><code><a title="midori.parser.Link" href="#midori.parser.Link">Link</a></code></h4>
-<ul class="two-column">
-<li><code><a title="midori.parser.Link.bw" href="#midori.parser.Link.bw">bw</a></code></li>
-<li><code><a title="midori.parser.Link.cls" href="#midori.parser.Link.cls">cls</a></code></li>
-<li><code><a title="midori.parser.Link.delay" href="#midori.parser.Link.delay">delay</a></code></li>
-<li><code><a title="midori.parser.Link.dst" href="#midori.parser.Link.dst">dst</a></code></li>
-<li><code><a title="midori.parser.Link.name" href="#midori.parser.Link.name">name</a></code></li>
-<li><code><a title="midori.parser.Link.port1" href="#midori.parser.Link.port1">port1</a></code></li>
-<li><code><a title="midori.parser.Link.port2" href="#midori.parser.Link.port2">port2</a></code></li>
-<li><code><a title="midori.parser.Link.src" href="#midori.parser.Link.src">src</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="midori.parser.Name" href="#midori.parser.Name">Name</a></code></h4>
-<ul class="">
-<li><code><a title="midori.parser.Name.name" href="#midori.parser.Name.name">name</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="midori.parser.Node" href="#midori.parser.Node">Node</a></code></h4>
-<ul class="two-column">
-<li><code><a title="midori.parser.Node.cmd" href="#midori.parser.Node.cmd">cmd</a></code></li>
-<li><code><a title="midori.parser.Node.env" href="#midori.parser.Node.env">env</a></code></li>
-<li><code><a title="midori.parser.Node.image" href="#midori.parser.Node.image">image</a></code></li>
-<li><code><a title="midori.parser.Node.ip_addr" href="#midori.parser.Node.ip_addr">ip_addr</a></code></li>
-<li><code><a title="midori.parser.Node.mac" href="#midori.parser.Node.mac">mac</a></code></li>
-<li><code><a title="midori.parser.Node.name" href="#midori.parser.Node.name">name</a></code></li>
-<li><code><a title="midori.parser.Node.port_bindings" href="#midori.parser.Node.port_bindings">port_bindings</a></code></li>
-<li><code><a title="midori.parser.Node.ports" href="#midori.parser.Node.ports">ports</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="midori.parser.Parser" href="#midori.parser.Parser">Parser</a></code></h4>
-<ul class="">
-<li><code><a title="midori.parser.Parser.parse" href="#midori.parser.Parser.parse">parse</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="midori.parser.Ping" href="#midori.parser.Ping">Ping</a></code></h4>
-<ul class="">
-<li><code><a title="midori.parser.Ping.name" href="#midori.parser.Ping.name">name</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="midori.parser.Program" href="#midori.parser.Program">Program</a></code></h4>
-<ul class="">
-<li><code><a title="midori.parser.Program.statements" href="#midori.parser.Program.statements">statements</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="midori.parser.RemoteController" href="#midori.parser.RemoteController">RemoteController</a></code></h4>
-<ul class="">
-<li><code><a title="midori.parser.RemoteController.host" href="#midori.parser.RemoteController.host">host</a></code></li>
-<li><code><a title="midori.parser.RemoteController.port" href="#midori.parser.RemoteController.port">port</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="midori.parser.Switch" href="#midori.parser.Switch">Switch</a></code></h4>
-<ul class="">
-<li><code><a title="midori.parser.Switch.name" href="#midori.parser.Switch.name">name</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="midori.parser.ToAst" href="#midori.parser.ToAst">ToAst</a></code></h4>
-<ul class="">
-<li><code><a title="midori.parser.ToAst.DEC_NUMBER" href="#midori.parser.ToAst.DEC_NUMBER">DEC_NUMBER</a></code></li>
-<li><code><a title="midori.parser.ToAst.STRING" href="#midori.parser.ToAst.STRING">STRING</a></code></li>
-<li><code><a title="midori.parser.ToAst.start" href="#midori.parser.ToAst.start">start</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="midori.parser.Up" href="#midori.parser.Up">Up</a></code></h4>
-</li>
-<li>
-<h4><code><a title="midori.parser.Value" href="#midori.parser.Value">Value</a></code></h4>
-<ul class="">
-<li><code><a title="midori.parser.Value.meta" href="#midori.parser.Value.meta">meta</a></code></li>
-<li><code><a title="midori.parser.Value.value" href="#midori.parser.Value.value">value</a></code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</nav>
-</main>
-<footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
-</footer>
-</body>
+</div>
+
+
+                            </div>
+                            <div id="IPGenerator.next" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#IPGenerator.next">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">next</span><span class="signature">(self) -&gt; str</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Get the next address. </span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: An IP address. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The pool of random IP addresses has been exhausted.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>Get the next address. </p>
+
+<h6 id="returns">Returns</h6>
+
+<blockquote>
+  <p>str: An IP address.</p>
+</blockquote>
+</div>
+
+
+                            </div>
+                </section>
+                <section id="parser">
+                                <div class="attr variable"><a class="headerlink" href="#parser">#&nbsp;&nbsp</a>
+
+        <span class="name">parser</span><span class="default_value"> = Lark(open(&#39;&lt;string&gt;&#39;), parser=&#39;lalr&#39;, lexer=&#39;contextual&#39;, ...)</span>
+    </div>
+
+    
+            <div class="docstring"><p>Use Lark tools to build the abstract syntax tree.</p>
+</div>
+
+
+                </section>
+                <section id="transformer">
+                                <div class="attr variable"><a class="headerlink" href="#transformer">#&nbsp;&nbsp</a>
+
+        <span class="name">transformer</span><span class="default_value"> = &lt;<a href="#ToAst">midori.parser.ToAst</a> object&gt;</span>
+    </div>
+
+    
+    
+
+                </section>
+                <section id="Parser">
+                                <div class="attr class">
+        <a class="headerlink" href="#Parser">#&nbsp;&nbsp</a>
+
+        
+        <span class="def">class</span>
+        <span class="name">Parser</span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Parser</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; The parser performs lexixal analysis, executes gammar productions,</span>
+<span class="sd">    and generates the abstract syntax tree. &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Program</span><span class="p">:</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">pretty</span><span class="p">())</span>
+        <span class="n">ast</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot; Until we have a better way to ensure default values are set... &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ast</span><span class="p">:</span>
+            <span class="n">ip_generator</span> <span class="o">=</span> <span class="n">IPGenerator</span> <span class="p">()</span>
+            <span class="n">mac_generator</span> <span class="o">=</span> <span class="n">MACGenerator</span> <span class="p">()</span>
+            <span class="k">for</span> <span class="n">statement</span> <span class="ow">in</span> <span class="n">ast</span><span class="o">.</span><span class="n">statements</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">statement</span><span class="p">,</span> <span class="n">Host</span><span class="p">):</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">ip_addr</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">ip_addr</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">ip_addr</span> <span class="k">else</span> <span class="n">ip_generator</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">cmd</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">cmd</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">cmd</span> <span class="k">else</span> <span class="p">[]</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">mac</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">mac</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">mac</span> <span class="k">else</span> <span class="n">mac_generator</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">env</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">env</span> <span class="k">else</span> <span class="p">[]</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">ports</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">ports</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">ports</span> <span class="k">else</span> <span class="p">[]</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">port_bindings</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">port_bindings</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">port_bindings</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="n">ast</span>
+</pre></div>
+
+        </details>
+
+            <div class="docstring"><p>The parser performs lexixal analysis, executes gammar productions,
+and generates the abstract syntax tree.</p>
+</div>
+
+
+                            <div id="Parser.__init__" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Parser.__init__">#&nbsp;&nbsp</a>
+
+        
+            <span class="name">Parser</span><span class="signature">()</span>
+    </div>
+
+    
+    
+
+                            </div>
+                            <div id="Parser.parse" class="classattr">
+                                        <div class="attr function"><a class="headerlink" href="#Parser.parse">#&nbsp;&nbsp</a>
+
+        
+            <span class="def">def</span>
+            <span class="name">parse</span><span class="signature">(self, text: str) -&gt; <a href="#Program">midori.parser.Program</a></span>:
+    </div>
+
+            <details>
+            <summary>View Source</summary>
+            <div class="pdoc-code codehilite"><pre><span></span>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Program</span><span class="p">:</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">pretty</span><span class="p">())</span>
+        <span class="n">ast</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot; Until we have a better way to ensure default values are set... &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ast</span><span class="p">:</span>
+            <span class="n">ip_generator</span> <span class="o">=</span> <span class="n">IPGenerator</span> <span class="p">()</span>
+            <span class="n">mac_generator</span> <span class="o">=</span> <span class="n">MACGenerator</span> <span class="p">()</span>
+            <span class="k">for</span> <span class="n">statement</span> <span class="ow">in</span> <span class="n">ast</span><span class="o">.</span><span class="n">statements</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">statement</span><span class="p">,</span> <span class="n">Host</span><span class="p">):</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">ip_addr</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">ip_addr</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">ip_addr</span> <span class="k">else</span> <span class="n">ip_generator</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">cmd</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">cmd</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">cmd</span> <span class="k">else</span> <span class="p">[]</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">mac</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">mac</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">mac</span> <span class="k">else</span> <span class="n">mac_generator</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">env</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">env</span> <span class="k">else</span> <span class="p">[]</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">ports</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">ports</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">ports</span> <span class="k">else</span> <span class="p">[]</span>
+                    <span class="n">statement</span><span class="o">.</span><span class="n">port_bindings</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="n">port_bindings</span> <span class="k">if</span> <span class="n">statement</span><span class="o">.</span><span class="n">port_bindings</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="n">ast</span>
+</pre></div>
+
+        </details>
+
+    
+
+                            </div>
+                </section>
+    </main>
+<script>
+    function escapeHTML(html) {
+        return document.createElement('div').appendChild(document.createTextNode(html)).parentNode.innerHTML;
+    }
+
+    const originalContent = document.querySelector("main.pdoc");
+    let currentContent = originalContent;
+
+    function setContent(innerHTML) {
+        let elem;
+        if (innerHTML) {
+            elem = document.createElement("main");
+            elem.classList.add("pdoc");
+            elem.innerHTML = innerHTML;
+        } else {
+            elem = originalContent;
+        }
+        if (currentContent !== elem) {
+            currentContent.replaceWith(elem);
+            currentContent = elem;
+        }
+    }
+
+    function getSearchTerm() {
+        return (new URL(window.location)).searchParams.get("search");
+    }
+
+    const searchBox = document.querySelector(".pdoc input[type=search]");
+    searchBox.addEventListener("input", function () {
+        let url = new URL(window.location);
+        if (searchBox.value.trim()) {
+            url.hash = "";
+            url.searchParams.set("search", searchBox.value);
+        } else {
+            url.searchParams.delete("search");
+        }
+        history.replaceState("", "", url.toString());
+        onInput();
+    });
+    window.addEventListener("popstate", onInput);
+
+
+    let search, searchErr;
+
+    async function initialize() {
+        try {
+            search = await new Promise((resolve, reject) => {
+                const script = document.createElement("script");
+                script.type = "text/javascript";
+                script.async = true;
+                script.onload = () => resolve(window.pdocSearch);
+                script.onerror = (e) => reject(e);
+                script.src = "../search.js";
+                document.getElementsByTagName("head")[0].appendChild(script);
+            });
+        } catch (e) {
+            console.error("Cannot fetch pdoc search index");
+            searchErr = "Cannot fetch search index.";
+        }
+        onInput();
+
+        document.querySelector("nav.pdoc").addEventListener("click", e => {
+            if (e.target.hash) {
+                searchBox.value = "";
+                searchBox.dispatchEvent(new Event("input"));
+            }
+        });
+    }
+
+    function onInput() {
+        setContent((() => {
+            const term = getSearchTerm();
+            if (!term) {
+                return null
+            }
+            if (searchErr) {
+                return `<h3>Error: ${searchErr}</h3>`
+            }
+            if (!search) {
+                return "<h3>Searching...</h3>"
+            }
+
+            window.scrollTo({top: 0, left: 0, behavior: 'auto'});
+
+            const results = search(term);
+
+            let html;
+            if (results.length === 0) {
+                html = `No search results for '${escapeHTML(term)}'.`
+            } else {
+                html = `<h4>${results.length} search result${results.length > 1 ? "s" : ""} for '${escapeHTML(term)}'.</h4>`;
+            }
+            for (let result of results.slice(0, 10)) {
+                let doc = result.doc;
+                let url = `../${doc.modulename.replaceAll(".", "/")}.html`;
+                if (doc.qualname) {
+                    url += `#${doc.qualname}`;
+                }
+
+                let heading;
+                switch (result.doc.type) {
+                    case "function":
+                        heading = `<span class="def">${doc.funcdef}</span> <span class="name">${doc.fullname}</span><span class="signature">${doc.signature}:</span>`;
+                        break;
+                    case "class":
+                        heading = `<span class="def">class</span> <span class="name">${doc.fullname}</span>`;
+                        if (doc.bases)
+                            heading += `<wbr>(<span class="base">${doc.bases}</span>)`;
+                        heading += `:`;
+                        break;
+                    case "variable":
+                        heading = `<span class="name">${doc.fullname}</span>`;
+                        if (doc.annotation)
+                            heading += `<span class="annotation">${doc.annotation}</span>`;
+                        if (doc.default_value)
+                            heading += `<span class="default_value">${doc.default_value}</span>`;
+                        break;
+                    default:
+                        heading = `<span class="name">${doc.fullname}</span>`;
+                        break;
+                }
+                html += `
+                        <section class="search-result">
+                        <a href="${url}" class="attr ${doc.type}">${heading}</a>
+                        <div class="docstring">${doc.doc}</div>
+                        </section>
+                    `;
+
+            }
+            return html;
+        })());
+    }
+
+    if (getSearchTerm()) {
+        initialize();
+        searchBox.value = getSearchTerm();
+        onInput();
+    } else {
+        searchBox.addEventListener("focus", initialize, {once: true});
+    }
+
+    searchBox.addEventListener("keydown", e => {
+        if (["ArrowDown", "ArrowUp", "Enter"].includes(e.key)) {
+            let focused = currentContent.querySelector(".search-result.focused");
+            if (!focused) {
+                currentContent.querySelector(".search-result").classList.add("focused");
+            } else if (
+                e.key === "ArrowDown"
+                && focused.nextElementSibling
+                && focused.nextElementSibling.classList.contains("search-result")
+            ) {
+                focused.classList.remove("focused");
+                focused.nextElementSibling.classList.add("focused");
+                focused.nextElementSibling.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest"
+                });
+            } else if (
+                e.key === "ArrowUp"
+                && focused.previousElementSibling
+                && focused.previousElementSibling.classList.contains("search-result")
+            ) {
+                focused.classList.remove("focused");
+                focused.previousElementSibling.classList.add("focused");
+                focused.previousElementSibling.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "nearest"
+                });
+            } else if (
+                e.key === "Enter"
+            ) {
+                focused.querySelector("a").click();
+            }
+        }
+    });
+</script></body>
 </html>

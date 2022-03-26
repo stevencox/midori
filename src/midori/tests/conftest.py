@@ -8,7 +8,7 @@ import sys
 from collections import namedtuple
 from starlette.testclient import TestClient
 from midori.api import app
-from midori.runtime import run_simulation, Host
+from midori.runtime import run_simulation, Host, Onos
 from midori.messaging import Producer
 from midori.utils import LoggingUtil
 
@@ -90,6 +90,16 @@ def mock_mininet(monkeypatch):
         return MockContainernet()
     monkeypatch.setattr("midori.runtime.ContainernetFactory", ContainernetFactory)
     print(f"monkeypatched runtime containernet.")
+
+@pytest.fixture(scope="function")
+def mock_onos(monkeypatch):
+    
+    class MockOnos(Onos):
+        def clean(self) -> None:
+            pass
+        
+    monkeypatch.setattr("midori.runtime.Onos", MockOnos)
+    print(f"monkeypatched runtime onos.")
     
 @pytest.fixture(scope="function")
 def mock_graph(monkeypatch):

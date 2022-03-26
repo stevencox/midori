@@ -23,29 +23,40 @@ set -e
 ## Get our location and configure the path.
 ##
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-MIDORI_ROOT=$( dirname $DIR )
-export PYTHONPATH=${PYTHONPATH:-$MIDORI_ROOT/src}
-echo PYTHONPATH=$PYTHONPATH
+MIDORI_HOME=$( dirname $DIR )
+export PYTHONPATH=${PYTHONPATH:-$MIDORI_HOME/src}
 
 ##
 ## Compile a Midori program.
 ##
 compile () {
-    python $MIDORI_ROOT/src/midori/compiler.py --source $*
+    python $MIDORI_HOME/src/midori/compiler.py --source $*
 }
 
 ##
 ## Run a Midori program remotely.
 ##
 run () {
-    python $MIDORI_ROOT/src/midori/client.py $*
+    python $MIDORI_HOME/src/midori/client.py $*
 }
 
 ##
 ## Run the Midori API.
 ##
 api () {
-    python $MIDORI_ROOT/src/midori/api.py $*
+    python $MIDORI_HOME/src/midori/api.py $*
+}
+
+##
+## Serve in a fault tolerant setting
+##
+serve () {
+    echo $*
+    gunicorn --bind 0.0.0.0:8000 \
+	     --worker-class uvicorn.workers.UvicornWorker \
+	     --log-level=debug \
+	     --pythonpath=./src midori.api:app \
+	     --workers=$*
 }
 
 ##
@@ -53,7 +64,7 @@ api () {
 ##
 worker () {
     echo $PYTHONPATH
-    python $MIDORI_ROOT/src/midori/worker.py $*
+    python $MIDORI_HOME/src/midori/worker.py $*
 }
 
 ##
@@ -61,6 +72,13 @@ worker () {
 ##
 test () {
     pytest --asyncio-mode=strict --capture=no $*
+}
+
+##
+## Document
+##
+doc () {
+    pdoc -d google --output $MIDORI_HOME/docs midori
 }
 
 ##
@@ -81,14 +99,15 @@ load () {
 ## Tools for keeping Python pip dependencies orderly and minimal.
 ##
 configure () {
-    DEPS="fastapi jinja2 redis kafka-python docker lark argparse PyYAML uvicorn jsonpickle pytest pympler"
+    TEST_DEPS="pytest pytest-asyncio asgi_lifespan httpx pdoc"
+    DEPS="fastapi jinja2 redis kafka-python docker lark argparse python-iptables PyYAML uvicorn gunicorn jsonpickle ${TEST_DEPS}"
     install () {
-	pip install $DEPS
+	python -m pip install --upgrade pip
+	pip install --upgrade $DEPS
     }
     freeze () {
-	pattern=$(echo $DEPS | sed -e "s, ,\|,g")
-	pattern="($pattern)"
-	pip freeze | egrep $pattern
+	pattern=$(echo $DEPS | sed -e "s, ,\|,g" -e "s,_,\.\*,g" )
+	pip freeze | egrep "($pattern)" > $MIDORI_HOME/requirements.txt
     }
     clean () {
 	pip freeze | xargs pip uninstall -y

@@ -9,7 +9,7 @@ LoggingUtil.setup_logging ()
 logger = logging.getLogger (__name__)
 
 class Compiler:
-    """ The compiler accetps a domain specific language (DSL) describing
+    """ The compiler accepts a domain specific language (DSL) describing
     a network including elements like SDN controllers, hosts as containers,
     switches, and links. The compiler parses the input source code into an
     abstract syntax tree, then projects that intermediate representation
@@ -26,7 +26,7 @@ class Compiler:
         self.dry_run = dry_run
         self.debug = debug
         logger.debug (f"dry_run={self.dry_run}, debug={self.debug}")
-        self.parser = Parser ()
+        self._parser = Parser ()
         """ The lexical analyzer (parser) that will assemble tokens into an AST. """
         
     def _emit (self,
@@ -35,8 +35,10 @@ class Compiler:
         """ Write an executable output program.
         Args:
             ast (Program): Parsed statements from the grammar.
-            path (str): The path to the input file.
             output_path (str): Path to the output file.
+        
+        Returns:
+            str: Executable code.
         """
         if logger.isEnabledFor(logging.DEBUG):
             for statement in ast.statements:
@@ -61,16 +63,35 @@ class Compiler:
     def process_file (self,
                       path: str,
                       output_path:str=None) -> str:
+        """ Compile a the file specified by path, writing output to the output path.
+
+        Args:
+            path (str): Path to the file to compile.
+            output_path (str): Path to the output file to write.
+
+        Returns:
+            str: Executable output.
+        """
         text = Resource.read_file (path)
         return self.process (source=text, output_path=output_path)
         
     def process (self,
                  source: str,
                  output_path:str=None) -> str:
-        ast: Program = self.parser.parse (source)
+        """ Compile a block of source code, optionally writing to an output file.
+
+        Args:
+            path (str): Path to the file to compile.
+            output_path (str): Path to the output file to write.
+
+        Returns:
+            str: Executable output.
+        """
+        ast: Program = self._parser.parse (source)
         return self._emit (ast=ast, output_path=output_path)
 
 def main ():
+    """ Run the compiler from the command line. """
     
     """ Process arguments. """
     arg_parser = argparse.ArgumentParser(

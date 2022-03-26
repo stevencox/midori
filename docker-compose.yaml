@@ -14,7 +14,7 @@
 ##
 ##
 ###########################################################
-version: '3.3'
+version: '3.9'
 
 services:
 
@@ -36,21 +36,32 @@ services:
   # is a Mininet fork which provides container based
   # network simulation via a Python API.
   midori:
-    image: midori/midori:latest
-    entrypoint: /midori/bin/midorictl start
-    ports:
-      - 8000:8000
+    image: midori/worker:0.0.2
+    entrypoint: util/docker/entrypoint.sh /midori/bin/midorictl start worker
     volumes:
       # The docker socket is shared to allow Docker-in-Docker.
       - "/var/run/docker.sock:/var/run/docker.sock"
       - $PWD:/midori
     depends_on:
       - onos
+      - kafka
+      - redis
     privileged: true
     pid: host
     tty: true
     container_name: midori
 
+  api:
+    image: midori/api:0.0.2
+    entrypoint: /midori/bin/midorictl api
+    depends_on:
+      - kafka
+      - redis
+    ports:
+      - 8000:8000
+    volumes:
+      - $PWD:/midori
+      
   # Redis cache and message queue for communication
   # between Midori API and Containernet execution layer.
   redis:
@@ -59,7 +70,12 @@ services:
     ports:
       - 6379:6379
     container_name: redis
-
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+      
   # Redis admin user interface.
   redisinsight:
     image: redislabs/redisinsight:latest
@@ -67,6 +83,8 @@ services:
       - 8001:8001
     volumes:
       - ${PWD}/redisinsight_data:/db
+    depends_on:
+      - redis
 
   zookeeper:
     image: docker.io/bitnami/zookeeper:3.7
@@ -76,6 +94,11 @@ services:
       - "zookeeper_data:/bitnami"
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
+    healthcheck:
+      test: [ "CMD", "/kafka/check.sh", "zookeeper" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
       
   kafka:
     image: docker.io/bitnami/kafka:3.1
@@ -95,7 +118,19 @@ services:
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
     depends_on:
       - zookeeper
-
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --topic <TOPIC_NAME> --describe"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+      
+  kafkaui:
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - 8082:8080
+    environment:
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+      
 volumes:
   zookeeper_data:
     driver: local

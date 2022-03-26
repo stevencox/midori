@@ -46,9 +46,17 @@ class Code:
         return module
     
 class Resource:
-
+    """ Load various kinds of resources. """
     @staticmethod
     def read_file (path:str) -> str:
+        """ Read a file from a POSIX path as a string. 
+        
+        Args:
+            path (str): POSIX path to a file.
+
+        Returns:
+            str: Contents of the file as text.
+        """
         result = None
         with open (path, 'r') as stream:
             result = stream.read ()
@@ -56,11 +64,25 @@ class Resource:
 
     @staticmethod
     def write_file (path:str, data:str) -> None:
+        """ Write text to a POSIX path.
+        
+        Args:
+            path (str): The path to the file to write.
+            data (str): Data to write to the file.
+        """
         with open (path, 'w') as stream:
             result = stream.write (data)
     
     @staticmethod
     def load_json (path:str) -> object:
+        """ Load an JSON serialized object from a POSIX file.
+
+        Args:
+            path (str): Path to a file containing a JSON object.
+        
+        Returns:
+            object: An object deserialized from JSON.
+        """
         result = None
         with open (path, 'r') as stream:
             result = json.loads (stream.read ())
